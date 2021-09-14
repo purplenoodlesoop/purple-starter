@@ -40,7 +40,7 @@ List of pre-written modules included in starter.
 
 ## Included extensions
 
-- [] Context
+- [ ] Context
     - [ ] IO msg
     - [ ] Localization
 - [ ] IO
