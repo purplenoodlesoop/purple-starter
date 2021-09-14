@@ -1,0 +1,3 @@
+library extensions;
+
+mixin ImportCommonExtensions {}
