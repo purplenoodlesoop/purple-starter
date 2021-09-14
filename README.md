@@ -2,6 +2,52 @@
 
 Flutter project starter using updated MSWS architecture, providing pre-written modules, extensions, and included dependencies for functional Flutter apps.
 
+## Folder structure
+
+### Project
+
+lib
+├── common
+│   ├── data
+│   ├── extensions
+│   │   └── % Extensions structure %
+│   └── modules
+│       └── % Module structure %
+├── features
+│   ├── % Feature A %
+│   │   └── % Feature Structure %
+│   └── % Feature B %
+└── main.dart
+
+### Modules
+
+modules
+├── core
+├── io
+└── program
+
+### Extensions
+
+extensions
+├── src
+│   └── ...
+└── extensions.dart
+
+### Feature
+
+% Feature %
+├── models
+├── data (optional)
+├── modules (optional)
+│   └── % Modules structure %
+├── extensions (optional)
+│   └── % Extensions structure %
+├── msg
+│   ├── msgs.dart
+│   └── store.dart
+└── widgets
+    └── screen.dart
+
 ## Included packages
 
 List of default packages included in starter.
