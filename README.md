@@ -55,4 +55,4 @@ List of pre-written modules included in starter.
     * [] Perform IO and discard result
 
 ## Ideas for improvement
-[] Widget functions with anonymous Element wrapper through extensions
+[ ] Widget functions with anonymous Element wrapper through extensions
