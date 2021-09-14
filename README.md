@@ -9,6 +9,7 @@ List of default packages included in starter.
 ### FP
 * fpdart
 * pure (coming soon)
+* Fast Immutable Collections
 
 ### Remote and local data
 * sembast
@@ -17,6 +18,7 @@ List of default packages included in starter.
 ### Code generation
 * freezed
 * freezed_annotation
+* json_serializable
 * build_runner
 
 ### State management

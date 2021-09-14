@@ -33,6 +33,7 @@ dependencies:
   # FP
   fpdart: ^0.0.10
   # pure: ^0.1.0
+  fast_immutable_collections: ^7.0.0
 
   # Local and remote data
   sembast: ^3.1.1
@@ -41,6 +42,7 @@ dependencies:
   # Code generation
   freezed: ^0.14.5
   freezed_annotation: ^0.14.3
+  json_serializable: ^5.0.0
   build_runner: ^2.1.2
 
   # State management
