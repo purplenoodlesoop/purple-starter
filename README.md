@@ -28,31 +28,31 @@ List of pre-written modules included in starter.
 
 ### Core
 
-* [] Pattern-matching
+- [ ] Pattern-matching
 
 ### IO
 
-* [] Logger
-* [] Navigation
-* [] DB client access
-* [] HTTP client access
-* [] HTTP requests (?)
+- [ ] Logger
+- [ ] Navigation
+- [ ] DB client access
+- [ ] HTTP client access
+- [ ] HTTP requests (?)
 
 ## Included extensions
 
-* [] Context
-    * [] IO msg
-    * [] Localization
-* [] IO
-    * [] Put
-    * [] Perform IO and discard result 
-* [] Object
-    * [] Try cast
-    * [] Right Pipe
-    * [] Is null / is not null
-* [] Task
-    * [] Put
-    * [] Perform IO and discard result
+- [] Context
+    - [ ] IO msg
+    - [ ] Localization
+- [ ] IO
+    - [ ] Put
+    - [ ] Perform IO and discard result 
+- [ ] Object
+    - [ ] Try cast
+    - [ ] Right Pipe
+    - [ ] Is null / is not null
+- [ ] Task
+    - [ ] Put
+    - [ ] Perform IO and discard result
 
 ## Ideas for improvement
-[ ] Widget functions with anonymous Element wrapper through extensions
+- [ ] Widget functions with anonymous Element wrapper through extensions
