@@ -6,6 +6,7 @@ Flutter project starter using updated MSWS architecture, providing pre-written m
 
 ### Project
 
+```
 lib
 ├── common
 │   ├── data
@@ -18,23 +19,29 @@ lib
 │   │   └── % Feature Structure %
 │   └── % Feature B %
 └── main.dart
+```
 
 ### Modules
 
+```
 modules
 ├── core
 ├── io
 └── program
+```
 
 ### Extensions
 
+```
 extensions
 ├── src
 │   └── ...
 └── extensions.dart
+```
 
 ### Feature
 
+```
 % Feature %
 ├── models
 ├── data (optional)
@@ -47,6 +54,7 @@ extensions
 │   └── store.dart
 └── widgets
     └── screen.dart
+```
 
 ## Included packages
 
