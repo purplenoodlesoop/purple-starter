@@ -36,14 +36,15 @@ dependencies:
   fast_immutable_collections: ^7.0.0
 
   # Local and remote data
-  sembast: ^3.1.1
+  sembast: ^3.0.1
   http: ^0.13.3
 
   # Code generation
-  freezed: ^0.14.5
-  freezed_annotation: ^0.14.3
-  json_serializable: ^5.0.0
-  build_runner: ^2.1.2
+  # TODO: -- Fix versions to appropriate ones
+  freezed: any
+  freezed_annotation: any
+  json_serializable: any
+  build_runner: any
 
   # State management
   provider_msg: ^0.1.0
@@ -51,13 +52,6 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-  # The "flutter_lints" package below contains a set of recommended lints to
-  # encourage good coding practices. The lint set provided by the package is
-  # activated in the `analysis_options.yaml` file located at the root of your
-  # package. See that file for information about deactivating specific lint
-  # rules and activating additional ones.
-  flutter_lints: ^1.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
