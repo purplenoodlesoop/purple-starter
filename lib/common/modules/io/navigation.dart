@@ -8,7 +8,7 @@ mixin Navigation {
   static IO<Unit> back<T extends Object?>([T? value]) =>
       IO(() => globalKey.currentState!.pop(value)).put(unit);
 
-  static Task<T?> to<T>(Widget Function() screen) => Task(
+  static Task<T?> to<T extends Object?>(Widget Function() screen) => Task(
         () => globalKey.currentState!.push(
           MaterialPageRoute<T>(builder: (context) => screen()),
         ),
