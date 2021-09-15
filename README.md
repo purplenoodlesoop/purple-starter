@@ -88,11 +88,11 @@ List of pre-written modules included in starter.
 
 ### Core
 
-- [ ] Pattern-matching
+- [x] Pattern-matching
 
 ### IO
 
-- [ ] Logger
+- [x] Logger
 - [ ] Navigation
 - [ ] DB client access
 - [ ] HTTP client access
@@ -104,15 +104,11 @@ List of pre-written modules included in starter.
     - [ ] IO msg
     - [ ] Localization
 - [ ] IO
-    - [ ] Put
+    - [x] Put
     - [ ] Perform IO and discard result 
 - [ ] Object
-    - [ ] Try cast
     - [ ] Right Pipe
     - [ ] Is null / is not null
 - [ ] Task
     - [ ] Put
-    - [ ] Perform IO and discard result
-
-## Ideas for improvement
-- [ ] Widget functions with anonymous Element wrapper through extensions
+    - [x] Perform IO and discard result
