@@ -8,11 +8,11 @@ mixin Navigation {
   static IO<Unit> back<T extends Object?>([T? value]) =>
       IO(() => globalKey.currentState!.pop(value)).put(unit);
 
-  static Task<Unit> to(Widget Function() screen) => Task(
+  static Task<T?> to<T>(Widget Function() screen) => Task(
         () => globalKey.currentState!.push(
-          MaterialPageRoute<void>(builder: (context) => screen()),
+          MaterialPageRoute<T>(builder: (context) => screen()),
         ),
-      ).put(unit);
+      );
 
   static IO<Unit> snack({
     required Widget contents,
