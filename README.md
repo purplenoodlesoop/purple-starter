@@ -10,6 +10,8 @@ Flutter project starter using updated MSWS architecture, providing pre-written m
 lib
 ├── common
 │   ├── data
+│   ├── enums
+│   ├── models
 │   ├── extensions
 │   │   └── % Extensions structure %
 │   └── modules
@@ -17,7 +19,8 @@ lib
 ├── features
 │   ├── % Feature A %
 │   │   └── % Feature Structure %
-│   └── % Feature B %
+│   ├── % Feature B %
+│   └── ...
 └── main.dart
 ```
 
@@ -25,9 +28,9 @@ lib
 
 ```
 modules
-├── core
-├── io
-└── program
+├── core (optional)
+├── io (optional)
+└── program (optional)
 ```
 
 ### Extensions
@@ -45,6 +48,7 @@ extensions
 % Feature %
 ├── models
 ├── data (optional)
+├── enums (optional)
 ├── modules (optional)
 │   └── % Modules structure %
 ├── extensions (optional)
@@ -67,7 +71,7 @@ List of default packages included in starter.
 
 ### Remote and local data
 * sembast
-* dio/http (?)
+* http
 
 ### Code generation
 * freezed

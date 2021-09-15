@@ -37,7 +37,7 @@ dependencies:
 
   # Local and remote data
   sembast: ^3.1.1
-  # dio: ^4.0.0
+  http: ^0.13.3
 
   # Code generation
   freezed: ^0.14.5
