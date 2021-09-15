@@ -1,24 +1,8 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:functional_starter/common/extensions/extensions.dart';
-import 'package:functional_starter/common/modules/core/matcher.dart';
+import 'package:functional_starter/common/modules/io/logger/levels.dart';
 
-enum LogLevels {
-  info,
-  warning,
-  error,
-}
-
-extension on LogLevels {
-  String get string => Matcher.match(this, to: {
-        LogLevels.info: 'INFO:',
-        LogLevels.warning: 'WARNING:',
-        LogLevels.error: 'ERROR:'
-      });
-}
-
-typedef LoggerF = IO<Unit> Function(String data, LogLevels level);
-
-mixin Logger {
+mixin ConsoleLogger {
   static String _assembleLog(
     LogLevels level,
     String data,

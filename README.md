@@ -95,8 +95,8 @@ List of pre-written modules included in starter.
 - [x] Logger
 - [x] Navigation
 - [ ] DB client access
-- [ ] HTTP client access
-- [ ] HTTP requests (?)
+- [x] HTTP client access
+- [x] HTTP requests
 
 ## Included extensions
 
