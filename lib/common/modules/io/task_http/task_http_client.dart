@@ -91,5 +91,5 @@ class TaskHttpClient {
   ) =>
       Task(() => _base.send(request));
 
-  IO<Unit> close() => IO(_base.close).put(unit);
+  IO<Unit> close() => IO(_base.close).asUnit();
 }

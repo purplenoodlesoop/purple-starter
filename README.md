@@ -100,15 +100,15 @@ List of pre-written modules included in starter.
 
 ## Included extensions
 
-- [ ] Context
-    - [ ] IO msg
-    - [ ] Localization
-- [ ] IO
+- [x] Context
+    - [x] IO msg
+    - [ ] Localization (?)
+- [x] IO
     - [x] Put
-    - [ ] Perform IO and discard result 
-- [ ] Object
-    - [ ] Right Pipe
-    - [ ] Is null / is not null
+    - [x] Perform IO and discard result 
+- [x] Object
+    - [x] Right Pipe
+    - [x] Is null / is not null
 - [x] Task
     - [x] Put
     - [x] Perform IO and discard result

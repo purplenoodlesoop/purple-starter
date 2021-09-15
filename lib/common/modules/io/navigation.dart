@@ -6,7 +6,7 @@ mixin Navigation {
   static final globalKey = GlobalKey<NavigatorState>();
 
   static IO<Unit> back<T extends Object?>([T? value]) =>
-      IO(() => globalKey.currentState!.pop(value)).put(unit);
+      IO(() => globalKey.currentState!.pop(value)).asUnit();
 
   static Task<T?> to<T extends Object?>(Widget Function() screen) => Task(
         () => globalKey.currentState!.push(
@@ -26,5 +26,5 @@ mixin Navigation {
             backgroundColor: color,
           ),
         ),
-      ).put(unit);
+      ).asUnit();
 }

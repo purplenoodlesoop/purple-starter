@@ -11,7 +11,7 @@ mixin ConsoleLogger {
       '${level.string} $data $timestamp';
 
   static IO<String> get _timeStamp => dateNow().map((date) => 'at $date');
-  static IO<Unit> _ioPrint(String data) => IO(() => print(data)).put(unit);
+  static IO<Unit> _ioPrint(String data) => IO(() => print(data)).asUnit();
 
   static IO<Unit> log(
     String data,
