@@ -111,4 +111,5 @@ List of pre-written modules included in starter.
     - [x] Is null / is not null
 - [x] Task
     - [x] Put
+    - [x] As Unit
     - [x] Perform IO and discard result
