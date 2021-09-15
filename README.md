@@ -93,7 +93,7 @@ List of pre-written modules included in starter.
 ### IO
 
 - [x] Logger
-- [ ] Navigation
+- [x] Navigation
 - [ ] DB client access
 - [ ] HTTP client access
 - [ ] HTTP requests (?)
@@ -109,6 +109,6 @@ List of pre-written modules included in starter.
 - [ ] Object
     - [ ] Right Pipe
     - [ ] Is null / is not null
-- [ ] Task
-    - [ ] Put
+- [x] Task
+    - [x] Put
     - [x] Perform IO and discard result
