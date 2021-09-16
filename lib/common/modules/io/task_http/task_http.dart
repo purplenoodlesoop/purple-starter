@@ -8,11 +8,11 @@ mixin TaskHttp {
     Client Function() client,
     Task<T> Function(TaskHttpClient client) f,
   ) =>
-      Task.of(TaskHttpClient(client())).flatMap(
+      IO(() => TaskHttpClient(client())).flatMapTask(
         (client) => f(client).performDiscardIO(client.close()),
       );
 
-  static Task<T> batchDefault<T>(
+  static Task<T> batch<T>(
     Task<T> Function(TaskHttpClient client) f,
   ) =>
       batchWith(() => Client(), f);
