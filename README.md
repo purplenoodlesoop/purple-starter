@@ -11,13 +11,13 @@ Represent business logic as purely functional as possible. Consists of 3 sub-lay
 - IO. IO and impure `Task`/`TaskEither` functions, usually need dynamic dependencies, such as HTTP and DB clients. Uses Reader monad/Parametrized Injection to obtain dynamic dependencies/some static dependencies, or Dependency Rejection on static dependencies.
 - Program. Combines and wraps up two previous layers, uses Parametrized Injection for external dependencies, injects static dependencies in IO and Core functions.
 
-### Msg layer
+### Store layer
 
 Expressed through Msg Stores and Msgs, uses Modules, mostly the Program layer, and describes the state of the Feature/Screen. Does not depend on Flutter and is completely UI agnostic.
 
 ### Widgets layer
 
-Split up into two sub-layers: Act and Display. Expressed through pure, top-level functions that has type signatures `(BuildContext) -> Widget` and `\<ModelPart\>(BuildContext, ModelPart) -> Widget`, respectively. Widgets layer never uses Msg layer directly, instead, it takes the state as an argument and sends Msgs using context.
+Split up into two sub-layers: Act and Display. Expressed through pure, top-level functions that has type signatures `(BuildContext) -> Widget` and `\<ModelPart\>(BuildContext, ModelPart) -> Widget`, respectively. Widgets layer never uses Store layer directly, instead, it takes the state as an argument and sends Msgs using context.
 
 ### Screens layer
 
