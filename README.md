@@ -17,7 +17,7 @@ Expressed through Msg Stores and Msgs, uses Modules, mostly the Program layer, a
 
 ### Widgets layer
 
-Split up into two sub-layers: Act and Display. Expressed through pure, top-level functions that has type signatures `(BuildContext) -> Widget` and `\<ModelPart\>(BuildContext, ModelPart) -> Widget`, respectively. Widgets layer never uses Store layer directly, instead, it takes the state as an argument and sends Msgs using context.
+Split up into two sub-layers: Act and Display. Expressed through pure, top-level functions that has type signatures `(BuildContext) -> Widget` and `<ModelPart>(BuildContext, ModelPart) -> Widget`, respectively. Widgets layer never uses Store layer directly, instead, it takes the state as an argument and sends Msgs using context.
 
 ### Screens layer
 
