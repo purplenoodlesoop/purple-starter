@@ -1,4 +1,5 @@
 import 'package:fpdart/fpdart.dart';
+import 'package:functional_starter/common/models/failure.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pure/pure.dart';
@@ -12,6 +13,9 @@ mixin DbPathManager {
 
   static final _createPathUnsafeMemoized = _createPathUnsafe.memoized;
 
-  static Task<String> getPath(String dbName) =>
-      Task(() => _createPathUnsafeMemoized(dbName));
+  static TaskEither<Failure, String> getPath(String dbName) =>
+      TaskEither<Failure, String>.tryCatch(
+        () => _createPathUnsafeMemoized(dbName),
+        (e, s) => Failure(s, e),
+      );
 }

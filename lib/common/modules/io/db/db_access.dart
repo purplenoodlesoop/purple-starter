@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:fpdart/fpdart.dart';
 import 'package:functional_starter/common/extensions/extensions.dart';
+import 'package:functional_starter/common/models/failure.dart';
 import 'package:functional_starter/common/modules/io/db/db_path_manager.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
@@ -21,16 +22,18 @@ mixin DbAccess {
         (db) => f(db, store).flatMap((_) => Task(db.close).asUnit()),
       );
 
-  static Task<Unit> performDefault(
+  static TaskEither<Failure, Unit> performDefault(
     String dbName,
     String storeName,
     DbCallback<String> f,
   ) =>
       DbPathManager.getPath(dbName).flatMap(
-        (dbPath) => perform<String>(
-          dbPath,
-          stringMapStoreFactory.store(storeName),
-          f,
+        (dbPath) => TaskEither.fromTask(
+          perform<String>(
+            dbPath,
+            stringMapStoreFactory.store(storeName),
+            f,
+          ),
         ),
       );
 
@@ -70,6 +73,14 @@ mixin DbAccess {
     Finder? finder,
   }) async* {
     final dbPath = await DbPathManager.getPath(dbName).run();
-    yield* stream<String>(dbPath, stringMapStoreFactory.store(storeName));
+    if (dbPath is Left<Failure, String>) {
+      final failure = dbPath.value;
+      yield* Stream.error(failure.exception, failure.stackTrace);
+    } else {
+      yield* stream<String>(
+        (dbPath as Right<Failure, String>).value,
+        stringMapStoreFactory.store(storeName),
+      );
+    }
   }
 }
