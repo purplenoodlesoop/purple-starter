@@ -34,50 +34,42 @@ mixin DbAccess {
         ),
       );
 
-  Task<Stream<List<RecordSnapshot<T, Map<String, Object?>>>>> stream<T>(
+  Stream<List<RecordSnapshot<T, Map<String, Object?>>>> stream<T>(
     String dbPath,
     StoreRef<T, Map<String, Object?>> store, {
     Finder? finder,
-  }) =>
-      Task(
-        () async {
-          final db = await databaseFactoryIo.openDatabase(dbPath);
+  }) async* {
+    final db = await databaseFactoryIo.openDatabase(dbPath);
 
-          StreamSubscription<List<RecordSnapshot<T, Map<String, Object?>>>>?
-              subscription;
-          StreamController<List<RecordSnapshot<T, Map<String, Object?>>>>?
-              controller;
+    StreamSubscription<List<RecordSnapshot<T, Map<String, Object?>>>>?
+        subscription;
+    StreamController<List<RecordSnapshot<T, Map<String, Object?>>>>? controller;
 
-          controller = StreamController(
-            onCancel: () {
-              subscription?.cancel();
-              controller?.close();
-              db.close();
-            },
+    controller = StreamController(
+      onCancel: () {
+        subscription?.cancel();
+        controller?.close();
+        db.close();
+      },
+    );
+
+    if (!controller.isClosed) {
+      subscription = store.query(finder: finder).onSnapshots(db).listen(
+            controller.add,
+            onDone: controller.close,
+            onError: controller.addError,
           );
+    }
 
-          if (!controller.isClosed) {
-            subscription = store.query(finder: finder).onSnapshots(db).listen(
-                  controller.add,
-                  onDone: controller.close,
-                  onError: controller.addError,
-                );
-          }
-          return controller.stream;
-        },
-      );
+    yield* controller.stream;
+  }
 
-  Task<Stream<List<RecordSnapshot<String, Map<String, Object?>>>>>
-      streamDefault(
+  Stream<List<RecordSnapshot<String, Map<String, Object?>>>> streamDefault(
     String dbName,
     String storeName, {
     Finder? finder,
-  }) =>
-          DbPathManager.getPath(dbName).flatMap(
-            (dbPath) => stream<String>(
-              dbPath,
-              stringMapStoreFactory.store(storeName),
-              finder: finder,
-            ),
-          );
+  }) async* {
+    final dbPath = await DbPathManager.getPath(dbName).run();
+    yield* stream<String>(dbPath, stringMapStoreFactory.store(storeName));
+  }
 }
