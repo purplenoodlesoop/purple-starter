@@ -21,7 +21,7 @@ Split up into two sub-layers: Act and Display. Expressed through pure, top-level
 
 ### Screens layer
 
-Represents the layout of the screen. Host Store instance injected using `StoreProvider`, binding their lifecycle to their own, and supply selected state into widgets. Uses Stores to provide state to widgets, but never uses it itself and never uses modules. Uses Binder/Selector with Display widgets and `El` with Act widgets, supplying an Element to them.
+Represents the layout of the screen. Host Store instance injected using `StoreProvider`, binding their lifecycle to their own, and supply selected state into widgets. Uses Stores to provide state to widgets, but never uses it itself and never uses modules. Uses `Binder`/`Selector` with Display widgets and `El` with Act widgets, supplying an Element to them.
 
 ## Folder structure
 
