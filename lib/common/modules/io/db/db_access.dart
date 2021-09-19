@@ -74,7 +74,7 @@ mixin DbAccess {
     Finder? finder,
   }) =>
           DbPathManager.getPath(dbName).flatMap(
-            (dbPath) => stream(
+            (dbPath) => stream<String>(
               dbPath,
               stringMapStoreFactory.store(storeName),
               finder: finder,
