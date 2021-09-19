@@ -5,6 +5,6 @@ extension IOExtensions<A> on IO<A> {
   IO<A> performDiscardIO(IO<Object?> io) => flatMap((a) => io.map((_) => a));
 }
 
-extension ToUnit on IO<void> {
+extension ToUnitIO on IO<void> {
   IO<Unit> asUnit() => put(unit);
 }
