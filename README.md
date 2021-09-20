@@ -2,6 +2,27 @@
 
 Flutter project starter using updated MSWS architecture, providing pre-written modules, extensions, and included dependencies for functional Flutter apps.
 
+## Overview
+
+The starter contains included packages, pre-written boilerplate, and provides architectural guidance. It is highly opinionated.
+
+The starter favors static to dynamic, immutability to mutability, functional approach to object-oriented approach, declarative style to imperative style, while not forcing any anti-patterns such as Singletons or others, that are unfortunately widely used.
+
+It is highly functional and embraces the Functional Programming paradigm for every layer – from Business Logic to Widgets. It may seem hard to understand or even redundant, but such an approach solves a lot of issues and allows one to focus on meaningful tasks.
+
+The starter provides a solution, in the form of a pre-written Module or simply included package, for the following problems:
+- [x] HTTP requests
+- [x] Local DB
+- [x] State management
+- [x] Navigation (may change)
+- [x] Logging
+- [ ] Theming 
+- [ ] Localization 
+- [ ] Authentication 
+- [ ] Testing
+
+Every of the listed solutions is easily substitutable, and any solution can be swapped to another one, or discarded altogether if not needed. 
+
 ## Layers
 
 ### Modules layer
@@ -87,7 +108,7 @@ List of default packages included in starter.
 
 ### FP
 * fpdart
-* pure (coming soon)
+* pure 
 * Fast Immutable Collections
 
 ### Remote and local data
@@ -109,28 +130,24 @@ List of pre-written modules included in starter.
 
 ### Core
 
-- [x] Pattern-matching
+- Pattern-matching
 
 ### IO
 
-- [x] Logger
-- [x] Navigation
-- [ ] DB client access
-- [x] HTTP client access
-- [x] HTTP requests
+- Logger
+- Navigation
+- DB client access
+- HTTP client access
+- HTTP requests
 
 ## Included extensions
 
-- [x] Context
-    - [x] IO msg
-    - [ ] Localization (?)
-- [x] IO
-    - [x] Put
-    - [x] Perform IO and discard result 
-- [x] Object
-    - [x] Right Pipe
-    - [x] Is null / is not null
-- [x] Task
-    - [x] Put
-    - [x] As Unit
-    - [x] Perform IO and discard result
+- Context
+    - IO msg
+    - Localization (?, WIP)
+- IO / Task
+    - Put
+    - As Unit
+    - Perform IO and discard result 
+- Object
+    - Is null / is not null
