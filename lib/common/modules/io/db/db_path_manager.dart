@@ -16,6 +16,6 @@ mixin DbPathManager {
   static TaskEither<Failure, String> getPath(String dbName) =>
       TaskEither<Failure, String>.tryCatch(
         () => _createPathUnsafeMemoized(dbName),
-        (e, s) => Failure(s, e),
+        Failure.n,
       );
 }

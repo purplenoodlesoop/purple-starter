@@ -78,7 +78,6 @@ linter:
     - empty_constructor_bodies # error!
     - exhaustive_cases # error!
     - file_names # error!
-    - flutter_style_todos
     - implementation_imports
     - join_return_with_assignment # error!
     - leading_newlines_in_multiline_strings # error!

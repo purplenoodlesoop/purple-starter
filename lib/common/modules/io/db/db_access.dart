@@ -7,33 +7,40 @@ import 'package:functional_starter/common/modules/io/db/db_path_manager.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
 
-typedef DbCallback<T> = Task<Unit> Function(
+typedef DbCallback<T> = Future<void> Function(
   Database db,
   StoreRef<T, Map<String, Object?>> store,
 );
 
 mixin DbAccess {
-  static Task<Unit> perform<T>(
+  static TaskEither<Failure, Unit> perform<T>(
     String dbPath,
     StoreRef<T, Map<String, Object?>> store,
-    DbCallback<T> f,
+    DbCallback<T> fUnsafe,
   ) =>
-      Task(() => databaseFactoryIo.openDatabase(dbPath)).flatMap(
-        (db) => f(db, store).flatMap((_) => Task(db.close).asUnit()),
+      TaskEither.tryCatch(
+        () => databaseFactoryIo.openDatabase(dbPath),
+        Failure.n,
+      ).flatMap(
+        // TODO: -- Make client close anyway, using match instead of flatMap
+        (db) => TaskEither.tryCatch(
+          () => fUnsafe(db, store),
+          Failure.n,
+        ).flatMap(
+          (_) => TaskEither.fromTask(Task(db.close).asUnit()),
+        ),
       );
 
   static TaskEither<Failure, Unit> performDefault(
     String dbName,
     String storeName,
-    DbCallback<String> f,
+    DbCallback<String> fUnsafe,
   ) =>
       DbPathManager.getPath(dbName).flatMap(
-        (dbPath) => TaskEither.fromTask(
-          perform<String>(
-            dbPath,
-            stringMapStoreFactory.store(storeName),
-            f,
-          ),
+        (dbPath) => perform<String>(
+          dbPath,
+          stringMapStoreFactory.store(storeName),
+          fUnsafe,
         ),
       );
 
