@@ -2,31 +2,36 @@ import 'dart:async';
 
 import 'package:fpdart/fpdart.dart';
 import 'package:functional_starter/common/extensions/extensions.dart';
+import 'package:functional_starter/common/helpers/try_task.dart';
 import 'package:functional_starter/common/models/failure.dart';
 import 'package:functional_starter/common/modules/io/db/db_path_manager.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
 
-typedef DbCallback<T> = Future<void> Function(
+typedef DbCallbackUnsafe<T> = Future<void> Function(
   Database db,
   StoreRef<T, Map<String, Object?>> store,
 );
 
 mixin DbAccess {
+  static StoreRef<String, Map<String, Object?>> _mkStore(
+    String name,
+  ) =>
+      stringMapStoreFactory.store(name);
+
+  static Future<Database> _mkDb(
+    String path,
+  ) =>
+      databaseFactoryIo.openDatabase(path);
+
+  // TODO: -- Make client close anyway, using match instead of flatMap
   static TaskEither<Failure, Unit> perform<T>(
     String dbPath,
     StoreRef<T, Map<String, Object?>> store,
-    DbCallback<T> fUnsafe,
+    DbCallbackUnsafe<T> f,
   ) =>
-      TaskEither.tryCatch(
-        () => databaseFactoryIo.openDatabase(dbPath),
-        Failure.n,
-      ).flatMap(
-        // TODO: -- Make client close anyway, using match instead of flatMap
-        (db) => TaskEither.tryCatch(
-          () => fUnsafe(db, store),
-          Failure.n,
-        ).flatMap(
+      tryTask(() => _mkDb(dbPath)).flatMap(
+        (db) => tryTask(() => f(db, store)).flatMap(
           (_) => TaskEither.fromTask(Task(db.close).asUnit()),
         ),
       );
@@ -34,14 +39,10 @@ mixin DbAccess {
   static TaskEither<Failure, Unit> performDefault(
     String dbName,
     String storeName,
-    DbCallback<String> fUnsafe,
+    DbCallbackUnsafe<String> f,
   ) =>
       DbPathManager.getPath(dbName).flatMap(
-        (dbPath) => perform<String>(
-          dbPath,
-          stringMapStoreFactory.store(storeName),
-          fUnsafe,
-        ),
+        (dbPath) => perform(dbPath, _mkStore(storeName), f),
       );
 
   Stream<List<RecordSnapshot<T, Map<String, Object?>>>> stream<T>(
@@ -49,7 +50,7 @@ mixin DbAccess {
     StoreRef<T, Map<String, Object?>> store, {
     Finder? finder,
   }) async* {
-    final db = await databaseFactoryIo.openDatabase(dbPath);
+    final db = await _mkDb(dbPath);
 
     StreamSubscription<List<RecordSnapshot<T, Map<String, Object?>>>>?
         subscription;
@@ -80,14 +81,9 @@ mixin DbAccess {
     Finder? finder,
   }) async* {
     final dbPath = await DbPathManager.getPath(dbName).run();
-    if (dbPath is Left<Failure, String>) {
-      final failure = dbPath.value;
-      yield* Stream.error(failure.exception, failure.stackTrace);
-    } else {
-      yield* stream<String>(
-        (dbPath as Right<Failure, String>).value,
-        stringMapStoreFactory.store(storeName),
-      );
-    }
+    yield* dbPath.match(
+      (failure) => Stream.error(failure.exception, failure.stackTrace),
+      (path) => stream(path, _mkStore(storeName)),
+    );
   }
 }
