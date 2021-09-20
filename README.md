@@ -108,7 +108,7 @@ List of default packages included in starter.
 
 ### FP
 * fpdart
-* pure (coming soon)
+* pure 
 * Fast Immutable Collections
 
 ### Remote and local data
