@@ -1,3 +1,7 @@
+analyzer:
+  strong-mode:
+    implicit-casts: false
+
 linter:
   rules:
     # --- Error Rules ---
@@ -103,7 +107,6 @@ linter:
     - prefer_const_declarations # error!
     - prefer_const_literals_to_create_immutables # error!
     - prefer_contains # error!
-    - prefer_double_quotes
     - prefer_equal_for_default_values
     - prefer_expression_function_bodies # error!
     - prefer_final_fields # error!
