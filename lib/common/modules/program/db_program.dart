@@ -19,8 +19,7 @@ mixin DbProgram {
         (dbPath) => DbAccess.perform(dbPath, _mkStore(storeName), f),
       );
 
-  static Stream<List<RecordSnapshot<String, Map<String, Object?>>>>
-      streamDefault(
+  static Stream<List<RecordSnapshot<String, Map<String, Object?>>>> snapshots(
     String dbName,
     String storeName, {
     Finder? finder,
@@ -28,7 +27,7 @@ mixin DbProgram {
     final dbPath = await DbPathManager.getPath(dbName).run();
     yield* dbPath.match(
       (failure) => Stream.error(failure.exception, failure.stackTrace),
-      (path) => DbAccess.stream(path, _mkStore(storeName)),
+      (path) => DbAccess.snapshots(path, _mkStore(storeName)),
     );
   }
 }

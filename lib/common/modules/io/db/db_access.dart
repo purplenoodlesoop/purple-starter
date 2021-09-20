@@ -30,7 +30,7 @@ mixin DbAccess {
         ),
       );
 
-  static Stream<List<RecordSnapshot<T, Map<String, Object?>>>> stream<T>(
+  static Stream<List<RecordSnapshot<T, Map<String, Object?>>>> snapshots<T>(
     String dbPath,
     StoreRef<T, Map<String, Object?>> store, {
     Finder? finder,
