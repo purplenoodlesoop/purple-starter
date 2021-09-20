@@ -6,3 +6,7 @@ extension TaskExtensions<A> on Task<A> {
 
   Task<B> put<B>(B b) => map((_) => b);
 }
+
+extension ToUnitTask on Task<void> {
+  Task<Unit> asUnit() => put(unit);
+}

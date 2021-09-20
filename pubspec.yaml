@@ -32,10 +32,12 @@ dependencies:
 
   # FP
   fpdart: ^0.0.10
-  # pure: ^0.1.0
+  pure: ^0.1.1
   fast_immutable_collections: ^7.0.0
 
   # Local and remote data
+  path: ^1.8.0
+  path_provider: ^2.0.4
   sembast: ^3.0.1
   http: ^0.13.3
 
