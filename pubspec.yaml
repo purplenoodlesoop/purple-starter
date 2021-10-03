@@ -48,9 +48,6 @@ dependencies:
   json_serializable: any
   build_runner: any
 
-  # State management
-  provider_msg: ^0.1.0
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
