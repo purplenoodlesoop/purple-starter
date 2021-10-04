@@ -13,7 +13,7 @@ It is highly functional and embraces the Functional Programming paradigm for eve
 The starter provides a solution, in the form of a pre-written Module or simply included package, for the following problems:
 - [x] HTTP requests
 - [x] Local DB
-- [ ] State management - WIP, current bugged -
+- [ ] State management - WIP, currently bugged -
 - [x] Navigation (may change)
 - [x] Logging
 - [ ] Theming 
@@ -24,6 +24,29 @@ The starter provides a solution, in the form of a pre-written Module or simply i
 Every of the listed solutions is easily substitutable, and any solution can be swapped to another one, or discarded altogether if not needed. 
 
 ## Purpose
+
+### Core aspects.
+
+The starter allows rapidly developing correct Flutter applications. It uses heavily Functional Programming, and was built with following aspects kept in mind:
+- Correctness. Applications must function predictably and reliably in any case.
+- Maintainability. Applications must be easy to maintain, both from cold and practical sense, and from psychological. Code must not intimidate the developer, even after large intervals of time spent away from it.
+- Conciseness and expressiveness. Applications must require little code actually written by the developer. This involves and is not limited to: using a correct paradigm, using code generation, using templates/snippets.
+
+### Design decisions.
+
+The following decisions were made while developing the Starter's design. 
+
+#### Structure. 
+
+Feature first vs Function first – Feature first. This approach scales better, enables more organic encapsulation and makes navigation easier.
+
+#### Paradigm.
+
+OOP vs FP – FP. Functional programming nicely aligns with the core aspects. It allows to write more correct, expressive and maintainable code – even in OOP language that is Dart.
+
+#### Database type.
+
+SQL vs NoSQL – NoSQL. NoSQL databases cover most of the needs of the modern Flutter applications, and helps to get rid of the headaches that SQL databases bring along with their requirements.
 
 ## Layers
 
@@ -63,6 +86,10 @@ Side effects, either synchronous or asynchronous, should not be executed "as is"
 And about the `void` type – `fpdart` offers an alternative, `Unit` type, that can increase the type safety – `Unit` will not mask itself as other types and require explicitly returning it from the function.
 
 ### Widgets must behave as pure functions
+
+Widgets must behave as pure functions towards the actual UI, even if they are implemented through classes. It is discouraged to pollute feature-specific widgets with calls to the context, making them referentially non-transparent. 
+
+Instead, widgets must accept models as parameters, and display only the information that was given as function arguments or class fields. To perform actions, widgets can directly locate the `Store`/`Cubit`/`BLoC` and add an event/call a method, since those abstractions already decouple state from UI.
 
 ## Folder structure
 
