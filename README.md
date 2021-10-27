@@ -31,6 +31,7 @@ The starter allows rapidly developing correct Flutter applications. It uses heav
 - Correctness. Applications must function predictably and reliably in any case.
 - Maintainability. Applications must be easy to maintain, both from cold and practical sense, and from psychological. Code must not intimidate the developer, even after large intervals of time spent away from it.
 - Conciseness and expressiveness. Applications must require little code actually written by the developer. This involves and is not limited to: using a correct paradigm, using code generation, using templates/snippets.
+- Declarative style. Anything that can be done, derived or inferred automatically should be done, derived or inferred automatically. This includes, but not limited to: manual subscription or any other lifecycle management, both right and left side type declarations, reassigning of variables, imperative-style loops.
 
 ### Design decisions.
 
