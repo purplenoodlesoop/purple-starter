@@ -31,14 +31,12 @@ dependencies:
     sdk: flutter
 
   # FP
-  fpdart: ^0.0.10
   pure: ^0.1.1
   fast_immutable_collections: ^7.0.0
 
   # Local and remote data
-  path: ^1.8.0
-  path_provider: ^2.0.4
-  sembast: ^3.0.1
+  objectbox: ^1.2.0
+  objectbox_flutter_libs: any
   http: ^0.13.3
 
   # Code generation
@@ -46,11 +44,15 @@ dependencies:
   freezed: any
   freezed_annotation: any
   json_serializable: any
-  build_runner: any
+
+  # Utils
+  l: ^3.0.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  build_runner: any
+  objectbox_generator: any
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
