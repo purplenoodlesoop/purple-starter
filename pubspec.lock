@@ -202,25 +202,11 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_msg:
-    dependency: transitive
-    description:
-      name: flutter_msg
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.2.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
     source: sdk
     version: "0.0.0"
-  fpdart:
-    dependency: "direct main"
-    description:
-      name: fpdart
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.10"
   freezed:
     dependency: "direct main"
     description:
@@ -305,6 +291,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.1.4"
+  l:
+    dependency: "direct main"
+    description:
+      name: l
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.1"
   logging:
     dependency: transitive
     description:
@@ -330,20 +323,6 @@ packages:
     dependency: transitive
     description:
       name: mime
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.0"
-  msg:
-    dependency: transitive
-    description:
-      name: msg
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.2.0"
-  nested:
-    dependency: transitive
-    description:
-      name: nested
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
@@ -431,20 +410,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.2.3"
-  provider:
-    dependency: transitive
-    description:
-      name: provider
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "5.0.0"
-  provider_msg:
-    dependency: "direct main"
-    description:
-      name: provider_msg
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.0"
   pub_semver:
     dependency: transitive
     description:

@@ -31,7 +31,6 @@ dependencies:
     sdk: flutter
 
   # FP
-  fpdart: ^0.0.10
   pure: ^0.1.1
   fast_immutable_collections: ^7.0.0
 
@@ -47,6 +46,9 @@ dependencies:
   freezed_annotation: any
   json_serializable: any
   build_runner: any
+
+  # Utils
+  l: ^3.0.1
 
 dev_dependencies:
   flutter_test:

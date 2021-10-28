@@ -11,11 +11,11 @@ The starter favors static to dynamic, immutability to mutability, functional app
 It is highly functional and embraces the Functional Programming paradigm for every layer – from Business Logic to Widgets. It may seem hard to understand or even redundant, but such an approach solves a lot of issues and allows one to focus on meaningful tasks.
 
 The starter provides a solution, in the form of a pre-written Module or simply included package, for the following problems:
-- [x] HTTP requests
-- [x] Local DB
-- [ ] State management - WIP, currently bugged -
-- [x] Navigation (may change)
-- [x] Logging
+- [ ] HTTP requests
+- [ ] Local DB
+- [ ] State management
+- [ ] Navigation
+- [ ] Logging
 - [ ] Theming 
 - [ ] Localization 
 - [ ] Authentication 
