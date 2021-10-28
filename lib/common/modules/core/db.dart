@@ -9,32 +9,11 @@ Stream<List<T>> obStreamQuery<T>(
   QueryProperty<T, dynamic>? orderBy,
   int? flags,
 }) {
-  StreamSubscription<Query<T>>? querySubscription;
-
-  final queryStreamController = StreamController<List<T>>.broadcast();
-
-  void onListen() {
-    final query = box.query(condition);
-    if (orderBy != null) {
-      flags == null
-          ? query.order<dynamic>(orderBy)
-          : query.order<dynamic>(orderBy, flags: flags);
-    }
-    querySubscription = query.watch().listen(
-          (query) => queryStreamController.add(query.find()),
-          onDone: queryStreamController.close,
-          onError: queryStreamController.addError,
-        );
+  final query = box.query(condition);
+  if (orderBy != null) {
+    flags == null
+        ? query.order<dynamic>(orderBy)
+        : query.order<dynamic>(orderBy, flags: flags);
   }
-
-  void onCancel() {
-    querySubscription?.cancel();
-    queryStreamController.close();
-  }
-
-  queryStreamController
-    ..onListen = onListen
-    ..onCancel = onCancel;
-
-  return queryStreamController.stream;
+  return query.watch().map((query) => query.find());
 }
