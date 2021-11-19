@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:objectbox/objectbox.dart' as ob;
 
 class DependenciesProvider extends StatefulWidget {
-  final ob.Store obStore;
   final Widget child;
 
   const DependenciesProvider({
     Key? key,
-    required this.obStore,
     required this.child,
   }) : super(key: key);
 
@@ -16,8 +13,6 @@ class DependenciesProvider extends StatefulWidget {
 
   static http.Client httpClientOf(BuildContext context) =>
       _stateOf(context).getClient();
-
-  static ob.Store obStoreOf(BuildContext context) => _stateOf(context).obStore;
 
   @override
   _DependenciesProviderState createState() => _DependenciesProviderState();
@@ -27,7 +22,6 @@ class _DependenciesProviderState extends State<DependenciesProvider> {
   http.Client? _client;
 
   http.Client getClient() => _client ??= http.Client();
-  ob.Store get obStore => widget.obStore;
 
   static _DependenciesProviderState of(BuildContext context) =>
       _InheriteDependenciesProvider.of(context).providerState;
@@ -35,7 +29,6 @@ class _DependenciesProviderState extends State<DependenciesProvider> {
   @override
   void dispose() {
     _client?.close();
-    obStore.close();
     super.dispose();
   }
 

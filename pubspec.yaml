@@ -35,8 +35,6 @@ dependencies:
   fast_immutable_collections: ^7.0.0
 
   # Local and remote data
-  objectbox: ^1.2.0
-  objectbox_flutter_libs: any
   http: ^0.13.3
 
   # Code generation
@@ -52,7 +50,6 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   build_runner: any
-  objectbox_generator: any
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
