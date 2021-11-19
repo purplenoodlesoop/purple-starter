@@ -1,3 +1,3 @@
-library extensions;
+library common_extensions;
 
 mixin ImportCommonExtensions {}
