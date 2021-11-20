@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:l/l.dart';
 
-mixin ErrorModule {
+mixin ErrorM {
   static bool _shouldLog(
     List<bool> Function(Object e)? ignoreWhen,
     Object e,

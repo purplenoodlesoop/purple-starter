@@ -3,7 +3,7 @@ import 'package:l/l.dart';
 
 extension on DateTime {
   String get formatted =>
-      [hour, minute, second].map(LoggerModule._timeFormat).join(":");
+      [hour, minute, second].map(LoggerM._timeFormat).join(":");
 }
 
 extension on LogLevel {
@@ -17,7 +17,7 @@ extension on LogLevel {
       );
 }
 
-mixin LoggerModule {
+mixin LoggerM {
   static const _logOptions = LogOptions(
     printColors: false,
     messageFormatting: _formatLoggerMessage,

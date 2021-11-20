@@ -3,19 +3,19 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:functional_starter/common/modules/io/logger.dart';
 
-mixin MainRunnerModule {
-  static Future<void> _onInit() async {
-    WidgetsFlutterBinding.ensureInitialized();
-  }
+mixin MainRunnerM {
+  static Future<void> _onInit() async {}
 
-  static Future<void> run(void Function() app) async {
-    await LoggerModule.runLogging(
+  static Future<void> run(Widget Function() app) async {
+    await LoggerM.runLogging(
       () => runZonedGuarded(
         () async {
+          WidgetsFlutterBinding.ensureInitialized();
+          FlutterError.onError = LoggerM.logFlutterError;
           await _onInit();
-          app();
+          runApp(app());
         },
-        LoggerModule.logZoneError,
+        LoggerM.logZoneError,
       ),
     );
   }
