@@ -1,30 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:functional_starter/common/interfaces/app_dependencies.dart';
 import 'package:http/http.dart' as http;
 
-class DependenciesProvider extends StatefulWidget {
+class AppDependenciesProvider extends StatefulWidget {
   final Widget child;
 
-  const DependenciesProvider({
+  const AppDependenciesProvider({
     Key? key,
     required this.child,
   }) : super(key: key);
 
-  static const _stateOf = _DependenciesProviderState.of;
-
-  static http.Client httpClientOf(BuildContext context) =>
-      _stateOf(context).getClient();
+  static IAppDependencies of(BuildContext context) =>
+      _InheritedAppDependenciesProvider.of(context).providerState;
 
   @override
-  _DependenciesProviderState createState() => _DependenciesProviderState();
+  _AppDependenciesProviderState createState() =>
+      _AppDependenciesProviderState();
 }
 
-class _DependenciesProviderState extends State<DependenciesProvider> {
+class _AppDependenciesProviderState extends State<AppDependenciesProvider>
+    implements IAppDependencies {
   http.Client? _client;
 
-  http.Client getClient() => _client ??= http.Client();
-
-  static _DependenciesProviderState of(BuildContext context) =>
-      _InheriteDependenciesProvider.of(context).providerState;
+  @override
+  http.Client get httpClient => _client ??= http.Client();
 
   @override
   void dispose() {
@@ -33,27 +32,27 @@ class _DependenciesProviderState extends State<DependenciesProvider> {
   }
 
   @override
-  Widget build(BuildContext context) => _InheriteDependenciesProvider(
+  Widget build(BuildContext context) => _InheritedAppDependenciesProvider(
         providerState: this,
         child: widget.child,
       );
 }
 
-class _InheriteDependenciesProvider extends InheritedWidget {
-  final _DependenciesProviderState providerState;
+class _InheritedAppDependenciesProvider extends InheritedWidget {
+  final _AppDependenciesProviderState providerState;
 
-  const _InheriteDependenciesProvider({
+  const _InheritedAppDependenciesProvider({
     required this.providerState,
     required Widget child,
   }) : super(child: child);
 
-  static _InheriteDependenciesProvider of(BuildContext context) {
-    final provider = context
-        .dependOnInheritedWidgetOfExactType<_InheriteDependenciesProvider>();
-    assert(provider != null, "Unable to locate DependenciesProvider.");
+  static _InheritedAppDependenciesProvider of(BuildContext context) {
+    final provider = context.dependOnInheritedWidgetOfExactType<
+        _InheritedAppDependenciesProvider>();
+    assert(provider != null, "Unable to locate AppDependenciesProvider.");
     return provider!;
   }
 
   @override
-  bool updateShouldNotify(_InheriteDependenciesProvider _) => false;
+  bool updateShouldNotify(_InheritedAppDependenciesProvider _) => false;
 }

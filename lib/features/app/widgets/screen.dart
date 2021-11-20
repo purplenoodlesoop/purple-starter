@@ -10,7 +10,7 @@ class NameApp extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => DependenciesProvider(
+  Widget build(BuildContext context) => AppDependenciesProvider(
         child: MaterialApp(
           home: child,
         ),
