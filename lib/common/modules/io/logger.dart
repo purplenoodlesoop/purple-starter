@@ -3,7 +3,7 @@ import 'package:l/l.dart';
 
 extension on DateTime {
   String get formatted =>
-      [hour, minute, second].map(loggerModule.timeFormat).join(":");
+      [hour, minute, second].map(LoggerModule._timeFormat).join(":");
 }
 
 extension on LogLevel {
@@ -17,18 +17,13 @@ extension on LogLevel {
       );
 }
 
-class LoggerModule {
-  const LoggerModule._internal();
-  const factory LoggerModule._() = LoggerModule._internal;
-
-  static const logOptions = LogOptions(
+mixin LoggerModule {
+  static const _logOptions = LogOptions(
     printColors: false,
     messageFormatting: _formatLoggerMessage,
   );
-}
 
-extension XLoggerModule on LoggerModule {
-  String timeFormat(int input) => input.toString().padLeft(2, "0");
+  static String _timeFormat(int input) => input.toString().padLeft(2, "0");
 
   static Object _formatLoggerMessage(
     Object message,
@@ -37,7 +32,7 @@ extension XLoggerModule on LoggerModule {
   ) =>
       "${logLevel.emoji} ${now.formatted} | $message";
 
-  String _formatError(
+  static String _formatError(
     String type,
     String error,
     StackTrace? stackTrace,
@@ -53,19 +48,19 @@ extension XLoggerModule on LoggerModule {
     return buffer.toString();
   }
 
-  void logZoneError(
+  static void logZoneError(
     Object? e,
     StackTrace s,
   ) {
     l.e(_formatError("Top-level", e.toString(), s), s);
   }
 
-  void logFlutterError(
+  static void logFlutterError(
     FlutterErrorDetails details,
   ) {
     final s = details.stack;
     l.e(_formatError("Flutter", details.exceptionAsString(), s), s);
   }
-}
 
-const loggerModule = LoggerModule._();
+  static T runLogging<T>(T Function() body) => l.capture(body, _logOptions);
+}
