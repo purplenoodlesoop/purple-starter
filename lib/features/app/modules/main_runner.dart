@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:functional_starter/common/modules/io/logger.dart';
+import 'package:functional_starter/common/modules/logger.dart';
 
 mixin MainRunnerM {
   static Future<void> _onInit() async {}
