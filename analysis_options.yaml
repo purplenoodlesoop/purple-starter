@@ -29,7 +29,6 @@ analyzer:
     await_only_futures: error
     cast_nullable_to_non_nullable: error
     curly_braces_in_flow_control_structures: error
-    do_not_use_environment: error
     empty_catches: error
     empty_constructor_bodies: error
     exhaustive_cases: error
@@ -39,7 +38,6 @@ analyzer:
     library_names: error
     missing_whitespace_between_adjacent_strings: error
     omit_local_variable_types: error
-    one_member_abstracts: error
     only_throw_errors: error
     overridden_fields: error
     parameter_assignments: error
@@ -143,7 +141,6 @@ linter:
     - curly_braces_in_flow_control_structures
     - deprecated_consistency
     - directives_ordering
-    - do_not_use_environment
     - empty_catches
     - empty_constructor_bodies
     - exhaustive_cases
@@ -162,7 +159,6 @@ linter:
     - null_check_on_nullable_type_parameter # experimental
     - null_closures
     - omit_local_variable_types
-    - one_member_abstracts
     - only_throw_errors
     - overridden_fields
     - package_prefixed_library_names
