@@ -18,7 +18,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.14.0 <3.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -30,26 +30,43 @@ dependencies:
   flutter:
     sdk: flutter
 
-  # FP
+  # System
+  path_provider: ^2.0.0
+  path: ^1.8.0
+
+  # Immutability & FP
   pure: ^0.1.1
   fast_immutable_collections: ^7.0.0
+  stream_transform: ^2.0.0
 
-  # Local and remote data
-  http: ^0.13.3
+  # BLoC
+  stream_bloc: ^0.1.0
+  flutter_bloc: ^8.0.1
 
   # Code generation
-  # TODO: -- Fix versions to appropriate ones
-  freezed: any
-  freezed_annotation: any
-  json_serializable: any
+  freezed_annotation: ^1.1.0
 
-  # Utils
+  # Internationalization
+  intl: ^0.17.0
+
+  # Logging
   l: ^3.0.1
+  sentry_flutter: ^6.2.2
+
+  # SQL
+  drift: ^1.2.0
+  sqlite3_flutter_libs: ^0.5.0
+
+  # HTTP
+  dio: ^4.0.4
+  retrofit: ^3.0.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  build_runner: any
+  drift_dev: ^1.2.0
+  build_runner: ^2.1.7
+  freezed: ^1.1.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
