@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:functional_starter/common/modules/logger.dart';
 
-mixin MainRunnerM {
+mixin MainRunner {
   static Future<void> _onInit() async {}
 
   static Future<void> run(Widget Function() app) async {
