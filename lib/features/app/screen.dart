@@ -13,7 +13,7 @@ class NameApp extends StatelessWidget {
   Widget build(BuildContext context) => ThemeControllerProvider(
         themeController: ThemeController(),
         child: const AppDependenciesProvider(
-          // TODO: - Assign propper name
+          // TODO: - Assign proper name
           databaseName: "db",
           child: AppConfiguration(),
         ),

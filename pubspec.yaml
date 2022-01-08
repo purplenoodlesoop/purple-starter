@@ -30,9 +30,13 @@ dependencies:
   flutter:
     sdk: flutter
 
-  # FP
+  # Immutability & FP
   pure: ^0.1.1
   fast_immutable_collections: ^7.0.0
+
+  # BLoC
+  stream_bloc: ^0.1.0
+  flutter_bloc: ^8.0.1
 
   # System
   path_provider: ^2.0.0
