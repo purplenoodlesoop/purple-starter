@@ -37,6 +37,7 @@ dependencies:
   # Immutability & FP
   pure: ^0.1.1
   fast_immutable_collections: ^7.0.0
+  stream_transform: ^2.0.0
 
   # BLoC
   stream_bloc: ^0.1.0
