@@ -1,5 +1,5 @@
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 
 abstract class IAppDependencies {
-  http.Client get httpClient;
+  Dio get dioClient;
 }

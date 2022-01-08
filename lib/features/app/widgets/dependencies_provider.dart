@@ -1,6 +1,6 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:functional_starter/common/interfaces/app_dependencies.dart';
-import 'package:http/http.dart' as http;
 
 class AppDependenciesProvider extends StatefulWidget {
   final Widget child;
@@ -20,10 +20,10 @@ class AppDependenciesProvider extends StatefulWidget {
 
 class _AppDependenciesProviderState extends State<AppDependenciesProvider>
     implements IAppDependencies {
-  http.Client? _client;
+  Dio? _client;
 
   @override
-  http.Client get httpClient => _client ??= http.Client();
+  Dio get dioClient => _client ??= Dio();
 
   @override
   void dispose() {
