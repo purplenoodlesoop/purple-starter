@@ -1,7 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:functional_starter/common/db/app_database.dart';
-import 'package:functional_starter/common/interfaces/app_dependencies.dart';
+import 'package:functional_starter/common/database/app_database.dart';
+
+abstract class IAppDependencies {
+  Dio get dioClient;
+  AppDatabase get database;
+}
 
 class AppDependenciesProvider extends StatefulWidget {
   final String databaseName;
@@ -61,10 +65,10 @@ class _InheritedAppDependenciesProvider extends InheritedWidget {
   }) : super(child: child);
 
   static _InheritedAppDependenciesProvider of(BuildContext context) {
-    final provider = context.dependOnInheritedWidgetOfExactType<
+    final provider = context.getElementForInheritedWidgetOfExactType<
         _InheritedAppDependenciesProvider>();
     assert(provider != null, "Unable to locate AppDependenciesProvider.");
-    return provider!;
+    return provider!.widget as _InheritedAppDependenciesProvider;
   }
 
   @override
