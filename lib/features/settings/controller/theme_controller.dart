@@ -1,7 +1,13 @@
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
-import 'package:functional_starter/features/settings/interfaces/theme_controller.dart';
+
+abstract class IThemeController implements Listenable {
+  ThemeData get theme;
+  bool get isDark;
+  bool get isLight;
+  void toggleTheme();
+}
 
 class ThemeController extends ChangeNotifier implements IThemeController {
   @override

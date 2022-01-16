@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:functional_starter/common/extension/extensions.dart';
-import 'package:functional_starter/features/settings/interfaces/theme_controller.dart';
+import 'package:functional_starter/features/settings/controller/theme_controller.dart';
 
 class ThemeControllerProvider extends InheritedNotifier<IThemeController> {
   const ThemeControllerProvider({
