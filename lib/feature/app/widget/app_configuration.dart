@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:functional_starter/features/settings/widgets/theme_controller_provider.dart';
+import 'package:functional_starter/feature/settings/widget/theme_controller_provider.dart';
 
 class AppConfiguration extends StatelessWidget {
   const AppConfiguration({

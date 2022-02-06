@@ -1,6 +1,6 @@
 # functional_starter
 
-Flutter project starter using updated MSWS architecture, providing pre-written modules, extensions, and included dependencies for functional Flutter apps.
+Flutter project starter using updated MSWS architecture, providing pre-written module, extensions, and included dependencies for functional Flutter apps.
 
 ## Overview
 
@@ -8,7 +8,7 @@ The starter contains included packages, pre-written boilerplate, and provides ar
 
 The starter favors static to dynamic, immutability to mutability, functional approach to object-oriented approach, declarative style to imperative style, while not forcing any anti-patterns such as Singletons or others, that are unfortunately widely used.
 
-It is highly functional and embraces the Functional Programming paradigm for every layer – from Business Logic to Widgets. It may seem hard to understand or even redundant, but such an approach solves a lot of issues and allows one to focus on meaningful tasks.
+It is highly functional and embraces the Functional Programming paradigm for every layer – from Business Logic to widget. It may seem hard to understand or even redundant, but such an approach solves a lot of issues and allows one to focus on meaningful tasks.
 
 The starter provides a solution, in the form of a pre-written Module or simply included package, for the following problems:
 - [ ] HTTP requests
@@ -51,7 +51,7 @@ SQL vs NoSQL – NoSQL. NoSQL databases cover most of the needs of the modern Fl
 
 ## Layers
 
-### Modules layer
+### module layer
 
 Represent business logic as purely functional as possible. Consists of 3 sub-layers: Core, IO, and Program. 
 - Core. Pure, non-IO, rarely `Future`, functions that require little dependencies. Uses `Pure`'s Reader Monad / Parametrized Injection to obtain dependencies.
@@ -62,17 +62,17 @@ Represent business logic as purely functional as possible. Consists of 3 sub-lay
 
 Specific to concrete state manager. This starter does not force any state management, and end user is free to choose from available options. It's recommended to use any state manager that enforces immutable state, and `Cubit` from the package `flutter_bloc` is one of the options. Please, just don't use GetX.
 
-### Widgets layer
+### widget layer
 
 WIP
 
-Represents the layout of the screen. Host Store instance injected using `StoreProvider`, binding their lifecycle to their own, and supply selected state into widgets. Uses Stores to provide state to widgets, but never uses it itself and never uses modules. Uses `Binder`/`Selector` with Display widgets and `El` with Act widgets, supplying an Element to them.
+Represents the layout of the screen. Host Store instance injected using `StoreProvider`, binding their lifecycle to their own, and supply selected state into widget. Uses Stores to provide state to widget, but never uses it itself and never uses module. Uses `Binder`/`Selector` with Display widget and `El` with Act widget, supplying an Element to them.
 
 ## Code style
 
 ### It is a functional starter, and functional style is highly encouraged. 
 
-Usage of non-data and non-widget classes should be limited, and functions must be used as a basic building block. For convenience, readability and discoverability, it is suggested to use named imports only on Modules.
+Usage of non-data and non-widget classes should be limited, and functions must be used as a basic building block. For convenience, readability and discoverability, it is suggested to use named imports only on module.
 
 ### Decomposition and loose coupling should be always kept in mind. 
 
@@ -82,11 +82,11 @@ Achieving former is easily done in FP – since every function is pure, it can b
 
 WIP
 
-### Widgets must behave as pure functions
+### widget must behave as pure functions
 
-Widgets must behave as pure functions towards the actual UI, even if they are implemented through classes. It is discouraged to pollute feature-specific widgets with calls to the context, making them referentially non-transparent. 
+widget must behave as pure functions towards the actual UI, even if they are implemented through classes. It is discouraged to pollute feature-specific widget with calls to the context, making them referentially non-transparent. 
 
-Instead, widgets must accept models as parameters, and display only the information that was given as function arguments or class fields. To perform actions, widgets can directly locate the `Store`/`Cubit`/`BLoC` and add an event/call a method, since those abstractions already decouple state from UI.
+Instead, widget must accept models as parameters, and display only the information that was given as function arguments or class fields. To perform actions, widget can directly locate the `Store`/`Cubit`/`BLoC` and add an event/call a method, since those abstractions already decouple state from UI.
 
 ## Folder structure
 
@@ -100,9 +100,9 @@ lib
 │   ├── models
 │   ├── extensions
 │   │   └── % Extensions structure %
-│   └── modules
+│   └── module
 │       └── % Module structure %
-├── features
+├── feature
 │   ├── % Feature A %
 │   │   └── % Feature Structure %
 │   ├── % Feature B %
@@ -110,10 +110,10 @@ lib
 └── main.dart
 ```
 
-### Modules
+### module
 
 ```
-modules
+module
 ├── core (optional)
 ├── io (optional)
 └── program (optional)
@@ -135,12 +135,12 @@ extensions
 ├── models
 ├── data (optional)
 ├── enums (optional)
-├── modules (optional)
-│   └── % Modules structure %
+├── module (optional)
+│   └── % module structure %
 ├── extensions (optional)
 │   └── % Extensions structure %
 ├── % State management-specific %
-└── widgets
+└── widget
     └── screen.dart
 ```
 
@@ -162,9 +162,9 @@ List of default packages included in starter.
 * json_serializable
 * build_runner
 
-## Included Modules
+## Included module
 
-List of pre-written modules included in starter.
+List of pre-written module included in starter.
 
 ### Core
 
