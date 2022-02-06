@@ -1,4 +1,4 @@
-.PHONY: get upgrade upgrade-major gen-delete deep-clean set-icon emulator simulator
+.PHONY: get upgrade upgrade-major gen-delete deep-clean set-icon google-localizations emulator simulator
 
 get:
 	@echo "* Getting latest dependencies *"
@@ -22,8 +22,16 @@ deep-clean:
 	@make get
 
 set-icon: get
+	@echo "* Removing alpha chanel from icon *"
 	@sh ./script/icon_remove_alpha.sh
+	@echo "* Generating app icons *"
 	@flutter pub run flutter_launcher_icons:main -f flutter_icons.yaml
+
+google-localizations:
+	@echo "* Getting dependencies form google localizer *"
+	@(cd ./tool/google_localizer; dart pub get)
+	@echo "* Generating automated localizations *"
+	@dart ./tool/google_localizer/main.dart "./lib/common/l10n/"
 
 emulator:
 	@echo "* Opening an android emulator *"
