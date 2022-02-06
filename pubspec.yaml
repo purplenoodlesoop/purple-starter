@@ -40,7 +40,7 @@ dependencies:
   stream_transform: ^2.0.0
 
   # BLoC
-  stream_bloc: ^0.1.0
+  stream_bloc: ^0.3.0
   flutter_bloc: ^8.0.1
 
   # Code generation
@@ -60,6 +60,9 @@ dependencies:
   # HTTP
   dio: ^4.0.4
   retrofit: ^3.0.1
+
+  # Utils
+  flutter_launcher_icons: ^0.9.2
 
 dev_dependencies:
   flutter_test:
