@@ -19,8 +19,8 @@ void main(List<String> args) => Environment.run(
 
 typedef Arb = Map<String, dynamic>;
 typedef Language = String;
-typedef ArbContents = Map<String, String>;
-typedef ArbEntry = MapEntry<String, String>;
+typedef TranslationContents = Map<String, String>;
+typedef TranslationEntry = MapEntry<String, String>;
 
 class Environment {
   static const _key = Object();
@@ -44,7 +44,7 @@ class Environment {
 
 class Localization {
   final Language language;
-  final ArbContents contents;
+  final TranslationContents contents;
 
   const Localization(this.language, this.contents);
 }
@@ -68,7 +68,7 @@ Arb readEnglishLocalizations() =>
     File(_localizationPath("en")).readAsStringSync().pipe<dynamic>(jsonDecode)
         as Arb;
 
-ArbContents extractLocalizations(
+TranslationContents extractLocalizations(
   Arb arb,
 ) =>
     Map.fromEntries(
@@ -77,9 +77,9 @@ ArbContents extractLocalizations(
           .map((e) => MapEntry(e.key, e.value.toString())),
     );
 
-Future<ArbEntry> _translateEntry(
+Future<TranslationEntry> _translateEntry(
   Language language,
-  ArbEntry englishEntry,
+  TranslationEntry englishEntry,
 ) async {
   final translation = await Environment.current.translator.translate(
     englishEntry.value,
@@ -91,7 +91,7 @@ Future<ArbEntry> _translateEntry(
 }
 
 Future<Localization> _translateTo(
-  ArbContents englishContents,
+  TranslationContents englishContents,
   Language language,
 ) =>
     _translateEntry
@@ -102,7 +102,7 @@ Future<Localization> _translateTo(
         .then((contents) => Localization(language, contents));
 
 Stream<Localization> translateAll(
-  ArbContents englishContents,
+  TranslationContents englishContents,
 ) async* {
   final translated = await _translateTo
       .apply(englishContents)
