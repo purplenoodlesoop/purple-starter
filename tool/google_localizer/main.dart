@@ -113,14 +113,32 @@ Stream<Localization> translateAll(
   yield* Stream.fromIterable(translated);
 }
 
+extension on StringBuffer {
+  void writeEntry(TranslationEntry entry) {
+    write('\t"');
+    write(entry.key);
+    write('": "');
+    write(entry.value);
+    write('"');
+  }
+}
+
 WritableLocalization formatLocalization(
   Localization localization,
 ) {
-  final entries = localization.contents.entries
-      .map((entry) => '\t"${entry.key}": "${entry.value}"')
-      .join(",\n");
+  final buffer = StringBuffer("{\n");
+  final iterator = localization.contents.entries.iterator..moveNext();
 
-  return WritableLocalization(localization.language, "{\n$entries\n}");
+  buffer.writeEntry(iterator.current);
+  while (iterator.moveNext()) {
+    buffer
+      ..writeln(",")
+      ..writeEntry(iterator.current);
+  }
+
+  buffer.write("\n}");
+
+  return WritableLocalization(localization.language, buffer.toString());
 }
 
 Future<File> writeLocalization(
