@@ -40,3 +40,7 @@ emulator:
 simulator:
 	@echo "* Opening an iOS simulator *"
 	@open -a Simulator
+
+stats:
+	@echo "* Running cloc *"
+	@cloc .

@@ -1,13 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:pure/pure.dart';
 import 'package:translator/translator.dart';
-
-void main(List<String> args) => Environment.run(
-      environment: createEnvironment(args),
-      body: localize,
-    );
 
 const languages = [
   "ru",
@@ -16,6 +12,12 @@ const languages = [
   "it",
 ];
 
+void main(List<String> args) => Environment.run(
+      environment: createEnvironment(args),
+      body: localize,
+    );
+
+typedef Arb = Map<String, dynamic>;
 typedef Language = String;
 typedef ArbContents = Map<String, String>;
 typedef ArbEntry = MapEntry<String, String>;
@@ -52,9 +54,6 @@ class WritableLocalization {
   final String fileContents;
 
   WritableLocalization(this.language, this.fileContents);
-
-  @override
-  String toString() => fileContents;
 }
 
 Environment createEnvironment(List<String> args) => Environment(
@@ -65,25 +64,18 @@ Environment createEnvironment(List<String> args) => Environment(
 String _localizationPath(Language language) =>
     "${Environment.current.localizationFolder}/app_$language.arb";
 
-List<String> readEnglishLocalizations() =>
-    File(_localizationPath("en")).readAsLinesSync();
-
-String _trimLine(String source) => source.trim().replaceAll(RegExp(',|"'), "");
-
-ArbEntry _lineToEntry(String line) {
-  final split = line.split(": ");
-
-  return MapEntry(split[0], split[1]);
-}
+Arb readEnglishLocalizations() =>
+    File(_localizationPath("en")).readAsStringSync().pipe<dynamic>(jsonDecode)
+        as Arb;
 
 ArbContents extractLocalizations(
-  List<String> rawStrings,
+  Arb arb,
 ) =>
-    rawStrings
-        .sublist(1, rawStrings.length - 1)
-        .map(_trimLine)
-        .map(_lineToEntry)
-        .pipe((entries) => Map.fromEntries(entries));
+    Map.fromEntries(
+      arb.entries
+          .where((element) => element.value is String)
+          .map((e) => MapEntry(e.key, e.value.toString())),
+    );
 
 Future<ArbEntry> _translateEntry(
   Language language,
