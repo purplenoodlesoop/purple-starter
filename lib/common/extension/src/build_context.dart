@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:functional_starter/common/widget/app_dependencies_provider.dart';
+import 'package:purple_starter/common/widget/app_dependencies_provider.dart';
 
 extension BuildContextX on BuildContext {
   IAppDependencies get dependencies => AppDependenciesProvider.of(this);

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:functional_starter/feature/app/widget/app_configuration.dart';
-import 'package:functional_starter/feature/settings/controller/theme_controller.dart';
-import 'package:functional_starter/feature/settings/widget/theme_controller_provider.dart';
+import 'package:purple_starter/feature/app/widget/app_configuration.dart';
+import 'package:purple_starter/feature/settings/controller/theme_controller.dart';
+import 'package:purple_starter/feature/settings/widget/theme_controller_provider.dart';
 
 class NameAppPage extends StatelessWidget {
   const NameAppPage({
