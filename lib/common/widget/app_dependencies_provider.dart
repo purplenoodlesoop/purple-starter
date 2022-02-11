@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:functional_starter/common/database/app_database.dart';
+import 'package:purple_starter/common/database/app_database.dart';
 
 abstract class IAppDependencies {
   Dio get dioClient;

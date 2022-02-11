@@ -1,4 +1,4 @@
-package com.example.functional_starter
+package com.example.purple_starter
 
 import io.flutter.embedding.android.FlutterActivity
 

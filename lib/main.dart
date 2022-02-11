@@ -1,5 +1,5 @@
-import 'package:functional_starter/feature/app/module/main_runner.dart';
-import 'package:functional_starter/feature/app/screen.dart';
+import 'package:purple_starter/feature/app/module/main_runner.dart';
+import 'package:purple_starter/feature/app/screen.dart';
 
 Future<void> main() => MainRunner.run(
       // TODO: - Cancel sentry subscription
