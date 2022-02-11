@@ -1,8 +1,12 @@
-.PHONY: get upgrade upgrade-major gen-delete deep-clean set-icon google-localizations emulator simulator
+.PHONY: get run upgrade upgrade-major gen-delete deep-clean set-icon google-localizations emulator simulator
 
 get:
 	@echo "* Getting latest dependencies *"
 	@flutter pub get
+
+run:
+	@echo "* Running app *"
+	@flutter run
 
 upgrade: get
 	@echo "* Upgrading dependencies *"
