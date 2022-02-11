@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:functional_starter/features/settings/widgets/theme_controller_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:functional_starter/feature/settings/widget/theme_controller_provider.dart';
 
 class AppConfiguration extends StatelessWidget {
   const AppConfiguration({
@@ -12,6 +13,8 @@ class AppConfiguration extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         theme: _listenTheme(context),
       );
 }

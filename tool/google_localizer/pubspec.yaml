@@ -1,0 +1,11 @@
+name: google_localizer
+publish_to: "none"
+
+environment:
+  sdk: ">=2.14.0 <3.0.0"
+
+dependencies:
+  translator: ^0.1.7
+  pure: ^0.1.1
+
+
