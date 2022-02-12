@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:purple_starter/common/extension/extensions.dart';
 import 'package:purple_starter/feature/settings/widget/theme_controller_provider.dart';
 
 class AppConfiguration extends StatelessWidget {
@@ -13,7 +14,7 @@ class AppConfiguration extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => MaterialApp(
-        onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
+        onGenerateTitle: (context) => context.localized.appTitle,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         theme: _listenTheme(context),

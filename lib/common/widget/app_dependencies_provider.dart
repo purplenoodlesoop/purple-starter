@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:purple_starter/common/database/app_database.dart';
 
 abstract class IAppDependencies {
-  Dio get dioClient;
+  Dio get dio;
   AppDatabase get database;
 }
 
@@ -31,7 +31,7 @@ class _AppDependenciesProviderState extends State<AppDependenciesProvider>
   AppDatabase? _database;
 
   @override
-  Dio get dioClient => _client ??= Dio();
+  Dio get dio => _client ??= Dio();
 
   @override
   AppDatabase get database => _database ??= AppDatabase(

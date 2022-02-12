@@ -16,8 +16,5 @@ class ThemeControllerProvider extends InheritedNotifier<IThemeController> {
   static IThemeController? maybeOf(
     BuildContext context, {
     bool listen = false,
-  }) =>
-      context
-          .getInheritedWidget<ThemeControllerProvider>(listen: listen)
-          ?.notifier;
+  }) {}
 }
