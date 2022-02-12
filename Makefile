@@ -16,7 +16,11 @@ upgrade-major: get
 	@echo "* Upgrading dependencies --major-versions *"
 	@flutter pub upgrade --major-versions
 
-gen-delete:
+gen: get
+	@echo "* Running build runner *"
+	@flutter pub run build_runner build
+
+gen-delete: get
 	@echo "* Running build runner with deletion of conflicting outputs *"
 	@flutter pub run build_runner build --delete-conflicting-outputs
 
