@@ -3,8 +3,8 @@ import 'package:purple_starter/feature/app/widget/app_configuration.dart';
 import 'package:purple_starter/feature/settings/controller/theme_controller.dart';
 import 'package:purple_starter/feature/settings/widget/theme_controller_provider.dart';
 
-class PurpleApp extends StatelessWidget {
-  const PurpleApp({
+class PurpleStarterApp extends StatelessWidget {
+  const PurpleStarterApp({
     Key? key,
   }) : super(key: key);
 

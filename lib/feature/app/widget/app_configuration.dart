@@ -13,7 +13,7 @@ class AppConfiguration extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => MaterialApp(
-        onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
+        onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         theme: _listenTheme(context),

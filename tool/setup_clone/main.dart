@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'dart:io';
+
 Future<void> main(List<String> args) => Environment.run(
       environment: createEnvironment(args),
       body: performRenaming,
@@ -12,10 +14,12 @@ class NameBundle {
   final String packageName;
 
   const NameBundle({required this.packageName});
+  const NameBundle.original() : this(packageName: "purple_starter");
 
-  String get appTitle => "An app created from `$packageName` app template.";
-  String get appWidgetName =>
-      packageName.split("_").map(capitalized).followedBy(const ["App"]).join();
+  String get _appFileName => packageName + "_app";
+
+  String get appWidgetPath => _appFileName + ".dart";
+  String get appWidgetName => _appFileName.split("_").map(capitalized).join();
 }
 
 class Environment {
@@ -42,16 +46,65 @@ class Environment {
 }
 
 Environment createEnvironment(List<String> args) => Environment(
-      originalName: const NameBundle(packageName: "purple_starter"),
+      originalName: const NameBundle.original(),
       newName: NameBundle(packageName: args.first),
     );
 
-Future<void> _renamePackage() async {}
-Future<void> _renameAppTitle() async {}
-Future<void> _renameAppWidgetName() async {}
+const _run = Process.run;
 
-Future<void> performRenaming() async {
-  await _renamePackage();
-  await _renameAppTitle();
-  await _renameAppWidgetName();
+Future<void> rename({
+  required String inDirectory,
+  required String Function(NameBundle nameBundle) select,
+}) async {
+  final environment = Environment.current;
+
+  final from = select(environment.originalName);
+  final to = select(environment.newName);
+
+  await _run("find", [
+    inDirectory,
+    "( -type d -name .git -prune )",
+    "-o",
+    "-type",
+    "f",
+    "-print0",
+    "|",
+    "xargs",
+    "-0",
+    "sed",
+    "-i",
+    "''",
+    "'s/$from/$to/g'",
+  ]);
 }
+
+Future<void> renamePackage() => rename(
+      inDirectory: "./",
+      select: (nameBundle) => nameBundle.packageName,
+    );
+
+Future<void> renameAppWidgetName() => rename(
+      inDirectory: "./lib/feature/app/",
+      select: (nameBundle) => nameBundle.appWidgetName,
+    );
+
+Future<void> renameWidgetFile() async {}
+
+Future<void> moveReadmeToSetup() async {}
+Future<void> createEmptyReadme() async {}
+Future<void> selfDestruct() async {}
+
+Future<void> seq(List<Future<void> Function()> actions) async {
+  for (final action in actions) {
+    await action();
+  }
+}
+
+Future<void> performRenaming() => seq(const [
+      renamePackage,
+      renameAppWidgetName,
+      renameWidgetFile,
+      moveReadmeToSetup,
+      createEmptyReadme,
+      selfDestruct,
+    ]);
