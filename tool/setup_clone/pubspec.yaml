@@ -1,0 +1,9 @@
+name: setup_clone
+publish_to: "none"
+
+environment:
+  sdk: ">=2.14.0 <3.0.0"
+
+# dependencies:
+
+

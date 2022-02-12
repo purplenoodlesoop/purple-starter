@@ -1,4 +1,4 @@
-.PHONY: get run upgrade upgrade-major gen-delete deep-clean set-icon google-localizations emulator simulator
+.PHONY: get run upgrade upgrade-major gen-delete deep-clean set-icon google-localizations setup emulator simulator
 
 get:
 	@echo "* Getting latest dependencies *"
@@ -16,7 +16,11 @@ upgrade-major: get
 	@echo "* Upgrading dependencies --major-versions *"
 	@flutter pub upgrade --major-versions
 
-gen-delete:
+gen: get
+	@echo "* Running build runner *"
+	@flutter pub run build_runner build
+
+gen-delete: get
 	@echo "* Running build runner with deletion of conflicting outputs *"
 	@flutter pub run build_runner build --delete-conflicting-outputs
 
@@ -32,10 +36,16 @@ set-icon: get
 	@flutter pub run flutter_launcher_icons:main -f flutter_icons.yaml
 
 google-localizations:
-	@echo "* Getting dependencies form google localizer *"
+	@echo "* Getting dependencies for google localizer *"
 	@(cd ./tool/google_localizer; dart pub get)
 	@echo "* Generating automated localizations *"
 	@dart ./tool/google_localizer/main.dart "./lib/common/l10n/"
+
+setup:
+	@echo "* Getting dependencies for setup tool *"
+	@(cd ./tool/setup_clone; dart pub get)
+	@echo "* Setting up the project *"
+	@dart ./tool/setup_clone/main.dart $(NAME)
 
 emulator:
 	@echo "* Opening an android emulator *"
