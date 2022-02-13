@@ -6,19 +6,24 @@ import 'package:purple_starter/common/module/logger.dart';
 import 'package:purple_starter/feature/app/module/sentry_init.dart';
 
 mixin MainRunner {
-  static Future<StreamSubscription<void>> _initApp(bool shouldSend) =>
-      SentryInit.init(shouldSend);
-
-  static Future<void> run({
+  static Future<void> run<D>({
     bool shouldSend = !kDebugMode,
-    required Widget Function(StreamSubscription<void> sentrySubscription) app,
+    required Future<D> Function() asyncInit,
+    required Widget Function(
+      StreamSubscription<void> sentrySubscription,
+      D dependencies,
+    )
+        app,
   }) async {
     await Logger.runLogging(
       () => runZonedGuarded(
         () async {
           WidgetsFlutterBinding.ensureInitialized();
           FlutterError.onError = Logger.logFlutterError;
-          runApp(app(await _initApp(shouldSend)));
+          // ignore: cancel_subscriptions
+          final sentrySubscription = await SentryInit.init(shouldSend);
+          final dependencies = await asyncInit();
+          runApp(app(sentrySubscription, dependencies));
         },
         Logger.logZoneError,
       ),
