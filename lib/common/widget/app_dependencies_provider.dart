@@ -1,42 +1,43 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:purple_starter/common/database/app_database.dart';
+import 'package:purple_starter/common/widget/scope.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class IAppDependencies {
   Dio get dio;
   AppDatabase get database;
+  SharedPreferences get sharedPreferences;
 }
 
-class AppDependenciesProvider extends StatefulWidget {
+class AppDependenciesScope extends Scope {
   final String databaseName;
-  final Widget child;
+  final SharedPreferences sharedPreferences;
 
-  const AppDependenciesProvider({
-    Key? key,
+  const AppDependenciesScope({
     required this.databaseName,
-    required this.child,
-  }) : super(key: key);
+    required this.sharedPreferences,
+    required Widget child,
+    Key? key,
+  }) : super(child: child, key: key);
 
-  static IAppDependencies of(BuildContext context) =>
-      _InheritedAppDependenciesProvider.of(context).providerState;
+  static const DelegateAccess<_AppDependenciesScopeDelegate> _delegateOf =
+      Scope.delegateOf<AppDependenciesScope, _AppDependenciesScopeDelegate>;
+
+  static IAppDependencies dependenciesOf(
+    BuildContext context,
+  ) =>
+      _delegateOf(context);
 
   @override
-  _AppDependenciesProviderState createState() =>
-      _AppDependenciesProviderState();
+  ScopeDelegate<AppDependenciesScope> createDelegate() =>
+      _AppDependenciesScopeDelegate();
 }
 
-class _AppDependenciesProviderState extends State<AppDependenciesProvider>
+class _AppDependenciesScopeDelegate extends ScopeDelegate<AppDependenciesScope>
     implements IAppDependencies {
   Dio? _client;
   AppDatabase? _database;
-
-  @override
-  Dio get dio => _client ??= Dio();
-
-  @override
-  AppDatabase get database => _database ??= AppDatabase(
-        name: widget.databaseName,
-      );
 
   Future<void> _closeDependencies() async {
     _client?.close();
@@ -50,27 +51,13 @@ class _AppDependenciesProviderState extends State<AppDependenciesProvider>
   }
 
   @override
-  Widget build(BuildContext context) => _InheritedAppDependenciesProvider(
-        providerState: this,
-        child: widget.child,
-      );
-}
-
-class _InheritedAppDependenciesProvider extends InheritedWidget {
-  final _AppDependenciesProviderState providerState;
-
-  const _InheritedAppDependenciesProvider({
-    required this.providerState,
-    required Widget child,
-  }) : super(child: child);
-
-  static _InheritedAppDependenciesProvider of(BuildContext context) {
-    final provider = context.getElementForInheritedWidgetOfExactType<
-        _InheritedAppDependenciesProvider>();
-    assert(provider != null, "Unable to locate AppDependenciesProvider.");
-    return provider!.widget as _InheritedAppDependenciesProvider;
-  }
+  Dio get dio => _client ??= Dio();
 
   @override
-  bool updateShouldNotify(_InheritedAppDependenciesProvider _) => false;
+  AppDatabase get database => _database ??= AppDatabase(
+        name: widget.databaseName,
+      );
+
+  @override
+  SharedPreferences get sharedPreferences => widget.sharedPreferences;
 }

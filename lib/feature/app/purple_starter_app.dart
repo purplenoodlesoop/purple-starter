@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:purple_starter/feature/app/widget/app_configuration.dart';
-import 'package:purple_starter/feature/settings/controller/theme_controller.dart';
-import 'package:purple_starter/feature/settings/widget/theme_controller_provider.dart';
+import 'package:purple_starter/feature/settings/widget/scope/settings_scope.dart';
 
 class PurpleStarterApp extends StatelessWidget {
   const PurpleStarterApp({
@@ -9,8 +8,7 @@ class PurpleStarterApp extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => ThemeControllerProvider(
-        themeController: ThemeController(),
-        child: const AppConfiguration(),
+  Widget build(BuildContext context) => const SettingsScope(
+        child: AppConfiguration(),
       );
 }
