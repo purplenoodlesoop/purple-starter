@@ -1,8 +1,13 @@
-.PHONY: get run upgrade upgrade-major gen-delete deep-clean set-icon google-localizations setup emulator simulator
+.PHONY: get install-pods run upgrade upgrade-major deep-clean gen-build gen-build-delete gen-clean gen-watch spider-build spider-build-watch spider-build-watch-smart first-run set-icon google-localizations setup emulator simulator stats
+
 
 get:
 	@echo "* Getting latest dependencies *"
 	@flutter pub get
+
+install-pods:
+	@echo "* Installing pods *"
+	@(cd ./ios; pod install)
 
 run:
 	@echo "* Running app *"
@@ -16,18 +21,44 @@ upgrade-major: get
 	@echo "* Upgrading dependencies --major-versions *"
 	@flutter pub upgrade --major-versions
 
-gen: get
+deep-clean:
+	@echo "* Performing a deep clean *"
+	@echo "* Running flutter clean *"
+	@flutter clean
+	@echo "* Cleaning iOS specific files *"
+	@sh ./script/clean_ios.sh
+	@make get
+	@make install-pods
+
+gen-build: get
 	@echo "* Running build runner *"
 	@flutter pub run build_runner build
 
-gen-delete: get
+gen-build-delete: get
 	@echo "* Running build runner with deletion of conflicting outputs *"
 	@flutter pub run build_runner build --delete-conflicting-outputs
 
-deep-clean:
-	@echo "* Performing a deep clean *"
-	@sh ./script/clean_ios.sh
-	@make get
+gen-clean:
+	@echo "* Cleaning build runner *"
+	@flutter pub run build_runner clean
+
+gen-watch:
+	@echo "* Running build runner in watch mode *"
+	@flutter pub run build_runner watch
+
+spider-build:
+	@echo "* Crawling asset names using Spider *"
+	@spider build
+
+spider-build-watch:
+	@echo "* Watching assets for name crawling using Spider *"
+	@spider build --watch
+
+spider-build-watch-smart:
+	@echo "* Watching assets for name crawling using Spider with smart flag *"
+	@spider build --smart-watch
+
+first-run: get gen-build-delete spider-build run
 
 set-icon: get
 	@echo "* Removing alpha chanel from icon *"
