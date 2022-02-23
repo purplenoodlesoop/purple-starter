@@ -61,7 +61,7 @@ Future<void> rename({
   final from = select(environment.originalName);
   final to = select(environment.newName);
 
-  await _run("find", [
+  await Process.run("find", [
     inDirectory,
     "( -type d -name .git -prune )",
     "-o",
