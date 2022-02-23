@@ -49,6 +49,15 @@ class SettingsScope extends StatelessWidget {
         return isLight ? ThemeData.light() : ThemeData.dark();
       });
 
+  /// Listens by default
+  static ThemeMode themeModeOf(
+    BuildContext context,
+  ) {
+    // TODO: - Read the value from SettingsBloc.
+    const themeMode = ThemeMode.dark;
+    return themeMode;
+  }
+
   // --- Methods --- //
 
   static void setTheme(
