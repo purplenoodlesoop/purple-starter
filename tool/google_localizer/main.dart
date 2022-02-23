@@ -6,7 +6,6 @@ import 'package:pure/pure.dart';
 import 'package:translator/translator.dart';
 
 const languages = [
-  "ru",
   "pt",
   "es",
   "it",
