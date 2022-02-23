@@ -1,12 +1,11 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
-typedef CreateRouter = GoRouter Function(BuildContext context);
-
+typedef CreateRouter = RootStackRouter Function(BuildContext context);
 typedef RouterWidgetBuilder = Widget Function(
   BuildContext context,
-  RouteInformationParser<Uri> informationParser,
-  RouterDelegate<Uri> routerDelegate,
+  RouteInformationParser<UrlState> informationParser,
+  RouterDelegate<UrlState> routerDelegate,
 );
 
 class AppRouterBuilder extends StatefulWidget {
@@ -24,7 +23,7 @@ class AppRouterBuilder extends StatefulWidget {
 }
 
 class _AppRouterBuilderState extends State<AppRouterBuilder> {
-  late final GoRouter router = widget.createRouter(context);
+  late final RootStackRouter router = widget.createRouter(context);
 
   @override
   void dispose() {
@@ -35,7 +34,7 @@ class _AppRouterBuilderState extends State<AppRouterBuilder> {
   @override
   Widget build(BuildContext context) => widget.builder(
         context,
-        router.routeInformationParser,
-        router.routerDelegate,
+        router.defaultRouteParser(),
+        router.delegate(),
       );
 }

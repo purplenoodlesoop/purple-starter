@@ -47,7 +47,7 @@ dependencies:
   retrofit: ^3.0.1
 
   # Navigation
-  go_router: ^3.0.1
+  auto_route: ^3.2.4
 
   # Utils
   flutter_launcher_icons: ^0.9.2
@@ -55,6 +55,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  auto_route_generator: ^3.2.3
   drift_dev: ^1.2.0
   build_runner: ^2.1.7
   freezed: ^1.1.0

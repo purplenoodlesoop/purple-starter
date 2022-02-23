@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:go_router/go_router.dart';
 import 'package:purple_starter/common/extension/extensions.dart';
-import 'package:purple_starter/feature/app/router/app_routes.dart';
+import 'package:purple_starter/feature/app/router/app_router.dart';
 import 'package:purple_starter/feature/app/widget/app_router_builder.dart';
 import 'package:purple_starter/feature/settings/widget/scope/settings_scope.dart';
 
@@ -13,7 +12,7 @@ class AppConfiguration extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => AppRouterBuilder(
-        createRouter: (context) => GoRouter(routes: appRoutes),
+        createRouter: (context) => AppRouter(),
         builder: (context, parser, delegate) => MaterialApp.router(
           routeInformationParser: parser,
           routerDelegate: delegate,
