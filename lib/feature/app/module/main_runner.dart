@@ -5,8 +5,14 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:purple_starter/common/extension/extensions.dart';
-import 'package:purple_starter/common/module/logger.dart';
+import 'package:purple_starter/feature/app/module/logger.dart';
 import 'package:purple_starter/feature/app/module/sentry_init.dart';
+
+typedef AsyncDependencies<D> = Future<D> Function();
+typedef AppBuilder<D> = Widget Function(
+  SentrySubscription sentrySubscription,
+  D dependencies,
+);
 
 mixin MainRunner {
   static void _amendFlutterError() {
@@ -15,23 +21,29 @@ mixin MainRunner {
     FlutterError.onError = FlutterError.onError?.amend(log) ?? log;
   }
 
+  static Future<Widget> _initApp<D>(
+    bool shouldSend,
+    AsyncDependencies<D> asyncDependencies,
+    AppBuilder<D> app,
+  ) async {
+    final sentrySubscription = await SentryInit.init(shouldSend);
+    final dependencies = await asyncDependencies();
+
+    return app(sentrySubscription, dependencies);
+  }
+
   static Future<void> run<D>({
     bool shouldSend = !kDebugMode,
-    required Future<D> Function() asyncInit,
-    required Widget Function(
-      StreamSubscription<void> sentrySubscription,
-      D dependencies,
-    )
-        app,
+    required AsyncDependencies<D> asyncDependencies,
+    required AppBuilder<D> appBuilder,
   }) async {
     await Logger.runLogging(
       () => runZonedGuarded(
         () async {
           WidgetsFlutterBinding.ensureInitialized();
           _amendFlutterError();
-          final sentrySubscription = await SentryInit.init(shouldSend);
-          final dependencies = await asyncInit();
-          runApp(app(sentrySubscription, dependencies));
+          final app = await _initApp(shouldSend, asyncDependencies, appBuilder);
+          runApp(app);
         },
         Logger.logZoneError,
       ),

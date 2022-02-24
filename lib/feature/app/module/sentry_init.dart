@@ -4,6 +4,8 @@ import 'package:l/l.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:stream_transform/stream_transform.dart';
 
+typedef SentrySubscription = StreamSubscription<void>;
+
 mixin SentryInit {
   static bool _isWarningOrError(LogMessage message) => message.level.maybeWhen(
         warning: () => true,
@@ -14,17 +16,16 @@ mixin SentryInit {
   static Stream<LogMessageWithStackTrace> get _warningsAndErrors =>
       l.where(_isWarningOrError).whereType<LogMessageWithStackTrace>();
 
-  static StreamSubscription<void> _subscribeToErrorReporting() =>
-      _warningsAndErrors
-          .asyncMap(
-            (msg) => Sentry.captureException(
-              msg.message,
-              stackTrace: msg.stackTrace,
-            ),
-          )
-          .listen((_) {});
+  static SentrySubscription _subscribeToErrorReporting() => _warningsAndErrors
+      .asyncMap(
+        (msg) => Sentry.captureException(
+          msg.message,
+          stackTrace: msg.stackTrace,
+        ),
+      )
+      .listen((_) {});
 
-  static Future<StreamSubscription<void>> init(bool shouldSend) async {
+  static Future<SentrySubscription> init(bool shouldSend) async {
     const dsn = String.fromEnvironment("SENTRY_DSN");
     if (dsn != "" && shouldSend) {
       await SentryFlutter.init(
