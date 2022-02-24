@@ -50,8 +50,6 @@ Environment createEnvironment(List<String> args) => Environment(
       newName: NameBundle(packageName: args.first),
     );
 
-const _run = Process.run;
-
 Future<void> rename({
   required String inDirectory,
   required String Function(NameBundle nameBundle) select,
