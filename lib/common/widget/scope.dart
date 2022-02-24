@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
+import 'package:flutter/material.dart';
 
 typedef DelegateAccess<D extends ScopeDelegate> = D Function(
   BuildContext, {
@@ -58,7 +58,8 @@ abstract class Scope extends StatefulWidget {
 ///   * [ScopeDelegate] has [scope] getter that allows accessing the delegating
 /// [Scope].
 ///   * [ScopeDelegate] has [buildScoping] method that should be overriden
-/// instead of the [build] method. Class that extends [ScopeDelegate] should **NEVER OVERRIDE THE BUILD METHOD**. It will break thing.
+/// instead of the [build] method. Class that extends [ScopeDelegate] should
+/// **NEVER OVERRIDE THE BUILD METHOD**. It will break things.
 abstract class ScopeDelegate<S extends Scope> extends State<S> {
   List<Object?> get keys => const [];
 
