@@ -6,7 +6,7 @@ part 'app_router.gr.dart';
 @MaterialAutoRouter(
   replaceInRouteName: 'Page,Route',
   routes: [
-    AutoRoute<dynamic>(page: PlaceholderPage),
+    AutoRoute<dynamic>(page: PlaceholderPage, initial: true),
   ],
 )
 class AppRouter extends _$AppRouter {}
@@ -17,5 +17,9 @@ class PlaceholderPage extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => const Placeholder();
+  Widget build(BuildContext context) => const Scaffold(
+        body: Center(
+          child: Text("Placeholder page"),
+        ),
+      );
 }
