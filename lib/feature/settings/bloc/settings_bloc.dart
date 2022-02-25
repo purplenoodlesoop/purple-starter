@@ -60,7 +60,9 @@ class SettingsBloc extends StreamBloc<SettingsEvent, SettingsState> {
   SettingsBloc({
     required ISettingsRepository settingsRepository,
   })  : _settingsRepository = settingsRepository,
-        super(const SettingsState.idle(data: SettingsData.initial));
+        super(
+          const SettingsState.idle(data: SettingsData.initial),
+        );
 
   Stream<SettingsState> _performMutation(
     Future<SettingsData> Function() body,
