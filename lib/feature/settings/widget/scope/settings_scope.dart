@@ -1,5 +1,3 @@
-import 'dart:ui' as ui;
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pure/pure.dart';
@@ -30,33 +28,20 @@ class SettingsScope extends StatelessWidget {
 
   // --- Data --- //
 
-  /// Listens by default
-  static bool hasUserThemeOf(
-    BuildContext context,
+  static ThemeMode _mapStateToThemeMode(
+    SettingsState state,
   ) =>
-      context.selectState(
-        (state) => state.data.theme != null,
-      );
-
-  /// Listens by default
-  static ThemeData themeDataOf(
-    BuildContext context,
-  ) =>
-      context.selectState((state) => state.data.theme).pipe((userTheme) {
-        final isLight = userTheme?.pipe((theme) => theme == AppTheme.light) ??
-            ui.window.platformBrightness == Brightness.light;
-
-        return isLight ? ThemeData.light() : ThemeData.dark();
-      });
+      state.data.theme.pipe((theme) => theme ?? AppTheme.system).when(
+            light: () => ThemeMode.light,
+            dark: () => ThemeMode.dark,
+            system: () => ThemeMode.system,
+          );
 
   /// Listens by default
   static ThemeMode themeModeOf(
     BuildContext context,
-  ) {
-    // TODO: - Read the value from SettingsBloc.
-    const themeMode = ThemeMode.dark;
-    return themeMode;
-  }
+  ) =>
+      context.selectState(_mapStateToThemeMode);
 
   // --- Methods --- //
 

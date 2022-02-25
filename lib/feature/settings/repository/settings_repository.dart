@@ -18,12 +18,10 @@ class SettingsRepository implements ISettingsRepository {
   @override
   Future<void> setTheme(AppTheme value) async {
     l.i("Setting theme to ${value.name}");
-    await _settingsDao.setIsThemeLight(value == AppTheme.light);
+    await _settingsDao.setThemeMode(value.name);
     l.i("Set theme successfully");
   }
 
   @override
-  AppTheme? get theme => _settingsDao.isThemeLight?.pipe(
-        (isThemeLight) => isThemeLight ? AppTheme.light : AppTheme.dark,
-      );
+  AppTheme? get theme => _settingsDao.themeMode?.pipe(AppThemeX.fromString);
 }
