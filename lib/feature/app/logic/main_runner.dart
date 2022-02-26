@@ -5,8 +5,8 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:purple_starter/common/extension/extensions.dart';
-import 'package:purple_starter/feature/app/module/logger.dart';
-import 'package:purple_starter/feature/app/module/sentry_init.dart';
+import 'package:purple_starter/feature/app/logic/logger.dart';
+import 'package:purple_starter/feature/app/logic/sentry_init.dart';
 
 typedef AsyncDependencies<D> = Future<D> Function();
 typedef AppBuilder<D> = Widget Function(

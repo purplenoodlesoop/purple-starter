@@ -38,13 +38,11 @@ mixin Logger {
     StackTrace? stackTrace,
   ) {
     final buffer = StringBuffer(type)
-      ..write(" ")
-      ..write("error")
-      ..write(": ")
-      ..write(error)
-      ..writeln()
+      ..write(" error: ")
+      ..writeln(error)
       ..writeln("Stack trace:")
       ..write(stackTrace);
+
     return buffer.toString();
   }
 

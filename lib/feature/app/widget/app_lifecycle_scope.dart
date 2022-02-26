@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:purple_starter/common/widget/scope.dart';
-import 'package:purple_starter/feature/app/module/sentry_init.dart';
+import 'package:purple_starter/feature/app/logic/sentry_init.dart';
 
 class AppLifecycleScope extends Scope {
   final SentrySubscription sentrySubscription;
