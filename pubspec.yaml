@@ -12,7 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  # Dart extensions
+  # SDK extensions
   async: ^2.8.2
   collection: ^1.15.0
   meta: ^1.7.0
