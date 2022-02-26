@@ -1,4 +1,4 @@
-.PHONY: get install-pods run upgrade upgrade-major deep-clean gen-build gen-build-delete gen-clean gen-watch spider-build spider-build-watch spider-build-watch-smart create-splash first-run set-icon google-localizations setup emulator simulator stats
+.PHONY: get install-pods run upgrade upgrade-major deep-clean gen-build gen-build-delete gen-clean gen-watch create-splash first-run set-icon google-localizations setup emulator simulator stats
 
 
 get:
@@ -46,23 +46,11 @@ gen-watch:
 	@echo "* Running build runner in watch mode *"
 	@flutter pub run build_runner watch
 
-spider-build:
-	@echo "* Crawling asset names using Spider *"
-	@spider build
-
-spider-build-watch:
-	@echo "* Watching assets for name crawling using Spider *"
-	@spider build --watch
-
-spider-build-watch-smart:
-	@echo "* Watching assets for name crawling using Spider with smart flag *"
-	@spider build --smart-watch
-
 create-splash: get
 	@echo "* Generating Splash screens *"
 	@flutter pub run flutter_native_splash:create
 
-first-run: get gen-build-delete spider-build create-splash run 
+first-run: get gen-build-delete create-splash run 
 
 set-icon: get
 	@echo "* Removing alpha chanel from icon *"
