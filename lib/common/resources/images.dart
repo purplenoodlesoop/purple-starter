@@ -1,3 +1,0 @@
-class Images {
-  Images._();
-}
