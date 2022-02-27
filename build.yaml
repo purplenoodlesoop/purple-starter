@@ -1,0 +1,21 @@
+targets:
+  $default:
+    sources:
+      - $package$
+      - assets/**
+      - lib/**
+      - test/**
+      - pubspec.yaml
+    builders:
+      json_serializable:
+        enabled: true
+        generate_for:
+          include:
+            - lib/**
+            - test/**
+      freezed:
+        enabled: true
+        generate_for:
+          include:
+            - lib/**
+            - test/**
