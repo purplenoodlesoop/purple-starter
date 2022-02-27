@@ -43,6 +43,7 @@ app.*.map.json
 # Code generation
 **/*.g.dart
 **/*.gr.dart
+**/*.gen.dart
 **/*.freezed.dart
 
 # Flutter Version Manager related

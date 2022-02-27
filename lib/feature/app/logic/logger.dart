@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:l/l.dart';
+import 'package:stack_trace/stack_trace.dart';
 
 extension on DateTime {
   String get formatted =>
@@ -37,11 +38,13 @@ mixin Logger {
     String error,
     StackTrace? stackTrace,
   ) {
+    final trace = stackTrace ?? StackTrace.current;
+
     final buffer = StringBuffer(type)
       ..write(" error: ")
       ..writeln(error)
       ..writeln("Stack trace:")
-      ..write(stackTrace);
+      ..write(Trace.from(trace).terse);
 
     return buffer.toString();
   }

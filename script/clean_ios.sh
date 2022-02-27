@@ -1,5 +1,5 @@
 #!/bin/bash
-flutter clean
+fvm flutter clean
 cd ios/
 pod cache clean --all
 xcodebuild clean

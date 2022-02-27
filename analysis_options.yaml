@@ -1,5 +1,5 @@
 analyzer:
-  exclude: [build/**, "**/*.freezed.dart", "**/*.g.dart", "**/*.gr.dart"]
+  exclude: [build/**, "**/*.freezed.dart", "**/*.g.dart", "**/*.gr.dart", "**/*.gen.dart"]
   strong-mode:
     implicit-casts: false
     implicit-dynamic: false
