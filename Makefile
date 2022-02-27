@@ -1,4 +1,4 @@
-.PHONY: get install-pods run upgrade upgrade-major deep-clean gen-build gen-build-delete gen-clean gen-watch create-splash first-run set-icon google-localizations setup emulator simulator stats
+.PHONY: get install-pods run upgrade upgrade-major deep-clean gen-build gen-build-delete gen-clean gen-watch create-splash prepare first-run set-icon google-localizations setup emulator simulator stats
 
 
 get:
@@ -50,7 +50,9 @@ create-splash: get
 	@echo "* Generating Splash screens *"
 	@flutter pub run flutter_native_splash:create
 
-first-run: get gen-build-delete create-splash run 
+prepare: get gen-build-delete create-splash
+
+first-run: prepare run 
 
 set-icon: get
 	@echo "* Removing alpha chanel from icon *"
