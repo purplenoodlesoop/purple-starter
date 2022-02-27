@@ -35,6 +35,7 @@ abstract class Scope extends StatefulWidget {
       "of the widget that has tried to access it, or BuildContext does not "
       "contain its instance.",
     );
+
     return scope!.delegate as D;
   }
 

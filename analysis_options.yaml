@@ -1,4 +1,7 @@
 analyzer:
+  plugins:
+    - dart_code_metrics
+    - drift
   exclude: [build/**, "**/*.freezed.dart", "**/*.g.dart", "**/*.gr.dart", "**/*.gen.dart"]
   strong-mode:
     implicit-casts: false
@@ -230,3 +233,21 @@ linter:
     - use_string_buffers
     - use_to_and_as_if_applicable
     - void_checks
+
+dart_code_metrics:
+  metrics:
+    cyclomatic-complexity: 20
+    number-of-parameters: 4
+    maximum-nesting-level: 5
+  metrics-exclude:
+    - test/**
+  rules:
+    - newline-before-return
+    - no-boolean-literal-compare
+    - no-empty-block
+    - prefer-trailing-comma
+    - prefer-conditional-expressions
+    - no-equal-then-else
+  anti-patterns:
+    - long-method
+    - long-parameter-list

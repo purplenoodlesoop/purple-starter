@@ -7,6 +7,9 @@ import 'package:stream_transform/stream_transform.dart';
 typedef SentrySubscription = StreamSubscription<void>;
 
 mixin SentryInit {
+  // ignore: no-empty-block
+  static void _nothing(dynamic _) {}
+
   static bool _isWarningOrError(LogMessage message) => message.level.maybeWhen(
         warning: () => true,
         error: () => true,
@@ -23,7 +26,7 @@ mixin SentryInit {
           stackTrace: msg.stackTrace,
         ),
       )
-      .listen((_) {});
+      .listen(_nothing);
 
   static Future<SentrySubscription> init(bool shouldSend) async {
     const dsn = String.fromEnvironment("SENTRY_DSN");
@@ -33,8 +36,10 @@ mixin SentryInit {
           ..dsn = dsn
           ..tracesSampleRate = 1,
       );
+
       return _subscribeToErrorReporting();
     }
-    return const Stream<void>.empty().listen((_) {});
+
+    return const Stream<void>.empty().listen(_nothing);
   }
 }
