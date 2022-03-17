@@ -3,6 +3,9 @@ import 'package:purple_starter/common/widget/scope.dart';
 import 'package:purple_starter/feature/app/logic/sentry_init.dart';
 
 class AppLifecycleScope extends Scope {
+  static const DelegateAccess<_AppLifecycleScopeDelegate> _delegateOf =
+      Scope.delegateOf<AppLifecycleScope, _AppLifecycleScopeDelegate>;
+
   final SentrySubscription sentrySubscription;
 
   const AppLifecycleScope({
@@ -10,9 +13,6 @@ class AppLifecycleScope extends Scope {
     required Widget child,
     Key? key,
   }) : super(child: child, key: key);
-
-  static const DelegateAccess<_AppLifecycleScopeDelegate> _delegateOf =
-      Scope.delegateOf<AppLifecycleScope, _AppLifecycleScopeDelegate>;
 
   @override
   ScopeDelegate<AppLifecycleScope> createDelegate() =>

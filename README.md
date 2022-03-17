@@ -11,5 +11,4 @@ Check for updates frequently – it won't take long to complete the remaining pa
 - [ ] Documentation
 - [ ] Setup tool
 - [ ] Tests
-- [ ] Extraction of analysis_options to a separate package
-- [ ] Adaptive theming
+- [x] Extraction of analysis_options to a separate package

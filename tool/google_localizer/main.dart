@@ -6,9 +6,9 @@ import 'package:pure/pure.dart';
 import 'package:translator/translator.dart';
 
 const languages = [
-  "pt",
-  "es",
-  "it",
+  'pt',
+  'es',
+  'it',
 ];
 
 void main(List<String> args) => Environment.run(
@@ -29,6 +29,9 @@ class Environment {
 
   Environment(this.localizationFolder, this.translator);
 
+  // ignore: avoid-non-null-assertion
+  static Environment get current => (Zone.current[_key] as Environment?)!;
+
   static T run<T>({
     required Environment environment,
     required T Function() body,
@@ -37,8 +40,6 @@ class Environment {
         body,
         zoneValues: {_key: environment},
       );
-
-  static Environment get current => (Zone.current[_key] as Environment?)!;
 }
 
 class Localization {
@@ -61,10 +62,10 @@ Environment createEnvironment(List<String> args) => Environment(
     );
 
 String _localizationPath(Language language) =>
-    "${Environment.current.localizationFolder}/app_$language.arb";
+    '${Environment.current.localizationFolder}/app_$language.arb';
 
 Arb readEnglishLocalizations() =>
-    File(_localizationPath("en")).readAsStringSync().pipe<dynamic>(jsonDecode)
+    File(_localizationPath('en')).readAsStringSync().pipe<dynamic>(jsonDecode)
         as Arb;
 
 TranslationContents extractLocalizations(
@@ -125,17 +126,17 @@ extension on StringBuffer {
 WritableLocalization formatLocalization(
   Localization localization,
 ) {
-  final buffer = StringBuffer("{\n");
+  final buffer = StringBuffer('{\n');
   final iterator = localization.contents.entries.iterator..moveNext();
 
   buffer.writeEntry(iterator.current);
   while (iterator.moveNext()) {
     buffer
-      ..writeln(",")
+      ..writeln(',')
       ..writeEntry(iterator.current);
   }
 
-  buffer.write("\n}");
+  buffer.write('\n}');
 
   return WritableLocalization(localization.language, buffer.toString());
 }

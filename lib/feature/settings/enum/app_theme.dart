@@ -9,9 +9,9 @@ enum AppTheme {
 extension AppThemeX on AppTheme {
   static AppTheme fromString(String source) {
     const values = {
-      "light": AppTheme.light,
-      "dark": AppTheme.dark,
-      "system": AppTheme.system,
+      'light': AppTheme.light,
+      'dark': AppTheme.dark,
+      'system': AppTheme.system,
     };
 
     final parsed = values[source];

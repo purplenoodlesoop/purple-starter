@@ -19,7 +19,7 @@ class AppRouterBuilder extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _AppRouterBuilderState createState() => _AppRouterBuilderState();
+  State<AppRouterBuilder> createState() => _AppRouterBuilderState();
 }
 
 class _AppRouterBuilderState extends State<AppRouterBuilder> {

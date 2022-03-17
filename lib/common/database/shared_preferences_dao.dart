@@ -5,7 +5,7 @@ abstract class ISharedPreferencesDao implements SharedPreferences {
 }
 
 abstract class SharedPreferencesDao implements ISharedPreferencesDao {
-  static const namespace = "shared_preference.purple_starter";
+  static const namespace = 'shared_preference.purple_starter';
 
   final SharedPreferences _sharedPreferences;
 
@@ -13,18 +13,19 @@ abstract class SharedPreferencesDao implements ISharedPreferencesDao {
       : _sharedPreferences = sharedPreferences;
 
   @override
-  String key(String name) => "$namespace.$name";
+  String key(String name) => '$namespace.$name';
 
   @override
   Future<bool> clear() => _sharedPreferences.clear();
 
   @override
-  @Deprecated("Deprecated for iOS")
+  @Deprecated('Deprecated for iOS')
   Future<bool> commit() => _sharedPreferences.commit();
 
   @override
   bool containsKey(String key) => _sharedPreferences.containsKey(key);
 
+  // ignore: no-object-declaration
   @override
   Object? get(String key) => _sharedPreferences.get(key);
 

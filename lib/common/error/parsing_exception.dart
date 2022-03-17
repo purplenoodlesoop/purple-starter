@@ -4,5 +4,5 @@ class ParsingException<From, To> implements Exception {
   ParsingException(this.from);
 
   @override
-  String toString() => "$this ocurred when parsing from $from";
+  String toString() => '$this ocurred when parsing from $from';
 }

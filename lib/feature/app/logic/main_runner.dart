@@ -26,7 +26,7 @@ mixin MainRunner {
     AsyncDependencies<D> asyncDependencies,
     AppBuilder<D> app,
   ) async {
-    final sentrySubscription = await SentryInit.init(shouldSend);
+    final sentrySubscription = await SentryInit.init(shouldSend: shouldSend);
     final dependencies = await asyncDependencies();
 
     return app(sentrySubscription, dependencies);
@@ -40,6 +40,7 @@ mixin MainRunner {
     await Logger.runLogging(
       () => runZonedGuarded(
         () async {
+          // ignore: avoid-ignoring-return-values
           WidgetsFlutterBinding.ensureInitialized();
           _amendFlutterError();
           final app = await _initApp(shouldSend, asyncDependencies, appBuilder);

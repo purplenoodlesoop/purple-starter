@@ -8,18 +8,18 @@ Future<void> main(List<String> args) => Environment.run(
     );
 
 String capitalized(String source) =>
-    "${source[0].toUpperCase()}${source.substring(1)}";
+    '${source[0].toUpperCase()}${source.substring(1)}';
 
 class NameBundle {
   final String packageName;
 
   const NameBundle({required this.packageName});
-  const NameBundle.original() : this(packageName: "purple_starter");
+  const NameBundle.original() : this(packageName: 'purple_starter');
 
-  String get _appFileName => packageName + "_app";
+  String get _appFileName => packageName + '_app';
 
-  String get appWidgetPath => _appFileName + ".dart";
-  String get appWidgetName => _appFileName.split("_").map(capitalized).join();
+  String get appWidgetPath => _appFileName + '.dart';
+  String get appWidgetName => _appFileName.split('_').map(capitalized).join();
 }
 
 class Environment {
@@ -59,30 +59,30 @@ Future<void> rename({
   final from = select(environment.originalName);
   final to = select(environment.newName);
 
-  await Process.run("find", [
+  await Process.run('find', [
     inDirectory,
-    "( -type d -name .git -prune )",
-    "-o",
-    "-type",
-    "f",
-    "-print0",
-    "|",
-    "xargs",
-    "-0",
-    "sed",
-    "-i",
+    '( -type d -name .git -prune )',
+    '-o',
+    '-type',
+    'f',
+    '-print0',
+    '|',
+    'xargs',
+    '-0',
+    'sed',
+    '-i',
     "''",
     "'s/$from/$to/g'",
   ]);
 }
 
 Future<void> renamePackage() => rename(
-      inDirectory: "./",
+      inDirectory: './',
       select: (nameBundle) => nameBundle.packageName,
     );
 
 Future<void> renameAppWidgetName() => rename(
-      inDirectory: "./lib/feature/app/",
+      inDirectory: './lib/feature/app/',
       select: (nameBundle) => nameBundle.appWidgetName,
     );
 

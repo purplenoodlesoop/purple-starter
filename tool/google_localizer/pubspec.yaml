@@ -8,4 +8,6 @@ dependencies:
   translator: ^0.1.7
   pure: ^0.1.1
 
-
+dev_dependencies:
+  # Analyzer extensions
+  purple_lints: ^0.2.0

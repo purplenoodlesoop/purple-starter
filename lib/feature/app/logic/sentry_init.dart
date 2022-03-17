@@ -7,7 +7,7 @@ import 'package:stream_transform/stream_transform.dart';
 typedef SentrySubscription = StreamSubscription<void>;
 
 mixin SentryInit {
-  // ignore: no-empty-block
+  // ignore: no-empty-block, avoid-dynamic
   static void _nothing(dynamic _) {}
 
   static bool _isWarningOrError(LogMessage message) => message.level.maybeWhen(
@@ -28,9 +28,9 @@ mixin SentryInit {
       )
       .listen(_nothing);
 
-  static Future<SentrySubscription> init(bool shouldSend) async {
-    const dsn = String.fromEnvironment("SENTRY_DSN");
-    if (dsn != "" && shouldSend) {
+  static Future<SentrySubscription> init({required bool shouldSend}) async {
+    const dsn = String.fromEnvironment('SENTRY_DSN');
+    if (dsn.isNotEmpty && shouldSend) {
       await SentryFlutter.init(
         (options) => options
           ..dsn = dsn
