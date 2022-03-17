@@ -8,4 +8,7 @@ dependencies:
   translator: ^0.1.7
   pure: ^0.1.1
 
-
+dev_dependencies:
+  # Analyzer extensions
+  dart_code_metrics: ^4.11.0
+  purple_metrics_lints: ^0.1.0

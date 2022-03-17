@@ -4,6 +4,9 @@ publish_to: "none"
 environment:
   sdk: ">=2.14.0 <3.0.0"
 
-# dependencies:
+dev_dependencies:
+  # Analyzer extensions
+  dart_code_metrics: ^4.11.0
+  purple_metrics_lints: ^0.1.0
 
 
