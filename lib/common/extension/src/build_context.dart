@@ -12,6 +12,7 @@ extension BuildContextX on BuildContext {
   AppDatabase get database => dependencies.database;
   SharedPreferences get sharedPreferences => dependencies.sharedPreferences;
 
+  // ignore: avoid-non-null-assertion
   AppLocalizations get localized => AppLocalizations.of(this)!;
 
   MediaQueryData get mediaQuery => MediaQuery.of(this);

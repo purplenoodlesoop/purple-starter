@@ -11,6 +11,9 @@ abstract class IAppDependencies {
 }
 
 class AppDependenciesScope extends Scope {
+  static const DelegateAccess<_AppDependenciesScopeDelegate> _delegateOf =
+      Scope.delegateOf<AppDependenciesScope, _AppDependenciesScopeDelegate>;
+
   final String databaseName;
   final SharedPreferences sharedPreferences;
 
@@ -20,9 +23,6 @@ class AppDependenciesScope extends Scope {
     required Widget child,
     Key? key,
   }) : super(child: child, key: key);
-
-  static const DelegateAccess<_AppDependenciesScopeDelegate> _delegateOf =
-      Scope.delegateOf<AppDependenciesScope, _AppDependenciesScopeDelegate>;
 
   static IAppDependencies dependenciesOf(
     BuildContext context,
@@ -39,17 +39,6 @@ class _AppDependenciesScopeDelegate extends ScopeDelegate<AppDependenciesScope>
   Dio? _client;
   AppDatabase? _database;
 
-  Future<void> _closeDependencies() async {
-    _client?.close();
-    await _database?.close();
-  }
-
-  @override
-  void dispose() {
-    _closeDependencies();
-    super.dispose();
-  }
-
   @override
   Dio get dio => _client ??= Dio();
 
@@ -60,4 +49,15 @@ class _AppDependenciesScopeDelegate extends ScopeDelegate<AppDependenciesScope>
 
   @override
   SharedPreferences get sharedPreferences => widget.sharedPreferences;
+
+  Future<void> _closeDependencies() async {
+    _client?.close();
+    await _database?.close();
+  }
+
+  @override
+  void dispose() {
+    _closeDependencies();
+    super.dispose();
+  }
 }

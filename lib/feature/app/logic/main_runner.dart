@@ -40,6 +40,7 @@ mixin MainRunner {
     await Logger.runLogging(
       () => runZonedGuarded(
         () async {
+          // ignore: avoid-ignoring-return-values
           WidgetsFlutterBinding.ensureInitialized();
           _amendFlutterError();
           final app = await _initApp(shouldSend, asyncDependencies, appBuilder);

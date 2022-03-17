@@ -9,11 +9,11 @@ part 'settings_bloc.freezed.dart';
 
 @freezed
 class SettingsData with _$SettingsData {
+  static const SettingsData initial = SettingsData();
+
   const factory SettingsData({
     AppTheme? theme,
   }) = _SettingsData;
-
-  static const SettingsData initial = SettingsData();
 }
 
 @freezed

@@ -4,8 +4,8 @@ import 'package:purple_starter/feature/settings/database/settings_dao.dart';
 import 'package:purple_starter/feature/settings/enum/app_theme.dart';
 
 abstract class ISettingsRepository {
-  Future<void> setTheme(AppTheme value);
   AppTheme? get theme;
+  Future<void> setTheme(AppTheme value);
 }
 
 class SettingsRepository implements ISettingsRepository {
@@ -16,12 +16,12 @@ class SettingsRepository implements ISettingsRepository {
   }) : _settingsDao = settingsDao;
 
   @override
-  Future<void> setTheme(AppTheme value) async {
-    l.i("Setting theme to ${value.name}");
-    await _settingsDao.setThemeMode(value.name);
-    l.i("Set theme successfully");
-  }
+  AppTheme? get theme => _settingsDao.themeMode?.pipe(AppThemeX.fromString);
 
   @override
-  AppTheme? get theme => _settingsDao.themeMode?.pipe(AppThemeX.fromString);
+  Future<void> setTheme(AppTheme value) async {
+    l.i('Setting theme to ${value.name}');
+    await _settingsDao.setThemeMode(value.name);
+    l.i('Set theme successfully');
+  }
 }

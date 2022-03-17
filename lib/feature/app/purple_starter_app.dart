@@ -20,7 +20,7 @@ class PurpleStarterApp extends StatelessWidget {
   Widget build(BuildContext context) => AppLifecycleScope(
         sentrySubscription: sentrySubscription,
         child: AppDependenciesScope(
-          databaseName: "purple_starter_database",
+          databaseName: 'purple_starter_database',
           sharedPreferences: sharedPreferences,
           child: const SettingsScope(
             child: AppConfiguration(),
