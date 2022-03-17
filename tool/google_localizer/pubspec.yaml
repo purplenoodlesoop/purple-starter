@@ -10,5 +10,4 @@ dependencies:
 
 dev_dependencies:
   # Analyzer extensions
-  dart_code_metrics: ^4.11.0
-  purple_metrics_lints: ^0.1.0
+  purple_lints: ^0.2.0

@@ -72,6 +72,7 @@ abstract class ScopeDelegate<S extends Scope> extends State<S> {
   @override
   Widget build(BuildContext context) => _InheritedScope<S>(
         delegate: this,
+        // ignore: avoid-returning-widgets
         child: buildScoping(context, widget._child),
       );
 }

@@ -59,8 +59,8 @@ dependencies:
 
 dev_dependencies:
   # Analyzer extensions
-  dart_code_metrics: ^4.11.0
-  purple_metrics_lints: ^0.1.1
+  dart_code_metrics: ^4.13.0
+  purple_metrics_lints: ^0.2.0
 
   # Utils
   flutter_launcher_icons: ^0.9.2

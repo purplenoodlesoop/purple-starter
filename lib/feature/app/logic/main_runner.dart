@@ -26,7 +26,7 @@ mixin MainRunner {
     AsyncDependencies<D> asyncDependencies,
     AppBuilder<D> app,
   ) async {
-    final sentrySubscription = await SentryInit.init(shouldSend);
+    final sentrySubscription = await SentryInit.init(shouldSend: shouldSend);
     final dependencies = await asyncDependencies();
 
     return app(sentrySubscription, dependencies);
