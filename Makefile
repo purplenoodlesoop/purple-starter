@@ -1,44 +1,47 @@
-.PHONY: pub-get pub-outdated pub-upgrade pub-upgrade-major install-pods run deep-clean gen-build gen-build-delete gen-clean gen-watch create-splash prepare first-run metrics-analyze metrics-unused-files metrics-unused-l10n metrics-unused-code set-icon google-localizations emulator simulator stats
+.PHONY: pub-get pub-outdated pub-upgrade pub-upgrade-major install-pods run clean ios-deep-clean gen-build gen-build-delete gen-clean gen-watch create-splash prepare first-run metrics-analyze metrics-unused-files metrics-unused-l10n metrics-unused-code set-icon google-localizations emulator simulator stats
 
 
 pub-get:
 	@echo "* Getting latest dependencies *"
 	@fvm flutter pub get
 
-pub-outdated: get
+pub-outdated: pub-get
 	@echo "* Checking for outdated dependencies *"
 	@fvm flutter pub outdated
 
-pub-upgrade: get
+pub-upgrade: pub-get
 	@echo "* Upgrading dependencies *"
 	@fvm flutter pub upgrade
 
-pub-upgrade-major: get
+pub-upgrade-major: pub-get
 	@echo "* Upgrading dependencies --major-versions *"
 	@fvm flutter pub upgrade --major-versions
 
 install-pods:
 	@echo "* Installing pods *"
-	@(cd ./ios; pod install)
+	@pod install --project-directory=./ios
 
 run:
 	@echo "* Running app *"
 	@fvm flutter run
 
-deep-clean:
-	@echo "* Performing a deep clean *"
-	@echo "* Running flutter clean *"
+clean:
+	@echo "* Cleaning project *"
 	@fvm flutter clean
+
+ios-deep-clean:
+	@echo "* Performing a deep clean *"
+	@make clean
 	@echo "* Cleaning iOS specific files *"
 	@sh ./script/clean_ios.sh
-	@make get
+	@make pub-get
 	@make install-pods
 
-gen-build: get
+gen-build: pub-get
 	@echo "* Running build runner *"
 	@fvm flutter pub run build_runner build
 
-gen-build-delete: get
+gen-build-delete: pub-get
 	@echo "* Running build runner with deletion of conflicting outputs *"
 	@fvm flutter pub run build_runner build --delete-conflicting-outputs
 
@@ -50,11 +53,11 @@ gen-watch:
 	@echo "* Running build runner in watch mode *"
 	@fvm flutter pub run build_runner watch
 
-create-splash: get
+create-splash: pub-get
 	@echo "* Generating Splash screens *"
 	@fvm flutter pub run flutter_native_splash:create
 
-prepare: get gen-build-delete create-splash
+prepare: pub-get gen-build-delete create-splash
 
 first-run: prepare run
 
@@ -80,7 +83,7 @@ metrics-unused-l10n:
 metrics-unused-code:
 	$(call run_metrics_unused,code)
 
-set-icon: get
+set-icon: pub-get
 	@echo "* Removing alpha chanel from icon *"
 	@sh ./script/icon_remove_alpha.sh
 	@echo "* Generating app icons *"
@@ -88,13 +91,13 @@ set-icon: get
 
 google-localizations:
 	@echo "* Getting dependencies for google localizer *"
-	@(cd ./tool/google_localizer; fvm dart pub get)
+	@fvm dart pub get --directory=./tool/google_localizer
 	@echo "* Generating automated localizations *"
 	@fvm dart ./tool/google_localizer/main.dart "./lib/core/l10n/"
 
 #setup:
 #	@echo "* Getting dependencies for setup tool *"
-#	@(cd ./tool/setup_clone; fvm dart pub get)
+#	fvm dart pub get --directory=./tool/setup_clone
 #	@echo "* Setting up the project *"
 #	@fvm dart ./tool/setup_clone/main.dart $(NAME)
 
