@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pure/pure.dart';
-import 'package:purple_starter/common/extension/extensions.dart';
-import 'package:purple_starter/feature/settings/bloc/settings_bloc.dart';
-import 'package:purple_starter/feature/settings/database/settings_dao.dart';
-import 'package:purple_starter/feature/settings/enum/app_theme.dart';
-import 'package:purple_starter/feature/settings/repository/settings_repository.dart';
+import 'package:purple_starter/src/core/extension/extensions.dart';
+import 'package:purple_starter/src/feature/settings/bloc/settings_bloc.dart';
+import 'package:purple_starter/src/feature/settings/database/settings_dao.dart';
+import 'package:purple_starter/src/feature/settings/enum/app_theme.dart';
+import 'package:purple_starter/src/feature/settings/repository/settings_repository.dart';
 
 extension on BuildContext {
   SettingsBloc get bloc => read<SettingsBloc>();

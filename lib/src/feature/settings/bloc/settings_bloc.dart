@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:purple_starter/feature/settings/enum/app_theme.dart';
-import 'package:purple_starter/feature/settings/repository/settings_repository.dart';
+import 'package:purple_starter/src/feature/settings/enum/app_theme.dart';
+import 'package:purple_starter/src/feature/settings/repository/settings_repository.dart';
 import 'package:stream_bloc/stream_bloc.dart';
 
 part 'settings_bloc.freezed.dart';
@@ -73,6 +73,8 @@ class SettingsBloc extends StreamBloc<SettingsEvent, SettingsState> {
       yield SettingsState.idle(data: newData);
     } on Object catch (e) {
       yield state.toError(description: e.toString());
+      rethrow;
+    } finally {
       yield state.toIdle();
     }
   }

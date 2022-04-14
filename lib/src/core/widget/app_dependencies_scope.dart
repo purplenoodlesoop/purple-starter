@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:purple_starter/common/database/app_database.dart';
-import 'package:purple_starter/common/widget/scope.dart';
+import 'package:purple_starter/src/core/database/app_database.dart';
+import 'package:purple_starter/src/core/widget/scope.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class IAppDependencies {
