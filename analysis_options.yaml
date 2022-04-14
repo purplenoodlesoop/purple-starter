@@ -4,3 +4,4 @@ analyzer:
   exclude:
     - 'tool/google_localizer/**'
     - 'tool/setup_clone/**'
+    - 'lib/generated_plugin_registrant.dart'
