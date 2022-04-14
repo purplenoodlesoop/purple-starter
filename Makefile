@@ -1,9 +1,21 @@
-.PHONY: get install-pods run upgrade upgrade-major deep-clean gen-build gen-build-delete gen-clean gen-watch create-splash prepare first-run metrics-analyze metrics-unused-files metrics-unused-l10n metrics-unused-code set-icon google-localizations emulator simulator stats
+.PHONY: pub-get pub-outdated pub-upgrade pub-upgrade-major install-pods run deep-clean gen-build gen-build-delete gen-clean gen-watch create-splash prepare first-run metrics-analyze metrics-unused-files metrics-unused-l10n metrics-unused-code set-icon google-localizations emulator simulator stats
 
 
-get:
+pub-get:
 	@echo "* Getting latest dependencies *"
 	@fvm flutter pub get
+
+pub-outdated: get
+	@echo "* Checking for outdated dependencies *"
+	@fvm flutter pub outdated
+
+pub-upgrade: get
+	@echo "* Upgrading dependencies *"
+	@fvm flutter pub upgrade
+
+pub-upgrade-major: get
+	@echo "* Upgrading dependencies --major-versions *"
+	@fvm flutter pub upgrade --major-versions
 
 install-pods:
 	@echo "* Installing pods *"
@@ -12,14 +24,6 @@ install-pods:
 run:
 	@echo "* Running app *"
 	@fvm flutter run
-
-upgrade: get
-	@echo "* Upgrading dependencies *"
-	@fvm flutter pub upgrade
-
-upgrade-major: get
-	@echo "* Upgrading dependencies --major-versions *"
-	@fvm flutter pub upgrade --major-versions
 
 deep-clean:
 	@echo "* Performing a deep clean *"
