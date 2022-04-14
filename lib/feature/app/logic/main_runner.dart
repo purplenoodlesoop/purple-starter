@@ -5,8 +5,10 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:purple_starter/core/extension/extensions.dart';
+import 'package:purple_starter/feature/app/bloc/app_bloc_observer.dart';
 import 'package:purple_starter/feature/app/logic/logger.dart';
 import 'package:purple_starter/feature/app/logic/sentry_init.dart';
+import 'package:stream_bloc/stream_bloc.dart';
 
 typedef AsyncDependencies<D> = Future<D> Function();
 typedef AppBuilder<D> = Widget Function(
@@ -32,22 +34,29 @@ mixin MainRunner {
     return app(sentrySubscription, dependencies);
   }
 
+  static T? _runZoned<T>(T Function() body) => Logger.runLogging(
+        () => StreamBlocObserver.inject(
+          AppBlocObserver(),
+          () => runZonedGuarded(
+            body,
+            Logger.logZoneError,
+          ),
+        ),
+      );
+
   static Future<void> run<D>({
     bool shouldSend = !kDebugMode,
     required AsyncDependencies<D> asyncDependencies,
     required AppBuilder<D> appBuilder,
   }) async {
-    await Logger.runLogging(
-      () => runZonedGuarded(
-        () async {
-          // ignore: avoid-ignoring-return-values
-          WidgetsFlutterBinding.ensureInitialized();
-          _amendFlutterError();
-          final app = await _initApp(shouldSend, asyncDependencies, appBuilder);
-          runApp(app);
-        },
-        Logger.logZoneError,
-      ),
+    await _runZoned(
+      () async {
+        // ignore: avoid-ignoring-return-values
+        WidgetsFlutterBinding.ensureInitialized();
+        _amendFlutterError();
+        final app = await _initApp(shouldSend, asyncDependencies, appBuilder);
+        runApp(app);
+      },
     );
   }
 }
