@@ -4,10 +4,10 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:purple_starter/core/extension/extensions.dart';
-import 'package:purple_starter/feature/app/bloc/app_bloc_observer.dart';
-import 'package:purple_starter/feature/app/logic/logger.dart';
-import 'package:purple_starter/feature/app/logic/sentry_init.dart';
+import 'package:purple_starter/src/core/extension/extensions.dart';
+import 'package:purple_starter/src/feature/app/bloc/app_bloc_observer.dart';
+import 'package:purple_starter/src/feature/app/logic/logger.dart';
+import 'package:purple_starter/src/feature/app/logic/sentry_init.dart';
 import 'package:stream_bloc/stream_bloc.dart';
 
 typedef AsyncDependencies<D> = Future<D> Function();
