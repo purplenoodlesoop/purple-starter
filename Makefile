@@ -86,7 +86,7 @@ google-localizations:
 	@echo "* Getting dependencies for google localizer *"
 	@(cd ./tool/google_localizer; fvm dart pub get)
 	@echo "* Generating automated localizations *"
-	@fvm dart ./tool/google_localizer/main.dart "./lib/common/l10n/"
+	@fvm dart ./tool/google_localizer/main.dart "./lib/core/l10n/"
 
 #setup:
 #	@echo "* Getting dependencies for setup tool *"

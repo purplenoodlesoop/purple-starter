@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_gen/gen_l10n/app_localizations.g.dart';
-import 'package:purple_starter/common/extension/extensions.dart';
+import 'package:purple_starter/core/extension/extensions.dart';
 import 'package:purple_starter/feature/app/router/app_router.dart';
 import 'package:purple_starter/feature/app/widget/app_router_builder.dart';
 import 'package:purple_starter/feature/settings/widget/scope/settings_scope.dart';

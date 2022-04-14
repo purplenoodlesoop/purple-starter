@@ -4,7 +4,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:purple_starter/common/extension/extensions.dart';
+import 'package:purple_starter/core/extension/extensions.dart';
 import 'package:purple_starter/feature/app/logic/logger.dart';
 import 'package:purple_starter/feature/app/logic/sentry_init.dart';
 

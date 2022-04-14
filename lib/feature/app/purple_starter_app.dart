@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:purple_starter/common/widget/app_dependencies_scope.dart';
+import 'package:purple_starter/core/widget/app_dependencies_scope.dart';
 import 'package:purple_starter/feature/app/logic/sentry_init.dart';
 import 'package:purple_starter/feature/app/widget/app_configuration.dart';
 import 'package:purple_starter/feature/app/widget/app_lifecycle_scope.dart';

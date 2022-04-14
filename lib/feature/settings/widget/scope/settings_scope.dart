@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pure/pure.dart';
-import 'package:purple_starter/common/extension/extensions.dart';
+import 'package:purple_starter/core/extension/extensions.dart';
 import 'package:purple_starter/feature/settings/bloc/settings_bloc.dart';
 import 'package:purple_starter/feature/settings/database/settings_dao.dart';
 import 'package:purple_starter/feature/settings/enum/app_theme.dart';
