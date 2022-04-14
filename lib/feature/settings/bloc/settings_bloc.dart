@@ -73,6 +73,8 @@ class SettingsBloc extends StreamBloc<SettingsEvent, SettingsState> {
       yield SettingsState.idle(data: newData);
     } on Object catch (e) {
       yield state.toError(description: e.toString());
+      rethrow;
+    } finally {
       yield state.toIdle();
     }
   }
