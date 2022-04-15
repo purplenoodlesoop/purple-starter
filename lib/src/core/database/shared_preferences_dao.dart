@@ -25,8 +25,8 @@ abstract class SharedPreferencesDao implements ISharedPreferencesDao {
   @override
   bool containsKey(String key) => _sharedPreferences.containsKey(key);
 
-  // ignore: no-object-declaration
   @override
+  // ignore: no-object-declaration
   Object? get(String key) => _sharedPreferences.get(key);
 
   @override

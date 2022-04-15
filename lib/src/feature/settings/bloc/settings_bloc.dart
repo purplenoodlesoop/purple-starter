@@ -2,6 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:purple_starter/src/feature/settings/enum/app_theme.dart';
 import 'package:purple_starter/src/feature/settings/repository/settings_repository.dart';
 import 'package:stream_bloc/stream_bloc.dart';
+import 'package:sum/sum.dart';
 
 part 'settings_bloc.freezed.dart';
 
@@ -9,39 +10,12 @@ part 'settings_bloc.freezed.dart';
 
 @freezed
 class SettingsData with _$SettingsData {
-  static const SettingsData initial = SettingsData();
-
   const factory SettingsData({
-    AppTheme? theme,
+    required AppTheme theme,
   }) = _SettingsData;
 }
 
-@freezed
-class SettingsState with _$SettingsState {
-  const factory SettingsState.idle({
-    required SettingsData data,
-  }) = _SettingsStateIdle;
-
-  const factory SettingsState.loading({
-    required SettingsData data,
-  }) = _SettingsStateLoading;
-
-  const factory SettingsState.error({
-    required SettingsData data,
-    required String description,
-  }) = _SettingsStateError;
-}
-
-extension on SettingsState {
-  SettingsState toLoading() => SettingsState.loading(data: data);
-
-  SettingsState toIdle() => SettingsState.idle(data: data);
-
-  SettingsState toError({
-    required String description,
-  }) =>
-      SettingsState.error(data: data, description: description);
-}
+typedef SettingsState = PersistentAsyncData<String, SettingsData>;
 
 // --- Events --- //
 
@@ -60,9 +34,16 @@ class SettingsBloc extends StreamBloc<SettingsEvent, SettingsState> {
   SettingsBloc({
     required ISettingsRepository settingsRepository,
   })  : _settingsRepository = settingsRepository,
-        super(
-          const SettingsState.idle(data: SettingsData.initial),
-        );
+        super(_initialState(settingsRepository));
+
+  static SettingsState _initialState(
+    ISettingsRepository repository,
+  ) =>
+      SettingsState.idle(
+        data: SettingsData(
+          theme: repository.theme ?? AppTheme.system,
+        ),
+      );
 
   Stream<SettingsState> _performMutation(
     Future<SettingsData> Function() body,
@@ -72,7 +53,7 @@ class SettingsBloc extends StreamBloc<SettingsEvent, SettingsState> {
       final newData = await body();
       yield SettingsState.idle(data: newData);
     } on Object catch (e) {
-      yield state.toError(description: e.toString());
+      yield state.toError(error: e.toString());
       rethrow;
     } finally {
       yield state.toIdle();

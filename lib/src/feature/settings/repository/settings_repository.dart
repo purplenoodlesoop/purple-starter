@@ -12,7 +12,7 @@ class SettingsRepository implements ISettingsRepository {
   final ISettingsDao _settingsDao;
 
   SettingsRepository({
-    required SettingsDao settingsDao,
+    required ISettingsDao settingsDao,
   }) : _settingsDao = settingsDao;
 
   @override

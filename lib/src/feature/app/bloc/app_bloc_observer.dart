@@ -43,8 +43,6 @@ class AppBlocObserver extends StreamBlocObserver {
     super.onTransition(bloc, transition);
 
     final Object? event = transition.event;
-    final Object? currentState = transition.currentState;
-    final Object? nextState = transition.nextState;
 
     if (event != null) {
       _log(
@@ -54,9 +52,9 @@ class AppBlocObserver extends StreamBlocObserver {
           ..write(' with ')
           ..writeType(event)
           ..write(': ')
-          ..writeType(currentState)
+          ..writeType(transition.currentState)
           ..write(' -> ')
-          ..writeType(nextState),
+          ..writeType(transition.nextState),
       );
     }
   }

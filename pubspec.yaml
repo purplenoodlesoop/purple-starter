@@ -22,13 +22,14 @@ dependencies:
   path: ^1.8.0
   platform_info: ^3.1.0
 
-  # Data transformations
-  pure: ^0.1.1
+  # Data manipulation
+  pure: ^0.2.0
   fast_immutable_collections: ^7.0.0
   stream_transform: ^2.0.0
+  sum: ^0.2.0
 
   # BLoC
-  stream_bloc: ^0.3.0
+  stream_bloc: ^0.4.0
   flutter_bloc: ^8.0.1
 
   # Code generation
@@ -81,7 +82,7 @@ dev_dependencies:
     sdk: flutter
 
 flutter_gen:
-  output: lib/core/resources
+  output: lib/src/core/resources
   
 flutter:
   uses-material-design: true
