@@ -22,10 +22,11 @@ dependencies:
   path: ^1.8.0
   platform_info: ^3.1.0
 
-  # Data transformations
+  # Data manipulation
   pure: ^0.2.0
   fast_immutable_collections: ^7.0.0
   stream_transform: ^2.0.0
+  sum: ^0.2.0
 
   # BLoC
   stream_bloc: ^0.3.0
