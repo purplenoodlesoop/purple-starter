@@ -29,7 +29,7 @@ dependencies:
   sum: ^0.2.0
 
   # BLoC
-  stream_bloc: ^0.3.0
+  stream_bloc: ^0.4.0
   flutter_bloc: ^8.0.1
 
   # Code generation
