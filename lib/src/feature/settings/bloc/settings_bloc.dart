@@ -9,10 +9,8 @@ part 'settings_bloc.freezed.dart';
 
 @freezed
 class SettingsData with _$SettingsData {
-  static const SettingsData initial = SettingsData();
-
   const factory SettingsData({
-    AppTheme? theme,
+    required AppTheme? theme,
   }) = _SettingsData;
 }
 
@@ -61,8 +59,17 @@ class SettingsBloc extends StreamBloc<SettingsEvent, SettingsState> {
     required ISettingsRepository settingsRepository,
   })  : _settingsRepository = settingsRepository,
         super(
-          const SettingsState.idle(data: SettingsData.initial),
+          SettingsState.idle(
+            data: _initialData(settingsRepository),
+          ),
         );
+
+  static SettingsData _initialData(
+    ISettingsRepository repository,
+  ) =>
+      SettingsData(
+        theme: repository.theme,
+      );
 
   Stream<SettingsState> _performMutation(
     Future<SettingsData> Function() body,
