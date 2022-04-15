@@ -30,10 +30,8 @@ clean:
 	@fvm flutter clean
 
 ios-deep-clean:
-	@echo "* Performing a deep clean *"
-	@make clean
-	@echo "* Cleaning iOS specific files *"
-	@sh ./script/clean_ios.sh
+	@echo "* Performing a deep clean for iOS *"
+	@grind clean-project
 	@make pub-get
 	@make install-pods
 
@@ -84,8 +82,6 @@ metrics-unused-code:
 	$(call run_metrics_unused,code)
 
 set-icon: pub-get
-	@echo "* Removing alpha chanel from icon *"
-	@sh ./script/icon_remove_alpha.sh
 	@echo "* Generating app icons *"
 	@fvm flutter pub run flutter_launcher_icons:main -f flutter_icons.yaml
 
@@ -93,7 +89,7 @@ google-localizations:
 	@echo "* Getting dependencies for google localizer *"
 	@fvm dart pub get --directory=./tool/google_localizer
 	@echo "* Generating automated localizations *"
-	@fvm dart ./tool/google_localizer/main.dart "./lib/core/l10n/"
+	@fvm dart ./tool/google_localizer/main.dart "./lib/src/core/l10n/"
 
 #setup:
 #	@echo "* Getting dependencies for setup tool *"
