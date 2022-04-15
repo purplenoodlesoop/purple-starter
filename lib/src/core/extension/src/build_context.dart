@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.g.dart';
 import 'package:purple_starter/src/core/database/app_database.dart';
 import 'package:purple_starter/src/core/model/dependencies_storage.dart';
+import 'package:purple_starter/src/core/model/repository_storage.dart';
 import 'package:purple_starter/src/core/widget/dependencies_scope.dart';
+import 'package:purple_starter/src/core/widget/repository_scope.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 extension BuildContextX on BuildContext {
@@ -12,6 +14,8 @@ extension BuildContextX on BuildContext {
   Dio get dio => dependencies.dio;
   AppDatabase get database => dependencies.database;
   SharedPreferences get sharedPreferences => dependencies.sharedPreferences;
+
+  IRepositoryStorage get repository => RepositoryScope.of(this);
 
   // ignore: avoid-non-null-assertion
   AppLocalizations get localized => AppLocalizations.of(this)!;
