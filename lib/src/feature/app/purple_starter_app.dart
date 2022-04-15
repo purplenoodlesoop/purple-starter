@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:purple_starter/src/core/widget/app_dependencies_scope.dart';
+import 'package:purple_starter/src/core/model/dependencies_storage.dart';
+import 'package:purple_starter/src/core/widget/dependencies_scope.dart';
 import 'package:purple_starter/src/feature/app/logic/sentry_init.dart';
 import 'package:purple_starter/src/feature/app/widget/app_configuration.dart';
 import 'package:purple_starter/src/feature/app/widget/app_lifecycle_scope.dart';
@@ -19,9 +20,11 @@ class PurpleStarterApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) => AppLifecycleScope(
         sentrySubscription: sentrySubscription,
-        child: AppDependenciesScope(
-          databaseName: 'purple_starter_database',
-          sharedPreferences: sharedPreferences,
+        child: DependenciesScope(
+          create: (context) => DependenciesStorage(
+            databaseName: 'purple_starter_database',
+            sharedPreferences: sharedPreferences,
+          ),
           child: const SettingsScope(
             child: AppConfiguration(),
           ),

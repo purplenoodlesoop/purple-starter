@@ -81,7 +81,7 @@ dev_dependencies:
     sdk: flutter
 
 flutter_gen:
-  output: lib/core/resources
+  output: lib/src/core/resources
   
 flutter:
   uses-material-design: true
