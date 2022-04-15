@@ -10,7 +10,7 @@ part 'settings_bloc.freezed.dart';
 @freezed
 class SettingsData with _$SettingsData {
   const factory SettingsData({
-    required AppTheme? theme,
+    required AppTheme theme,
   }) = _SettingsData;
 }
 
@@ -68,7 +68,7 @@ class SettingsBloc extends StreamBloc<SettingsEvent, SettingsState> {
     ISettingsRepository repository,
   ) =>
       SettingsData(
-        theme: repository.theme,
+        theme: repository.theme ?? AppTheme.system,
       );
 
   Stream<SettingsState> _performMutation(
