@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:purple_starter/src/feature/app/router/navigator_observers_factory.dart';
 
 typedef CreateRouter = RootStackRouter Function(BuildContext context);
 typedef RouterWidgetBuilder = Widget Function(
@@ -35,6 +36,8 @@ class _AppRouterBuilderState extends State<AppRouterBuilder> {
   Widget build(BuildContext context) => widget.builder(
         context,
         router.defaultRouteParser(),
-        router.delegate(),
+        router.delegate(
+          navigatorObservers: const NavigatorObserversFactory(),
+        ),
       );
 }
