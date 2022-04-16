@@ -59,27 +59,17 @@ prepare: pub-get gen-build-delete create-splash
 
 first-run: prepare run
 
-define run_metrics
-	@echo "* $(1) using Dart Code Metrics *"
-	@fvm flutter pub run dart_code_metrics:metrics $(2) lib \
-			--exclude={/**.g.dart,/**.gr.dart,/**.gen.dart,/**.freezed.dart,/**.template.dart,}
-endef
-
-define run_metrics_unused
-	$(call run_metrics,Checking for unused $(1),check-unused-$(1))
-endef
-
 metrics-analyze:
-	$(call run_metrics,Analyzing the codebase,analyze)
+	@grind code-metrics-analyze
 
 metrics-unused-files:
-	$(call run_metrics_unused,files)
+	@grind code-metrics-unused-files
 
 metrics-unused-l10n:
-	$(call run_metrics_unused,l10n)
+	@grind code-metrics-unused-l10n
 
 metrics-unused-code:
-	$(call run_metrics_unused,code)
+	@grind code-metrics-unused-code
 
 set-icon: pub-get
 	@echo "* Generating app icons *"
