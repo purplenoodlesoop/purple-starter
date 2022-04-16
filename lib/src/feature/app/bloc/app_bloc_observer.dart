@@ -8,6 +8,8 @@ extension on StringBuffer {
 }
 
 class AppBlocObserver extends StreamBlocObserver {
+  const AppBlocObserver();
+
   void _log(void Function(StringBuffer buffer) assemble) {
     final buffer = StringBuffer(runtimeType)..write(' | ');
     assemble(buffer);

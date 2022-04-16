@@ -8,6 +8,7 @@ import 'package:purple_starter/src/core/extension/extensions.dart';
 import 'package:purple_starter/src/feature/app/bloc/app_bloc_observer.dart';
 import 'package:purple_starter/src/feature/app/logic/logger.dart';
 import 'package:purple_starter/src/feature/app/logic/sentry_init.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:stream_bloc/stream_bloc.dart';
 
 typedef AsyncDependencies<D> = Future<D> Function();
@@ -36,7 +37,7 @@ mixin MainRunner {
 
   static T? _runZoned<T>(T Function() body) => Logger.runLogging(
         () => StreamBlocObserver.inject(
-          AppBlocObserver(),
+          const AppBlocObserver(),
           () => runZonedGuarded(
             body,
             Logger.logZoneError,
@@ -55,7 +56,12 @@ mixin MainRunner {
         WidgetsFlutterBinding.ensureInitialized();
         _amendFlutterError();
         final app = await _initApp(shouldSend, asyncDependencies, appBuilder);
-        runApp(app);
+        runApp(
+          DefaultAssetBundle(
+            bundle: SentryAssetBundle(),
+            child: app,
+          ),
+        );
       },
     );
   }
