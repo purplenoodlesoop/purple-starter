@@ -1,4 +1,4 @@
-import 'package:purple_starter/src/core/database/app_database.dart';
+import 'package:purple_starter/src/core/database/drift/app_database.dart';
 import 'package:purple_starter/src/feature/settings/database/settings_dao.dart';
 import 'package:purple_starter/src/feature/settings/repository/settings_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
