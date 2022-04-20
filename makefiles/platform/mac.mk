@@ -24,4 +24,4 @@ codegen-bg:
 	@nohup time /bin/bash -c ' \
 		flutter pub get \
 		&& flutter pub run build_runner build --delete-conflicting-outputs \
-		&& say "Code generation completed"' >/dev/null 2>&1 &
+		&& say "Code generation completed" || say "Code generation failed!" ' >/dev/null 2>&1 &
