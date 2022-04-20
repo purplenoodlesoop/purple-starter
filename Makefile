@@ -1,100 +1,10 @@
-.PHONY: pub-get pub-outdated pub-upgrade pub-upgrade-major install-pods run clean ios-deep-clean gen-build gen-build-delete gen-clean gen-watch create-splash prepare first-run metrics-analyze metrics-unused-files metrics-unused-l10n metrics-unused-code set-icon google-localizations emulator simulator stats
+.PHONY: help
 
+# Описание скрипта по `make` или `make help`
+help:
+	@echo "Make something good"
+	@echo " or something worse"
+	@echo "  or something else"
+	@echo "   with this script"
 
-pub-get:
-	@echo "* Getting latest dependencies *"
-	@fvm flutter pub get
-
-pub-upgrade:
-	@echo "* Upgrading dependencies *"
-	@fvm flutter pub upgrade
-
-pub-upgrade-major:
-	@echo "* Upgrading dependencies --major-versions *"
-	@fvm flutter pub upgrade --major-versions
-
-pub-outdated: pub-upgrade
-	@echo "* Checking for outdated dependencies *"
-	@fvm flutter pub outdated
-
-install-pods:
-	@echo "* Installing pods *"
-	@pod install --project-directory=./ios
-
-run:
-	@echo "* Running app *"
-	@fvm flutter run
-
-clean:
-	@echo "* Cleaning project *"
-	@fvm flutter clean
-
-ios-deep-clean:
-	@echo "* Performing a deep clean for iOS *"
-	@grind clean-project
-	@make pub-get
-	@make install-pods
-
-gen-build: pub-get
-	@echo "* Running build runner *"
-	@fvm flutter pub run build_runner build
-
-gen-build-delete: pub-get
-	@echo "* Running build runner with deletion of conflicting outputs *"
-	@fvm flutter pub run build_runner build --delete-conflicting-outputs
-
-gen-clean:
-	@echo "* Cleaning build runner *"
-	@fvm flutter pub run build_runner clean
-
-gen-watch:
-	@echo "* Running build runner in watch mode *"
-	@fvm flutter pub run build_runner watch
-
-create-splash: pub-get
-	@echo "* Generating Splash screens *"
-	@fvm flutter pub run flutter_native_splash:create
-
-prepare: pub-get gen-build-delete create-splash
-
-first-run: prepare run
-
-metrics-analyze:
-	@grind code-metrics-analyze
-
-metrics-unused-files:
-	@grind code-metrics-unused-files
-
-metrics-unused-l10n:
-	@grind code-metrics-unused-l10n
-
-metrics-unused-code:
-	@grind code-metrics-unused-code
-
-set-icon: pub-get
-	@echo "* Generating app icons *"
-	@fvm flutter pub run flutter_launcher_icons:main -f flutter_icons.yaml
-
-google-localizations:
-	@echo "* Getting dependencies for google localizer *"
-	@fvm dart pub get --directory=./tool/google_localizer
-	@echo "* Generating automated localizations *"
-	@fvm dart ./tool/google_localizer/main.dart "./lib/src/core/l10n/"
-
-#setup:
-#	@echo "* Getting dependencies for setup tool *"
-#	fvm dart pub get --directory=./tool/setup_clone
-#	@echo "* Setting up the project *"
-#	@fvm dart ./tool/setup_clone/main.dart $(NAME)
-
-emulator:
-	@echo "* Opening an android emulator *"
-	@emulator @Pixel_XL_API_30
-
-simulator:
-	@echo "* Opening an iOS simulator *"
-	@open -a Simulator
-
-stats:
-	@echo "* Running cloc *"
-	@cloc .
+-include makefiles/*.mk
