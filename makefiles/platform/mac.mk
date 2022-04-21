@@ -19,7 +19,7 @@ ios-deep-clean:
 	@make pub-get
 	@make install-pods
 
-# Запустить кодогенерацию в фоне
+# Runes code generation in background
 codegen-bg:
 	@nohup time /bin/bash -c ' \
 		flutter pub get \
