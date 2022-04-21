@@ -2,19 +2,15 @@
 
 first-run: prepare run
 
-clean:
-	@echo "* Cleaning project *"
-	@fvm flutter clean
-
 create-splash: pub-get
 	@echo "* Generating Splash screens *"
-	@fvm flutter pub run flutter_native_splash:create
+	@flutter pub run flutter_native_splash:create
 
 prepare: pub-get gen-build-delete create-splash
 
 set-icon: pub-get
 	@echo "* Generating app icons *"
-	@fvm flutter pub run flutter_launcher_icons:main -f flutter_icons.yaml
+	@flutter pub run flutter_launcher_icons:main -f flutter_icons.yaml
 
 google-localizations:
 	@echo "* Getting dependencies for google localizer *"

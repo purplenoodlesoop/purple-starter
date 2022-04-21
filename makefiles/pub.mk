@@ -1,17 +1,23 @@
 .PHONY: pub-get pub-outdated pub-upgrade pub-upgrade-major
 
+clean:
+	@echo "* Cleaning project *"
+	@rm -rf build .flutter-plugins .flutter-plugins-dependencies coverage .dart_tool .packages pubspec.lock
+	@flutter clean
+	@ #git clean -fdx
+
 pub-get:
 	@echo "* Getting latest dependencies *"
-	@fvm flutter pub get
+	@timeout 60 flutter pub get
 
 pub-upgrade:
 	@echo "* Upgrading dependencies *"
-	@fvm flutter pub upgrade
+	@timeout 60 flutter pub upgrade
 
 pub-upgrade-major:
 	@echo "* Upgrading dependencies --major-versions *"
-	@fvm flutter pub upgrade --major-versions
+	@timeout 60 flutter pub upgrade --major-versions
 
 pub-outdated: pub-upgrade
 	@echo "* Checking for outdated dependencies *"
-	@fvm flutter pub outdated
+	@timeout 120 flutter pub outdated
