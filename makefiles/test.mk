@@ -9,10 +9,10 @@ coverage: test
 	@ #mv coverage/lcov.info coverage/lcov.base.info
 	@ #lcov -r coverage/lcov.base.info -o coverage/lcov.base.info "lib/**.freezed.dart" "lib/**.g.dart"
 	@ #mv coverage/lcov.base.info coverage/lcov.info
-	@dart run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info --packages=.packages --report-on=lib
-	@genhtml -o coverage coverage/lcov.info
+	@ #dart run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info --packages=.packages --report-on=lib
 	@ #lcov --list coverage/lcov.info
-	@ #lcov --summary coverage/lcov.info
+	@lcov --summary coverage/lcov.info
+	@genhtml -o coverage coverage/lcov.info
 
 # Интеграционные тесты
 integration:
@@ -37,7 +37,8 @@ integration:
 # ```
 # git config --global user.email "developer@domain.tld" \
 # git config --global user.name "Flutter Developer" \
-# git config --global credential.helper store
+# git config --global credential.helper store \
+# git config --global --add safe.directory /opt/flutter
 # ```
 test-docker:
 	@docker run --rm -it -v ${PWD}:/app --workdir /app \
@@ -48,12 +49,14 @@ test-docker:
 				&& mkdir -p /app/build; touch /app/build/.docker.txt \
 				&& echo "Testing inside docker container: started" > /app/build/.docker.txt 2>&1 \
 				&& date >> /app/build/.docker.txt 2>&1 \
-				&& apk --no-cache add lcov \
+				&& echo "https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
+				&& apk update && apk --no-cache add lcov \
 				&& export PUB_CACHE="/var/tmp/.pub_cache" \
 				&& flutter config --no-analytics --no-color \
 				&& time timeout 60 flutter pub get --suppress-analytics --verbose >> /app/build/.docker.txt 2>&1 \
 				&& time timeout 300 flutter pub run build_runner build --delete-conflicting-outputs --release --verbose >> /app/build/.docker.txt 2>&1 \
 				&& time timeout 300 flutter test --concurrency=6 --dart-define=environment=testing --coverage test/ >> /app/build/.docker.txt 2>&1 \
-				&& dart run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info --packages=.packages --report-on=lib \
+				&& lcov --summary coverage/lcov.info \
+				&& genhtml -o coverage coverage/lcov.info \
 				&& date >> /app/build/.docker.txt 2>&1 \
 				&& echo "Testing inside docker container: completed" >> /app/build/.docker.txt 2>&1'
