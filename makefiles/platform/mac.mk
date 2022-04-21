@@ -21,7 +21,7 @@ ios-deep-clean:
 
 # Запустить кодогенерацию в фоне
 codegen-bg:
-	@nohup sh -c ' \
-		timeout 60 flutter pub get \
-		&& timeout 300 flutter pub run build_runner build --delete-conflicting-outputs \
+	@nohup time /bin/bash -c ' \
+		flutter pub get \
+		&& flutter pub run build_runner build --delete-conflicting-outputs \
 		&& say "Code generation completed" || say "Code generation failed!" ' >/dev/null 2>&1 &
