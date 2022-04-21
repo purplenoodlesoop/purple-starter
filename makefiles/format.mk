@@ -2,10 +2,6 @@
 
 first-run: prepare run
 
-clean:
-	@echo "* Cleaning project *"
-	@fvm flutter clean
-
 create-splash: pub-get
 	@echo "* Generating Splash screens *"
 	@fvm flutter pub run flutter_native_splash:create
