@@ -2,7 +2,7 @@
 
 flutter = (fvm flutter || flutter)
 
-# Описание скрипта по `make` или `make help`
+# Script description and usage through `make` or `make help` commands
 help:
 	@echo "Make something good"
 	@echo " or something worse"

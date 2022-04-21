@@ -1,10 +1,10 @@
 .PHONY: test coverage
 
-# Запустить тесты
+# Run tests
 test:
 	@time timeout 300 flutter test --concurrency=6 --dart-define=environment=testing --coverage test/
 
-# Запустить все тесты и собрать общее покрытие
+# Run tests and generate coverage report
 coverage: test
 	@ #mv coverage/lcov.info coverage/lcov.base.info
 	@ #lcov -r coverage/lcov.base.info -o coverage/lcov.base.info "lib/**.freezed.dart" "lib/**.g.dart"
@@ -14,7 +14,7 @@ coverage: test
 	@lcov --summary coverage/lcov.info
 	@genhtml -o coverage coverage/lcov.info
 
-# Интеграционные тесты
+# Run integration tests
 integration:
 	@flutter test \
 		--flavor integration \
@@ -22,10 +22,10 @@ integration:
 		--coverage \
 		integration_test/app_test.dart
 
-# Запустить тесты на последней стейбл версии флатера с поддержкой веба
+# Run tests on the latest stable version with web support
 # https://hub.docker.com/r/plugfox/flutter/tags?page=1&name=stable-web
 #
-# Если необходимо добавить sqlite последней версии:
+# Add the latest SQLite support:
 # ```
 # echo "https://dl-cdn.alpinelinux.org/alpine/edge/main" > /etc/apk/repositories \
 # echo "https://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
@@ -33,7 +33,7 @@ integration:
 # apk update && apk --no-cache add sqlite sqlite-dev lcov
 # ```
 #
-# Сконфигурировать git:
+# Configure git:
 # ```
 # git config --global user.email "developer@domain.tld" \
 # git config --global user.name "Flutter Developer" \
