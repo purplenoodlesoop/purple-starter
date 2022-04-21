@@ -2,7 +2,7 @@
 
 run:
 	@echo "* Running app *"
-	@fvm flutter run
+	@flutter run
 
 emulator:
 	@echo "* Opening an Android emulator *"

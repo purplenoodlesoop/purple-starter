@@ -1,4 +1,6 @@
-.PHONY: help
+.PHONY: help version doctor
+
+flutter = (fvm flutter || flutter)
 
 # Описание скрипта по `make` или `make help`
 help:
