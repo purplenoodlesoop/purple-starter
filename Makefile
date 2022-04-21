@@ -8,3 +8,9 @@ help:
 	@echo "   with this script"
 
 -include makefiles/*.mk
+
+version:
+	@flutter --version
+
+doctor:
+	@flutter doctor
