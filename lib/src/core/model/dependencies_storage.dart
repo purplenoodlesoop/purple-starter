@@ -3,9 +3,9 @@ import 'package:purple_starter/src/core/database/drift/app_database.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class IDependenciesStorage {
-  Dio get dio;
-  AppDatabase get database;
-  SharedPreferences get sharedPreferences;
+  abstract final Dio dio;
+  abstract final AppDatabase database;
+  abstract final SharedPreferences sharedPreferences;
 
   void close();
 }
