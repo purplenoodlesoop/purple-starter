@@ -10,7 +10,7 @@ prepare: pub-get gen-build-delete icon splash
 
 icon: pub-get
 	@echo "* Generating app icons *"
-	@flutter pub run flutter_launcher_icons:main -f flutter_icons.yaml
+	@flutter pub run flutter_launcher_icons:main -f flutter_launcher_icons.yaml
 
 google-localizations:
 	@echo "* Getting dependencies for google localizer *"

@@ -15,7 +15,7 @@ simulator:
 
 ios-deep-clean:
 	@echo "* Performing a deep clean for iOS *"
-	@grind clean-project
+	@grind clean-ios
 	@make pub-get
 	@make install-pods
 

@@ -2,7 +2,7 @@ targets:
   $default:
     sources:
       - $package$
-      - assets/**
+      - asset/**
       - lib/**
       - test/**
       - pubspec.yaml

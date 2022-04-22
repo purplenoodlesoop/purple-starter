@@ -1,10 +1,10 @@
 ifeq ($(OS),Windows_NT)
-	include makefiles/platform/win.mk
+	include automation/makefile/platform/win.mk
 else
     _detected_OS := $(shell uname -s)
     ifeq ($(_detected_OS),Linux)
-		include makefiles/platform/nix.mk
+		include automation/makefile/platform/nix.mk
     else ifeq ($(_detected_OS),Darwin)
-		include makefiles/platform/mac.mk
+		include automation/makefile/platform/mac.mk
     endif
 endif
