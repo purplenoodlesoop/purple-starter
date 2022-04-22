@@ -1,14 +1,14 @@
-.PHONY: first-run clean create-splash prepare set-icon google-localizations setup format
+.PHONY: first-run clean splash prepare icon google-localizations setup format
 
 first-run: prepare run
 
-create-splash: pub-get
+splash: pub-get
 	@echo "* Generating Splash screens *"
 	@flutter pub run flutter_native_splash:create
 
-prepare: pub-get gen-build-delete create-splash
+prepare: pub-get gen-build-delete icon splash
 
-set-icon: pub-get
+icon: pub-get
 	@echo "* Generating app icons *"
 	@flutter pub run flutter_launcher_icons:main -f flutter_icons.yaml
 

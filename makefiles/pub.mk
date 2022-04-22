@@ -1,7 +1,7 @@
 .PHONY: pub-get pub-outdated pub-upgrade pub-upgrade-major
 
 clean:
-	@echo "* Cleaning project *"
+	@echo "* Cleaning the project *"
 	@rm -rf build .flutter-plugins .flutter-plugins-dependencies coverage .dart_tool .packages pubspec.lock
 	@flutter clean
 	@ #git clean -fdx
