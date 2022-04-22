@@ -99,4 +99,4 @@ flutter:
   uses-material-design: true
   generate: true
   assets:
-    - asset/images/
+    - asset/image/
