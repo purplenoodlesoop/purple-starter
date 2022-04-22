@@ -9,7 +9,7 @@ help:
 	@echo "  or something else"
 	@echo "   with this script"
 
--include makefiles/*.mk
+-include automation/makefile/*.mk
 
 version:
 	@flutter --version
