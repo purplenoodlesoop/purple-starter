@@ -2,8 +2,22 @@ import 'package:l/l.dart';
 import 'package:stream_bloc/stream_bloc.dart';
 
 extension on StringBuffer {
-  void writeType(Object? object) {
-    write(object.runtimeType);
+  /// Writes the type of the object in debug mode to make logs **readable** and
+  /// write the object's [toString] in release mode to make logs
+  /// **informative**.
+  void writeInfo(Object? object) {
+    Type? type;
+
+    // ignore: prefer_asserts_with_message
+    assert(
+      () {
+        type = object.runtimeType;
+
+        return true;
+      }(),
+    );
+
+    write(type ?? object);
   }
 }
 
@@ -22,7 +36,7 @@ class AppBlocObserver extends StreamBlocObserver {
     _log(
       (buffer) => buffer
         ..write('Created ')
-        ..writeType(closable),
+        ..writeInfo(closable),
     );
   }
 
@@ -33,9 +47,9 @@ class AppBlocObserver extends StreamBlocObserver {
       _log(
         (buffer) => buffer
           ..write('Event ')
-          ..writeType(event)
+          ..writeInfo(event)
           ..write(' in ')
-          ..writeType(eventSink),
+          ..writeInfo(eventSink),
       );
     }
   }
@@ -50,13 +64,13 @@ class AppBlocObserver extends StreamBlocObserver {
       _log(
         (buffer) => buffer
           ..write('Transition in ')
-          ..writeType(bloc)
+          ..writeInfo(bloc)
           ..write(' with ')
-          ..writeType(event)
+          ..writeInfo(event)
           ..write(': ')
-          ..writeType(transition.currentState)
+          ..writeInfo(transition.currentState)
           ..write(' -> ')
-          ..writeType(transition.nextState),
+          ..writeInfo(transition.nextState),
       );
     }
   }
@@ -68,9 +82,9 @@ class AppBlocObserver extends StreamBlocObserver {
     _log(
       (buffer) => buffer
         ..write('Error ')
-        ..writeType(error)
+        ..writeInfo(error)
         ..write(' in ')
-        ..writeType(errorSink),
+        ..writeInfo(errorSink),
     );
 
     l.e(error, stackTrace);
@@ -82,7 +96,7 @@ class AppBlocObserver extends StreamBlocObserver {
     _log(
       (buffer) => buffer
         ..write('Closed ')
-        ..writeType(closable),
+        ..writeInfo(closable),
     );
   }
 }
