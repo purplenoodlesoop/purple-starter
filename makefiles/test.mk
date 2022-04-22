@@ -2,7 +2,7 @@
 
 # Run tests
 test:
-	@time timeout 300 flutter test --concurrency=6 --dart-define=environment=testing --coverage test/
+	@time flutter test --concurrency=6 --dart-define=environment=testing --coverage test/
 
 # Run tests and generate coverage report
 coverage: test
@@ -53,9 +53,9 @@ test-docker:
 				&& apk update && apk --no-cache add lcov \
 				&& export PUB_CACHE="/var/tmp/.pub_cache" \
 				&& flutter config --no-analytics --no-color \
-				&& time timeout 60 flutter pub get --suppress-analytics --verbose >> /app/build/.docker.txt 2>&1 \
-				&& time timeout 300 flutter pub run build_runner build --delete-conflicting-outputs --release --verbose >> /app/build/.docker.txt 2>&1 \
-				&& time timeout 300 flutter test --concurrency=6 --dart-define=environment=testing --coverage test/ >> /app/build/.docker.txt 2>&1 \
+				&& time flutter pub get --suppress-analytics --verbose >> /app/build/.docker.txt 2>&1 \
+				&& time flutter pub run build_runner build --delete-conflicting-outputs --release --verbose >> /app/build/.docker.txt 2>&1 \
+				&& time flutter test --concurrency=6 --dart-define=environment=testing --coverage test/ >> /app/build/.docker.txt 2>&1 \
 				&& lcov --summary coverage/lcov.info \
 				&& genhtml -o coverage coverage/lcov.info \
 				&& date >> /app/build/.docker.txt 2>&1 \
