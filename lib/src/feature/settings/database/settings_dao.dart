@@ -2,7 +2,7 @@ import 'package:purple_starter/src/core/database/shared_preferences/shared_prefe
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class ISettingsDao {
-  String? get themeMode;
+  abstract final String? themeMode;
   Future<void> setThemeMode(String value);
 }
 

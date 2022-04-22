@@ -4,7 +4,7 @@ import 'package:purple_starter/src/feature/settings/repository/settings_reposito
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class IRepositoryStorage {
-  ISettingsRepository get settings;
+  abstract final ISettingsRepository settings;
 }
 
 class RepositoryStorage implements IRepositoryStorage {
