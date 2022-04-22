@@ -19,8 +19,12 @@ typedef UnaryScopeMethod<A extends Object?> = void Function(
 @immutable
 class BlocScope<E extends Object?, S extends Object?,
     B extends StreamBloc<E, S>> {
+  final bool _listenByDefault;
+
   @literal
-  const BlocScope();
+  const BlocScope({
+    bool listenByDefault = false,
+  }) : _listenByDefault = listenByDefault;
 
   S _state(B bloc) => bloc.state;
 
@@ -29,7 +33,7 @@ class BlocScope<E extends Object?, S extends Object?,
   ScopeData<D> data<D extends Object?>(
     D Function(BuildContext context, S state) data,
   ) =>
-      (BuildContext context, {bool listen = false}) => listen
+      (BuildContext context, {bool? listen}) => (listen ?? _listenByDefault)
           ? context.select<B, D>(data.curry(context).dot(_state))
           : data(context, _bloc(context).state);
 
