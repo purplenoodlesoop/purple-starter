@@ -19,6 +19,6 @@ class RepositoryStorage implements IRepositoryStorage {
 
   @override
   ISettingsRepository get settings => SettingsRepository(
-        settingsDao: SettingsDao(_sharedPreferences),
+        settingsDao: SettingsDao(sharedPreferences: _sharedPreferences),
       );
 }

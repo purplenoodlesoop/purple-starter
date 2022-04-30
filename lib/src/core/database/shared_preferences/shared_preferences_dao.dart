@@ -1,3 +1,4 @@
+import 'package:pure/pure.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class ISharedPreferencesDao implements SharedPreferences {
@@ -5,15 +6,23 @@ abstract class ISharedPreferencesDao implements SharedPreferences {
 }
 
 abstract class SharedPreferencesDao implements ISharedPreferencesDao {
-  static const namespace = 'shared_preference.purple_starter';
+  static const String _namespace = 'shared_preference.purple_starter';
 
   final SharedPreferences _sharedPreferences;
+  final String _fullNamespace;
 
-  SharedPreferencesDao(SharedPreferences sharedPreferences)
-      : _sharedPreferences = sharedPreferences;
+  late final F1<String, String> _memoizedKey = _key.memoize();
+
+  SharedPreferencesDao(
+    SharedPreferences sharedPreferences, {
+    required String name,
+  })  : _sharedPreferences = sharedPreferences,
+        _fullNamespace = '$_namespace.$name';
+
+  String _key(String name) => '$_fullNamespace.$name';
 
   @override
-  String key(String name) => '$namespace.$name';
+  String key(String name) => _memoizedKey(name);
 
   @override
   Future<bool> clear() => _sharedPreferences.clear();
