@@ -25,8 +25,10 @@ class AppBlocObserver extends StreamBlocObserver {
   const AppBlocObserver();
 
   void _log(void Function(StringBuffer buffer) assemble) {
-    final buffer = StringBuffer(runtimeType)..write(' | ');
+    final buffer = StringBuffer('AppBlocObserver | ');
+
     assemble(buffer);
+
     l.d(buffer.toString());
   }
 
