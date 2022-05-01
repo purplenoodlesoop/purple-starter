@@ -15,9 +15,10 @@ class SettingsRepository implements ISettingsRepository {
   }) : _settingsDao = settingsDao;
 
   @override
-  AppTheme? get theme => _settingsDao.themeMode?.pipe(AppThemeX.fromString);
+  AppTheme? get theme =>
+      _settingsDao.themeMode.value?.pipe(AppTheme.values.byName);
 
   @override
   Future<void> setTheme(AppTheme value) =>
-      _settingsDao.setThemeMode(value.name);
+      _settingsDao.themeMode.setValue(value.name);
 }

@@ -1,5 +1,3 @@
-import 'package:purple_starter/src/core/error/parsing_exception.dart';
-
 enum AppTheme {
   light,
   dark,
@@ -7,17 +5,7 @@ enum AppTheme {
 }
 
 extension AppThemeX on AppTheme {
-  static AppTheme fromString(String source) {
-    const values = {
-      'light': AppTheme.light,
-      'dark': AppTheme.dark,
-      'system': AppTheme.system,
-    };
-
-    final parsed = values[source];
-    if (parsed != null) return parsed;
-    throw ParsingException<String, AppTheme>(source);
-  }
+  static AppTheme fromString(String source) => AppTheme.values.byName(source);
 
   R when<R>({
     required R Function() light,
