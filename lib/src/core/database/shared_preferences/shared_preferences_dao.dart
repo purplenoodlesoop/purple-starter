@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+import 'package:l/l.dart';
 import 'package:pure/pure.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -5,104 +7,253 @@ abstract class ISharedPreferencesDao implements SharedPreferences {
   String key(String name);
 }
 
-abstract class SharedPreferencesDao implements ISharedPreferencesDao {
-  static const String _namespace = 'shared_preference.purple_starter';
-
+abstract class BaseSharedPreferencesDao implements ISharedPreferencesDao {
   final SharedPreferences _sharedPreferences;
-  final String _fullNamespace;
+  final String _name;
 
-  late final F1<String, String> _memoizedKey = _key.memoize();
-
-  SharedPreferencesDao(
+  BaseSharedPreferencesDao(
     SharedPreferences sharedPreferences, {
     required String name,
   })  : _sharedPreferences = sharedPreferences,
-        _fullNamespace = '$_namespace.$name';
+        _name = name;
+}
+
+mixin _KeyImplementationMixin on BaseSharedPreferencesDao {
+  late final String _fullNamespace = 'purple_starter.$_name';
+  late final F1<String, String> _memoizedKey = _key.memoize();
 
   String _key(String name) => '$_fullNamespace.$name';
 
   @override
   String key(String name) => _memoizedKey(name);
+}
 
+mixin _LoggerMixin on BaseSharedPreferencesDao {
+  late final String _logOrigin =
+      kDebugMode ? runtimeType.toString() : 'SharedPreferencesDao($_name)';
+
+  void _log(void Function(StringBuffer b) buildLog) {
+    final buffer = StringBuffer(_logOrigin)..write(' | ');
+
+    buildLog(buffer);
+
+    l.i(buffer.toString());
+  }
+
+  Future<T> _performAsyncLogging<T>(
+    String description,
+    Future<T> Function() action,
+  ) async {
+    _log(
+      (b) => b
+        ..write('Performing')
+        ..write('"')
+        ..write(description)
+        ..write('".'),
+    );
+
+    final result = await action();
+
+    _log(
+      (b) => b
+        ..write('Successfully performed')
+        ..write('"')
+        ..write(description)
+        ..write('".'),
+    );
+
+    return result;
+  }
+
+  T _getLogging<T>(String key, T Function(String key) read) {
+    _log(
+      (b) => b
+        ..write('Reading key ')
+        ..write('"')
+        ..write(key)
+        ..write('" of type ')
+        ..write(T)
+        ..write('.'),
+    );
+
+    final value = read(key);
+
+    _log(
+      (b) => b
+        ..write('Successfully read key ')
+        ..write('"')
+        ..write(key)
+        ..write('". Value – ')
+        ..write(value)
+        ..write('.'),
+    );
+
+    return value;
+  }
+
+  Future<bool> _setLogging<T>(
+    String key,
+    T value,
+    Future<bool> Function(String key, T value) set,
+  ) async {
+    _log(
+      (b) => b
+        ..write('Writing key ')
+        ..write('"')
+        ..write(key)
+        ..write('" with value ')
+        ..write(value)
+        ..write('.'),
+    );
+
+    final hasSet = await set(key, value);
+
+    _log(
+      (b) => b
+        ..write('Wrote key ')
+        ..write('"')
+        ..write(key)
+        ..write('" ')
+        ..write(hasSet ? 'successfully' : 'unsuccessfully')
+        ..write('.'),
+    );
+
+    return hasSet;
+  }
+}
+
+mixin _MiscImplementationMixin on _LoggerMixin {
   @override
-  Future<bool> clear() => _sharedPreferences.clear();
+  Future<bool> clear() =>
+      _performAsyncLogging('clear', _sharedPreferences.clear);
 
   @override
   @Deprecated('Deprecated for iOS')
-  Future<bool> commit() => _sharedPreferences.commit();
+  Future<bool> commit() =>
+      _performAsyncLogging('commit', _sharedPreferences.clear);
 
   @override
-  bool containsKey(String key) => _sharedPreferences.containsKey(key);
+  Future<void> reload() =>
+      _performAsyncLogging('reload', _sharedPreferences.reload);
 
+  @override
+  bool containsKey(String key) {
+    _log(
+      (b) => b
+        ..write('Checking if key "')
+        ..write(key)
+        ..write('" exists.'),
+    );
+
+    final exists = _sharedPreferences.containsKey(key);
+
+    _log(
+      (b) => b
+        ..write('Key "')
+        ..write(key)
+        ..write('" ')
+        ..write(exists ? 'exists' : 'does not exist')
+        ..write('.'),
+    );
+
+    return exists;
+  }
+}
+
+mixin _GettersImplementationMixin on _LoggerMixin {
   @override
   // ignore: no-object-declaration
-  Object? get(String key) => _sharedPreferences.get(key);
+  Object? get(String key) => _getLogging(key, _sharedPreferences.get);
 
   @override
-  bool? getBool(String key) => _sharedPreferences.getBool(key);
+  bool? getBool(String key) => _getLogging(key, _sharedPreferences.getBool);
 
   @override
-  double? getDouble(String key) => _sharedPreferences.getDouble(key);
+  double? getDouble(String key) =>
+      _getLogging(key, _sharedPreferences.getDouble);
 
   @override
-  int? getInt(String key) => _sharedPreferences.getInt(key);
+  int? getInt(String key) => _getLogging(key, _sharedPreferences.getInt);
 
   @override
-  Set<String> getKeys() => _sharedPreferences.getKeys();
+  String? getString(String key) =>
+      _getLogging(key, _sharedPreferences.getString);
 
   @override
-  String? getString(String key) => _sharedPreferences.getString(key);
+  List<String>? getStringList(String key) =>
+      _getLogging(key, _sharedPreferences.getStringList);
 
   @override
-  List<String>? getStringList(String key) => _sharedPreferences.getStringList(
-        key,
-      );
+  Set<String> getKeys() {
+    _log(
+      (b) => b.write('Getting all keys.'),
+    );
 
-  @override
-  Future<void> reload() => _sharedPreferences.reload();
+    final keys = _sharedPreferences.getKeys();
 
-  @override
-  Future<bool> remove(String key) => _sharedPreferences.remove(key);
+    _log(
+      (b) => b
+        ..write('Successfully got all keys.')
+        ..write('Keys – ')
+        ..write(keys)
+        ..write('.'),
+    );
 
-  @override
-  Future<bool> setBool(String key, bool value) => _sharedPreferences.setBool(
-        key,
-        value,
-      );
-
-  @override
-  Future<bool> setDouble(
-    String key,
-    double value,
-  ) =>
-      _sharedPreferences.setDouble(
-        key,
-        value,
-      );
-
-  @override
-  Future<bool> setInt(String key, int value) => _sharedPreferences.setInt(
-        key,
-        value,
-      );
-
-  @override
-  Future<bool> setString(
-    String key,
-    String value,
-  ) =>
-      _sharedPreferences.setString(
-        key,
-        value,
-      );
-
-  @override
-  Future<bool> setStringList(
-    String key,
-    List<String> value,
-  ) =>
-      _sharedPreferences.setStringList(
-        key,
-        value,
-      );
+    return keys;
+  }
 }
+
+mixin _MutationsImplementationMixin on _LoggerMixin {
+  @override
+  Future<bool> setBool(String key, bool value) =>
+      _setLogging(key, value, _sharedPreferences.setBool);
+
+  @override
+  Future<bool> setDouble(String key, double value) =>
+      _setLogging(key, value, _sharedPreferences.setDouble);
+
+  @override
+  Future<bool> setInt(String key, int value) =>
+      _setLogging(key, value, _sharedPreferences.setInt);
+
+  @override
+  Future<bool> setString(String key, String value) =>
+      _setLogging(key, value, _sharedPreferences.setString);
+
+  @override
+  Future<bool> setStringList(String key, List<String> value) =>
+      _setLogging(key, value, _sharedPreferences.setStringList);
+
+  @override
+  Future<bool> remove(String key) async {
+    _log(
+      (b) => b
+        ..write('Removing key ')
+        ..write('"')
+        ..write(key)
+        ..write('".'),
+    );
+
+    final hasRemoved = await _sharedPreferences.remove(key);
+
+    _log(
+      (b) => b
+        ..write('Removed key ')
+        ..write('"')
+        ..write(key)
+        ..write('" ')
+        ..write(hasRemoved ? 'successfully' : 'unsuccessfully')
+        ..write('.'),
+    );
+
+    return hasRemoved;
+  }
+}
+
+abstract class SharedPreferencesDao = BaseSharedPreferencesDao
+    with
+        _LoggerMixin,
+        _KeyImplementationMixin,
+        _MiscImplementationMixin,
+        _GettersImplementationMixin,
+        _MutationsImplementationMixin;
