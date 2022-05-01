@@ -7,13 +7,15 @@ abstract class ISettingsDao {
 }
 
 class SettingsDao extends SharedPreferencesDao implements ISettingsDao {
-  SettingsDao(SharedPreferences sharedPreferences) : super(sharedPreferences);
+  SettingsDao({
+    required SharedPreferences sharedPreferences,
+  }) : super(sharedPreferences, name: 'settings');
 
-  String get _isThemeLightKey => key('is_theme_light');
+  String get _themeModeKey => key('theme_mode');
 
   @override
-  String? get themeMode => getString(_isThemeLightKey);
+  String? get themeMode => getString(_themeModeKey);
 
   @override
-  Future<void> setThemeMode(String value) => setString(_isThemeLightKey, value);
+  Future<void> setThemeMode(String value) => setString(_themeModeKey, value);
 }
