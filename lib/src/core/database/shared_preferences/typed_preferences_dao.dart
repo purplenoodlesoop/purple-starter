@@ -47,8 +47,10 @@ abstract class TypedPreferencesDao implements ITypedPreferencesDao {
   late final Map<String, PreferencesEntry> _entries = {};
   final ISharedPreferencesDao _delegate;
 
-  TypedPreferencesDao(SharedPreferences sharedPreferences, String name)
-      : _delegate = _TypedSharedPreferencesDaoDelegate(sharedPreferences, name);
+  TypedPreferencesDao(
+    SharedPreferences sharedPreferences, {
+    required String name,
+  }) : _delegate = _TypedSharedPreferencesDaoDelegate(sharedPreferences, name);
 
   @override
   Set<String> get keys => _delegate.getKeys();
