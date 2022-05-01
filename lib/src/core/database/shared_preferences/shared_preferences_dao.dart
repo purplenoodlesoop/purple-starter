@@ -18,19 +18,9 @@ abstract class BaseSharedPreferencesDao implements ISharedPreferencesDao {
         _name = name;
 }
 
-mixin _KeyImplementationMixin on BaseSharedPreferencesDao {
-  late final String _fullNamespace = 'purple_starter.$_name';
-  late final F1<String, String> _memoizedKey = _key.memoize();
-
-  String _key(String name) => '$_fullNamespace.$name';
-
-  @override
-  String key(String name) => _memoizedKey(name);
-}
-
 mixin _LoggerMixin on BaseSharedPreferencesDao {
   late final String _logOrigin =
-      kDebugMode ? runtimeType.toString() : 'SharedPreferencesDao($_name)';
+      kDebugMode ? '$runtimeType($_name)' : 'SharedPreferencesDao($_name)';
 
   void _log(void Function(StringBuffer b) buildLog) {
     final buffer = StringBuffer(_logOrigin)..write(' | ');
@@ -122,7 +112,17 @@ mixin _LoggerMixin on BaseSharedPreferencesDao {
   }
 }
 
-mixin _MiscImplementationMixin on _LoggerMixin {
+mixin _KeyImplementationMixin on BaseSharedPreferencesDao {
+  late final String _fullNamespace = 'purple_starter.$_name';
+  late final F1<String, String> _memoizedKey = _key.memoize();
+
+  String _key(String name) => '$_fullNamespace.$name';
+
+  @override
+  String key(String name) => _memoizedKey(name);
+}
+
+mixin _ActionsImplementationMixin on _LoggerMixin {
   @override
   Future<bool> clear() =>
       _performAsyncLogging('clear', _sharedPreferences.clear);
@@ -254,6 +254,6 @@ abstract class SharedPreferencesDao = BaseSharedPreferencesDao
     with
         _LoggerMixin,
         _KeyImplementationMixin,
-        _MiscImplementationMixin,
+        _ActionsImplementationMixin,
         _GettersImplementationMixin,
         _MutationsImplementationMixin;
