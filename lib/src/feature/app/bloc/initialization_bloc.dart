@@ -27,42 +27,55 @@ class InitializationProgress with _$InitializationProgress {
     required InitializationStep currentStep,
     StreamSubscription<void>? sentrySubscription,
   }) = _InitializationProgress;
+
+  const InitializationProgress._();
+
+  int get stepsCompleted => InitializationStep.values.indexOf(currentStep) + 1;
+}
+
+@selectable
+abstract class InitializationData {
+  SharedPreferences get sharedPreferences;
+  StreamSubscription<void> get sentrySubscription;
 }
 
 @selectable
 mixin _IndexedInitializationStateMixin {
   InitializationProgress get progress;
 
-  int get index => InitializationStep.values.indexOf(progress.currentStep) + 1;
+  int get stepsCompleted => progress.stepsCompleted;
 }
 
 @freezed
 class InitializationState with _$InitializationState {
   const InitializationState._();
 
-  const factory InitializationState.notInitialized() = _NotInitialized;
+  const factory InitializationState.notInitialized() =
+      InitializationNotInitialized;
 
   @With<_IndexedInitializationStateMixin>()
   const factory InitializationState.initializing({
     required InitializationProgress progress,
-  }) = _Initializing;
+  }) = InitializationInitializing;
 
+  @Implements<InitializationData>()
   const factory InitializationState.initialized({
     required SharedPreferences sharedPreferences,
     required StreamSubscription<void> sentrySubscription,
-  }) = _Initialized;
+  }) = InitializationInitialized;
 
   @With<_IndexedInitializationStateMixin>()
   const factory InitializationState.error({
-    required InitializationProgress progress,
-    required String description,
-  }) = _Error;
+    required InitializationProgress lastProgress,
+    required Object error,
+    required StackTrace stackTrace,
+  }) = InitializationError;
 
   int get stepsCompleted => map(
         notInitialized: 0.constant,
-        initializing: _IndexedInitializationStateMixin$.index,
+        initializing: _IndexedInitializationStateMixin$.stepsCompleted,
         initialized: InitializationStep.values.length.constant,
-        error: _IndexedInitializationStateMixin$.index,
+        error: _IndexedInitializationStateMixin$.stepsCompleted,
       );
 }
 
@@ -99,15 +112,17 @@ class InitializationBloc
           sentrySubscription: sentrySubscription,
         ),
       );
+
       final sharedPreferences = await SharedPreferences.getInstance();
       yield InitializationState.initialized(
         sharedPreferences: sharedPreferences,
         sentrySubscription: sentrySubscription,
       );
-    } on Object catch (e) {
+    } on Object catch (e, s) {
       yield InitializationState.error(
-        progress: _currentProgress,
-        description: e.toString(),
+        lastProgress: _currentProgress,
+        error: e,
+        stackTrace: s,
       );
       rethrow;
     }
