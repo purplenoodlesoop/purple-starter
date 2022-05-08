@@ -53,9 +53,9 @@ class SentryTrackingManager implements ErrorTrackingManager {
       final completer = _subscriptionCompleter = Completer();
       try {
         await body(completer.complete);
-      } on Object catch (e, s) {
-        l.e(e, s);
+      } on Object {
         completer.complete();
+        rethrow;
       }
     } else {
       // ignore: avoid-ignoring-return-values
