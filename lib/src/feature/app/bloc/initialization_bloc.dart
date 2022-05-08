@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:pure/pure.dart';
 import 'package:purple_starter/src/core/extension/extensions.dart';
-import 'package:purple_starter/src/feature/app/logic/sentry_init.dart';
+import 'package:purple_starter/src/feature/app/logic/error_tracking_manager.dart';
 import 'package:select_annotation/select_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stream_bloc/stream_bloc.dart';
@@ -13,30 +13,30 @@ part 'initialization_bloc.select.dart';
 
 @matchable
 enum InitializationStep {
-  sentry,
+  errorTracking,
   sharedPreferences,
 }
 
 @freezed
 class InitializationProgress with _$InitializationProgress {
   static const InitializationProgress initial = InitializationProgress(
-    currentStep: InitializationStep.sentry,
+    currentStep: InitializationStep.errorTracking,
   );
 
   const factory InitializationProgress({
     required InitializationStep currentStep,
-    StreamSubscription<void>? sentrySubscription,
+    ErrorTrackingDisabler? errorTrackingDisabler,
   }) = _InitializationProgress;
 
   const InitializationProgress._();
 
-  int get stepsCompleted => InitializationStep.values.indexOf(currentStep) + 1;
+  int get stepsCompleted => InitializationStep.values.indexOf(currentStep);
 }
 
 @selectable
 abstract class InitializationData {
   SharedPreferences get sharedPreferences;
-  StreamSubscription<void> get sentrySubscription;
+  ErrorTrackingDisabler get errorTrackingDisabler;
 }
 
 @selectable
@@ -61,7 +61,7 @@ class InitializationState with _$InitializationState {
   @Implements<InitializationData>()
   const factory InitializationState.initialized({
     required SharedPreferences sharedPreferences,
-    required StreamSubscription<void> sentrySubscription,
+    required ErrorTrackingDisabler errorTrackingDisabler,
   }) = InitializationInitialized;
 
   @With<_IndexedInitializationStateMixin>()
@@ -88,7 +88,12 @@ class InitializationEvent with _$InitializationEvent {
 
 class InitializationBloc
     extends StreamBloc<InitializationEvent, InitializationState> {
-  InitializationBloc() : super(const InitializationState.notInitialized());
+  final ErrorTrackingManager _errorTrackingManager;
+
+  InitializationBloc({
+    required ErrorTrackingManager errorTrackingManager,
+  })  : _errorTrackingManager = errorTrackingManager,
+        super(const InitializationState.notInitialized());
 
   InitializationProgress get _currentProgress =>
       state.maybeCast<_IndexedInitializationStateMixin>()?.progress ??
@@ -102,21 +107,18 @@ class InitializationBloc
     );
 
     try {
-      // ignore: cancel_subscriptions
-      final sentrySubscription = await SentryInit.init(
-        shouldSend: shouldSendSentry,
-      );
+      await _errorTrackingManager.enableReporting(shouldSend: shouldSendSentry);
       yield InitializationState.initializing(
         progress: _currentProgress.copyWith(
           currentStep: InitializationStep.sharedPreferences,
-          sentrySubscription: sentrySubscription,
+          errorTrackingDisabler: _errorTrackingManager,
         ),
       );
 
       final sharedPreferences = await SharedPreferences.getInstance();
       yield InitializationState.initialized(
         sharedPreferences: sharedPreferences,
-        sentrySubscription: sentrySubscription,
+        errorTrackingDisabler: _errorTrackingManager,
       );
     } on Object catch (e, s) {
       yield InitializationState.error(
@@ -124,6 +126,7 @@ class InitializationBloc
         error: e,
         stackTrace: s,
       );
+      await _errorTrackingManager.disableReporting();
       rethrow;
     }
   }

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:purple_starter/src/core/extension/extensions.dart';
 import 'package:purple_starter/src/feature/app/bloc/app_bloc_observer.dart';
 import 'package:purple_starter/src/feature/app/bloc/initialization_bloc.dart';
+import 'package:purple_starter/src/feature/app/logic/error_tracking_manager.dart';
 import 'package:purple_starter/src/feature/app/logic/logger.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:stream_bloc/stream_bloc.dart';
@@ -60,8 +61,11 @@ mixin MainRunner {
     required AppBuilder appBuilder,
     required InitializationHooks? hooks,
   }) {
-    final initializationBloc = InitializationBloc()
-      ..add(
+    final initializationBloc = InitializationBloc(
+      errorTrackingManager: SentryTrackingManager(
+        sentryDsn: const String.fromEnvironment('SENTRY_DSN'),
+      ),
+    )..add(
         InitializationEvent.initialize(
           shouldSendSentry: shouldSend,
         ),

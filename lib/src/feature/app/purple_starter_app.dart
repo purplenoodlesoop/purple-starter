@@ -22,7 +22,7 @@ class PurpleStarterApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => AppLifecycleScope(
-        sentrySubscription: initializationData.sentrySubscription,
+        errorTrackingDisabler: initializationData.errorTrackingDisabler,
         child: DependenciesScope(
           create: (context) => DependenciesStorage(
             databaseName: 'purple_starter_database',
