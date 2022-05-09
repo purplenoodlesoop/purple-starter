@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:purple_starter/src/core/extension/extensions.dart';
+import 'package:purple_starter/src/core/model/environment_storage.dart';
 import 'package:purple_starter/src/feature/app/bloc/app_bloc_observer.dart';
 import 'package:purple_starter/src/feature/app/bloc/initialization_bloc.dart';
 import 'package:purple_starter/src/feature/app/logic/error_tracking_manager.dart';
@@ -39,6 +40,19 @@ abstract class InitializationHooks {
   ) {}
 }
 
+class _InitializationFactories implements InitializationFactories {
+  const _InitializationFactories();
+
+  @override
+  IEnvironmentStorage createEnvironmentStorage() => const EnvironmentStorage();
+
+  @override
+  ErrorTrackingManager createErrorTrackingManager(
+    IEnvironmentStorage environment,
+  ) =>
+      SentryTrackingManager(sentryDsn: environment.sentryDsn);
+}
+
 mixin MainRunner {
   static void _amendFlutterError() {
     const log = Logger.logFlutterError;
@@ -62,13 +76,9 @@ mixin MainRunner {
     required InitializationHooks? hooks,
   }) {
     final initializationBloc = InitializationBloc(
-      errorTrackingManagerThunk: () => SentryTrackingManager(
-        sentryDsn: const String.fromEnvironment('SENTRY_DSN'),
-      ),
+      initializationFactories: const _InitializationFactories(),
     )..add(
-        InitializationEvent.initialize(
-          shouldSendSentry: shouldSend,
-        ),
+        InitializationEvent.initialize(shouldSendSentry: shouldSend),
       );
     StreamSubscription<InitializationState>? initializationSubscription;
 
