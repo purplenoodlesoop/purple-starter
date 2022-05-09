@@ -45,6 +45,7 @@ app.*.map.json
 **/*.gr.dart
 **/*.gen.dart
 **/*.freezed.dart
+**/*.select.dart
 
 # Flutter Version Manager related
 .fvm/flutter_sdk

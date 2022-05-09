@@ -3,4 +3,4 @@ import 'package:purple_starter/runner_stub.dart'
     if (dart.library.io) 'package:purple_starter/runner_io.dart'
     if (dart.library.html) 'package:purple_starter/runner_web.dart' as runner;
 
-Future<void> main() => runner.run();
+void main() => runner.run();

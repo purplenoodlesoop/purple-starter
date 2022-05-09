@@ -6,33 +6,44 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:purple_starter/src/core/extension/extensions.dart';
 import 'package:purple_starter/src/feature/app/bloc/app_bloc_observer.dart';
+import 'package:purple_starter/src/feature/app/bloc/initialization_bloc.dart';
+import 'package:purple_starter/src/feature/app/logic/error_tracking_manager.dart';
 import 'package:purple_starter/src/feature/app/logic/logger.dart';
-import 'package:purple_starter/src/feature/app/logic/sentry_init.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:stream_bloc/stream_bloc.dart';
+import 'package:stream_transform/stream_transform.dart';
 
-typedef AsyncDependencies<D> = Future<D> Function();
-typedef AppBuilder<D> = Widget Function(
-  SentrySubscription sentrySubscription,
-  D dependencies,
-);
+typedef AppBuilder = Widget Function(InitializationData initializationData);
+
+abstract class InitializationHooks {
+  const InitializationHooks();
+
+  @mustCallSuper
+  @protected
+  void onStarted() {}
+
+  @mustCallSuper
+  @protected
+  void onProgress(InitializationProgress progress) {}
+
+  @mustCallSuper
+  @protected
+  void onInitialized(InitializationData initializationData) {}
+
+  @mustCallSuper
+  @protected
+  void onFailed(
+    InitializationProgress lastProgress,
+    Object error,
+    StackTrace stackTrace,
+  ) {}
+}
 
 mixin MainRunner {
   static void _amendFlutterError() {
     const log = Logger.logFlutterError;
 
     FlutterError.onError = FlutterError.onError?.amend(log) ?? log;
-  }
-
-  static Future<Widget> _initApp<D>(
-    bool shouldSend,
-    AsyncDependencies<D> asyncDependencies,
-    AppBuilder<D> app,
-  ) async {
-    final sentrySubscription = await SentryInit.init(shouldSend: shouldSend);
-    final dependencies = await asyncDependencies();
-
-    return app(sentrySubscription, dependencies);
   }
 
   static T? _runZoned<T>(T Function() body) => Logger.runLogging(
@@ -45,23 +56,65 @@ mixin MainRunner {
         ),
       );
 
-  static Future<void> run<D>({
+  static void _runApp({
+    required bool shouldSend,
+    required AppBuilder appBuilder,
+    required InitializationHooks? hooks,
+  }) {
+    final initializationBloc = InitializationBloc(
+      errorTrackingManagerThunk: () => SentryTrackingManager(
+        sentryDsn: const String.fromEnvironment('SENTRY_DSN'),
+      ),
+    )..add(
+        InitializationEvent.initialize(
+          shouldSendSentry: shouldSend,
+        ),
+      );
+    StreamSubscription<InitializationState>? initializationSubscription;
+
+    void terminate() {
+      initializationSubscription?.cancel();
+      initializationBloc.close();
+    }
+
+    void processInitializationState(InitializationState state) {
+      // ignore: avoid-ignoring-return-values
+      state.map(
+        notInitialized: (_) => hooks?.onStarted(),
+        initializing: (state) => hooks?.onProgress(state.progress),
+        initialized: (state) {
+          terminate();
+          Future<void>(() => hooks?.onInitialized(state));
+          runApp(
+            DefaultAssetBundle(
+              bundle: SentryAssetBundle(),
+              child: appBuilder(state),
+            ),
+          );
+        },
+        error: (state) {
+          terminate();
+          hooks?.onFailed(state.lastProgress, state.error, state.stackTrace);
+        },
+      );
+    }
+
+    initializationSubscription = initializationBloc.stream
+        .startWith(initializationBloc.state)
+        .listen(processInitializationState, cancelOnError: false);
+  }
+
+  static void run({
+    required AppBuilder appBuilder,
     bool shouldSend = !kDebugMode,
-    required AsyncDependencies<D> asyncDependencies,
-    required AppBuilder<D> appBuilder,
-  }) async {
-    await _runZoned(
-      () async {
+    InitializationHooks? hooks,
+  }) {
+    _runZoned(
+      () {
         // ignore: avoid-ignoring-return-values
         WidgetsFlutterBinding.ensureInitialized();
         _amendFlutterError();
-        final app = await _initApp(shouldSend, asyncDependencies, appBuilder);
-        runApp(
-          DefaultAssetBundle(
-            bundle: SentryAssetBundle(),
-            child: app,
-          ),
-        );
+        _runApp(shouldSend: shouldSend, appBuilder: appBuilder, hooks: hooks);
       },
     );
   }
