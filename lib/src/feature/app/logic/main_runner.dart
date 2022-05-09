@@ -62,7 +62,7 @@ mixin MainRunner {
     required InitializationHooks? hooks,
   }) {
     final initializationBloc = InitializationBloc(
-      errorTrackingManager: SentryTrackingManager(
+      errorTrackingManagerThunk: () => SentryTrackingManager(
         sentryDsn: const String.fromEnvironment('SENTRY_DSN'),
       ),
     )..add(

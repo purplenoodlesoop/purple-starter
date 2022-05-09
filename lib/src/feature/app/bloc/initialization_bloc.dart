@@ -88,11 +88,11 @@ class InitializationEvent with _$InitializationEvent {
 
 class InitializationBloc
     extends StreamBloc<InitializationEvent, InitializationState> {
-  final ErrorTrackingManager _errorTrackingManager;
+  final F0<ErrorTrackingManager> _errorTrackingManagerThunk;
 
   InitializationBloc({
-    required ErrorTrackingManager errorTrackingManager,
-  })  : _errorTrackingManager = errorTrackingManager,
+    required F0<ErrorTrackingManager> errorTrackingManagerThunk,
+  })  : _errorTrackingManagerThunk = errorTrackingManagerThunk,
         super(const InitializationState.notInitialized());
 
   InitializationProgress get _currentProgress =>
@@ -107,18 +107,19 @@ class InitializationBloc
     );
 
     try {
-      await _errorTrackingManager.enableReporting(shouldSend: shouldSendSentry);
+      final errorTrackingManager = _errorTrackingManagerThunk();
+      await errorTrackingManager.enableReporting(shouldSend: shouldSendSentry);
       yield InitializationState.initializing(
         progress: _currentProgress.copyWith(
           currentStep: InitializationStep.sharedPreferences,
-          errorTrackingDisabler: _errorTrackingManager,
+          errorTrackingDisabler: errorTrackingManager,
         ),
       );
 
       final sharedPreferences = await SharedPreferences.getInstance();
       yield InitializationState.initialized(
         sharedPreferences: sharedPreferences,
-        errorTrackingDisabler: _errorTrackingManager,
+        errorTrackingDisabler: errorTrackingManager,
       );
     } on Object catch (e, s) {
       yield InitializationState.error(
@@ -126,7 +127,7 @@ class InitializationBloc
         error: e,
         stackTrace: s,
       );
-      await _errorTrackingManager.disableReporting();
+      await _currentProgress.errorTrackingDisabler?.disableReporting();
       rethrow;
     }
   }
