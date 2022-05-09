@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:pure/pure.dart';
 import 'package:purple_starter/src/core/extension/extensions.dart';
+import 'package:purple_starter/src/core/model/environment_storage.dart';
 import 'package:purple_starter/src/feature/app/logic/error_tracking_manager.dart';
 import 'package:select_annotation/select_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,30 +14,33 @@ part 'initialization_bloc.select.dart';
 
 @matchable
 enum InitializationStep {
+  environment,
   errorTracking,
   sharedPreferences,
 }
 
 @freezed
 class InitializationProgress with _$InitializationProgress {
-  static const InitializationProgress initial = InitializationProgress(
-    currentStep: InitializationStep.errorTracking,
-  );
-
   const factory InitializationProgress({
     required InitializationStep currentStep,
+    IEnvironmentStorage? environmentStorage,
     ErrorTrackingDisabler? errorTrackingDisabler,
   }) = _InitializationProgress;
 
   const InitializationProgress._();
+
+  factory InitializationProgress.initial() => InitializationProgress(
+        currentStep: InitializationStep.values.first,
+      );
 
   int get stepsCompleted => InitializationStep.values.indexOf(currentStep);
 }
 
 @selectable
 abstract class InitializationData {
-  SharedPreferences get sharedPreferences;
   ErrorTrackingDisabler get errorTrackingDisabler;
+  IEnvironmentStorage get environmentStorage;
+  SharedPreferences get sharedPreferences;
 }
 
 @selectable
@@ -60,8 +64,9 @@ class InitializationState with _$InitializationState {
 
   @Implements<InitializationData>()
   const factory InitializationState.initialized({
-    required SharedPreferences sharedPreferences,
+    required IEnvironmentStorage environmentStorage,
     required ErrorTrackingDisabler errorTrackingDisabler,
+    required SharedPreferences sharedPreferences,
   }) = InitializationInitialized;
 
   @With<_IndexedInitializationStateMixin>()
@@ -86,28 +91,46 @@ class InitializationEvent with _$InitializationEvent {
   }) = _Initialize;
 }
 
+abstract class InitializationFactories {
+  IEnvironmentStorage createEnvironmentStorage();
+
+  ErrorTrackingManager createErrorTrackingManager(
+    IEnvironmentStorage environmentStorage,
+  );
+}
+
 class InitializationBloc
     extends StreamBloc<InitializationEvent, InitializationState> {
-  final F0<ErrorTrackingManager> _errorTrackingManagerThunk;
+  final InitializationFactories _factories;
 
   InitializationBloc({
-    required F0<ErrorTrackingManager> errorTrackingManagerThunk,
-  })  : _errorTrackingManagerThunk = errorTrackingManagerThunk,
+    required InitializationFactories initializationFactories,
+  })  : _factories = initializationFactories,
         super(const InitializationState.notInitialized());
 
   InitializationProgress get _currentProgress =>
       state.maybeCast<_IndexedInitializationStateMixin>()?.progress ??
-      InitializationProgress.initial;
+      InitializationProgress.initial();
 
   Stream<InitializationState> _initialize(
     bool shouldSendSentry,
   ) async* {
-    yield const InitializationState.initializing(
-      progress: InitializationProgress.initial,
+    yield InitializationState.initializing(
+      progress: InitializationProgress.initial(),
     );
 
     try {
-      final errorTrackingManager = _errorTrackingManagerThunk();
+      final environmentStorage = _factories.createEnvironmentStorage();
+      yield InitializationState.initializing(
+        progress: _currentProgress.copyWith(
+          currentStep: InitializationStep.errorTracking,
+          environmentStorage: environmentStorage,
+        ),
+      );
+
+      final errorTrackingManager = _factories.createErrorTrackingManager(
+        environmentStorage,
+      );
       await errorTrackingManager.enableReporting(shouldSend: shouldSendSentry);
       yield InitializationState.initializing(
         progress: _currentProgress.copyWith(
@@ -118,8 +141,9 @@ class InitializationBloc
 
       final sharedPreferences = await SharedPreferences.getInstance();
       yield InitializationState.initialized(
-        sharedPreferences: sharedPreferences,
+        environmentStorage: environmentStorage,
         errorTrackingDisabler: errorTrackingManager,
+        sharedPreferences: sharedPreferences,
       );
     } on Object catch (e, s) {
       yield InitializationState.error(

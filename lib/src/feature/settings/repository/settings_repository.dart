@@ -3,7 +3,7 @@ import 'package:purple_starter/src/feature/settings/database/settings_dao.dart';
 import 'package:purple_starter/src/feature/settings/enum/app_theme.dart';
 
 abstract class ISettingsRepository {
-  abstract final AppTheme? theme;
+  AppTheme? get theme;
   Future<void> setTheme(AppTheme value);
 }
 

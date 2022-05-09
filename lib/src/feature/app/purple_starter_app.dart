@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:pure/pure.dart';
 import 'package:purple_starter/src/core/model/dependencies_storage.dart';
 import 'package:purple_starter/src/core/model/repository_storage.dart';
 import 'package:purple_starter/src/core/widget/dependencies_scope.dart';
+import 'package:purple_starter/src/core/widget/environment_scope.dart';
 import 'package:purple_starter/src/core/widget/repository_scope.dart';
 import 'package:purple_starter/src/feature/app/bloc/initialization_bloc.dart';
 import 'package:purple_starter/src/feature/app/widget/app_configuration.dart';
@@ -21,20 +23,23 @@ class PurpleStarterApp extends StatelessWidget {
       initializationData.sharedPreferences;
 
   @override
-  Widget build(BuildContext context) => AppLifecycleScope(
-        errorTrackingDisabler: initializationData.errorTrackingDisabler,
-        child: DependenciesScope(
-          create: (context) => DependenciesStorage(
-            databaseName: 'purple_starter_database',
-            sharedPreferences: _sharedPreferences,
-          ),
-          child: RepositoryScope(
-            create: (context) => RepositoryStorage(
-              appDatabase: DependenciesScope.of(context).database,
+  Widget build(BuildContext context) => EnvironmentScope(
+        create: initializationData.environmentStorage.constant,
+        child: AppLifecycleScope(
+          errorTrackingDisabler: initializationData.errorTrackingDisabler,
+          child: DependenciesScope(
+            create: (context) => DependenciesStorage(
+              databaseName: 'purple_starter_database',
               sharedPreferences: _sharedPreferences,
             ),
-            child: const SettingsScope(
-              child: AppConfiguration(),
+            child: RepositoryScope(
+              create: (context) => RepositoryStorage(
+                appDatabase: DependenciesScope.of(context).database,
+                sharedPreferences: _sharedPreferences,
+              ),
+              child: const SettingsScope(
+                child: AppConfiguration(),
+              ),
             ),
           ),
         ),
