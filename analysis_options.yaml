@@ -1,6 +1,8 @@
 include: package:purple_metrics_lints/purple_metrics_lints.yaml
 
 analyzer:
+  plugins:
+    - drift
   exclude:
     - 'tool/google_localizer/**'
     - 'tool/setup_clone/**'
