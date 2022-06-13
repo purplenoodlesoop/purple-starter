@@ -10,7 +10,7 @@ Future<void> main(List<String> args) => Environment.run(
     );
 
 String capitalized(String source) =>
-    '${source[0].toUpperCase()}${source.substring(1)}';
+    source[0].toUpperCase() + source.substring(1);
 
 class NameBundle {
   final String packageName;
@@ -24,18 +24,42 @@ class NameBundle {
   String get appWidgetName => _appFileName.split('_').map(capitalized).join();
 }
 
+class SetupStats {
+  late final Stopwatch _stopwatch = Stopwatch();
+
+  int _replaced = 0;
+
+  int get replaced => _replaced;
+
+  void incrementReplaced() {
+    _replaced++;
+  }
+
+  void startTimer() {
+    _stopwatch.start();
+  }
+
+  Duration stopTimer() {
+    _stopwatch.stop();
+
+    return _stopwatch.elapsed;
+  }
+}
+
 class Environment {
-  static const _key = Object();
+  static final _key = Object();
 
   final NameBundle originalName;
   final NameBundle newName;
+  final SetupStats stats;
 
   Environment({
     required this.originalName,
     required this.newName,
+    required this.stats,
   });
 
-  static Environment get current => Zone.current[_key] as Environment;
+  factory Environment.current() => Zone.current[_key] as Environment;
 
   static R run<R>({
     required Environment environment,
@@ -50,18 +74,18 @@ class Environment {
 Environment createEnvironment(List<String> args) => Environment(
       originalName: const NameBundle.original(),
       newName: NameBundle(packageName: args.first),
+      stats: SetupStats()..startTimer(),
     );
 
-Future<void> replaceInFile({
-  required String inDirectory,
-  required String Function(NameBundle nameBundle) select,
-}) async {
-  final environment = Environment.current;
+Future<void> replaceInCodebase(
+  String Function(NameBundle nameBundle) select,
+) async {
+  final environment = Environment.current();
 
   final originalName = select(environment.originalName);
   final newName = select(environment.newName);
 
-  final files = Directory(inDirectory)
+  final files = Directory('./')
       .list(recursive: true)
       .where((event) => event is File)
       .cast<File>();
@@ -69,31 +93,46 @@ Future<void> replaceInFile({
   await for (final file in files) {
     try {
       final contents = await file.readAsString();
-      await file.writeAsString(contents.replaceAll(originalName, newName));
+      final replaced = contents.replaceAll(originalName, newName);
+      if (contents != replaced) {
+        await file.writeAsString(replaced);
+        environment.stats.incrementReplaced();
+      }
     } on Object {
       // ignore
     }
   }
 }
 
-Future<void> renamePackage() => replaceInFile(
-      inDirectory: './lib',
-      select: (nameBundle) => nameBundle.packageName,
+Future<void> renamePackage() => replaceInCodebase(
+      (nameBundle) => nameBundle.packageName,
     );
 
-Future<void> renameAppWidgetName() => replaceInFile(
-      inDirectory: './lib/feature/app/',
-      select: (nameBundle) => nameBundle.appWidgetName,
+Future<void> renameAppWidgetName() => replaceInCodebase(
+      (nameBundle) => nameBundle.appWidgetName,
     );
 
 Future<void> renameWidgetFile() async {}
 
 Future<void> selfDestruct() async {}
 
-Future<void> seq(List<Future<void> Function()> actions) async {
+Future<void> seq(List<FutureOr<void> Function()> actions) async {
   for (final action in actions) {
     await action();
   }
+}
+
+void printResultMessage() {
+  final environment = Environment.current();
+  final stats = environment.stats;
+  final replaced = stats.replaced;
+  final duration = stats.stopTimer();
+
+  stdout.write(
+    'Setup complete! '
+    'Replaced to ${environment.newName}-derived names '
+    '$replaced times. Took $duration.',
+  );
 }
 
 Future<void> performRenaming() => seq(const [
@@ -101,4 +140,5 @@ Future<void> performRenaming() => seq(const [
       renameAppWidgetName,
       renameWidgetFile,
       selfDestruct,
+      printResultMessage,
     ]);
