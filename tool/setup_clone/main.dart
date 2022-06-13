@@ -1,3 +1,5 @@
+// ignore_for_file: avoid-ignoring-return-values
+
 import 'dart:async';
 
 import 'dart:io';
@@ -33,6 +35,8 @@ class Environment {
     required this.newName,
   });
 
+  static Environment get current => Zone.current[_key] as Environment;
+
   static R run<R>({
     required Environment environment,
     required R Function() body,
@@ -41,8 +45,6 @@ class Environment {
         body,
         zoneValues: {_key: environment},
       );
-
-  static Environment get current => (Zone.current[_key] as Environment?)!;
 }
 
 Environment createEnvironment(List<String> args) => Environment(
@@ -50,46 +52,42 @@ Environment createEnvironment(List<String> args) => Environment(
       newName: NameBundle(packageName: args.first),
     );
 
-Future<void> rename({
+Future<void> replaceInFile({
   required String inDirectory,
   required String Function(NameBundle nameBundle) select,
 }) async {
   final environment = Environment.current;
 
-  final from = select(environment.originalName);
-  final to = select(environment.newName);
+  final originalName = select(environment.originalName);
+  final newName = select(environment.newName);
 
-  await Process.run('find', [
-    inDirectory,
-    '( -type d -name .git -prune )',
-    '-o',
-    '-type',
-    'f',
-    '-print0',
-    '|',
-    'xargs',
-    '-0',
-    'sed',
-    '-i',
-    "''",
-    "'s/$from/$to/g'",
-  ]);
+  final files = Directory(inDirectory)
+      .list(recursive: true)
+      .where((event) => event is File)
+      .cast<File>();
+
+  await for (final file in files) {
+    try {
+      final contents = await file.readAsString();
+      await file.writeAsString(contents.replaceAll(originalName, newName));
+    } on Object {
+      // ignore
+    }
+  }
 }
 
-Future<void> renamePackage() => rename(
-      inDirectory: './',
+Future<void> renamePackage() => replaceInFile(
+      inDirectory: './lib',
       select: (nameBundle) => nameBundle.packageName,
     );
 
-Future<void> renameAppWidgetName() => rename(
+Future<void> renameAppWidgetName() => replaceInFile(
       inDirectory: './lib/feature/app/',
       select: (nameBundle) => nameBundle.appWidgetName,
     );
 
 Future<void> renameWidgetFile() async {}
 
-Future<void> moveReadmeToSetup() async {}
-Future<void> createEmptyReadme() async {}
 Future<void> selfDestruct() async {}
 
 Future<void> seq(List<Future<void> Function()> actions) async {
@@ -102,7 +100,5 @@ Future<void> performRenaming() => seq(const [
       renamePackage,
       renameAppWidgetName,
       renameWidgetFile,
-      moveReadmeToSetup,
-      createEmptyReadme,
       selfDestruct,
     ]);
