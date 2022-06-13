@@ -13,10 +13,21 @@ String capitalized(String source) =>
     source[0].toUpperCase() + source.substring(1);
 
 class NameBundle {
-  final String packageName;
+  static const String _originalPackageName = 'purple_starter';
 
-  const NameBundle({required this.packageName});
-  const NameBundle.original() : this(packageName: 'purple_starter');
+  final String packageName;
+  final String appTitle;
+
+  const NameBundle({
+    required this.packageName,
+    required this.appTitle,
+  });
+
+  const NameBundle.original()
+      : this(
+          packageName: _originalPackageName,
+          appTitle: 'An app created from `$_originalPackageName` app template.',
+        );
 
   String get _appFileName => packageName + '_app';
 
@@ -71,21 +82,29 @@ class Environment {
       );
 }
 
-Environment createEnvironment(List<String> args) => Environment(
-      originalName: const NameBundle.original(),
-      newName: NameBundle(packageName: args.first),
-      stats: SetupStats()..startTimer(),
-    );
+Environment createEnvironment(List<String> args) {
+  final packageName = args.first;
+
+  return Environment(
+    originalName: const NameBundle.original(),
+    newName: NameBundle(
+      packageName: packageName,
+      appTitle: capitalized(packageName.replaceAll('_', ' ')),
+    ),
+    stats: SetupStats()..startTimer(),
+  );
+}
 
 Future<void> replaceInCodebase(
-  String Function(NameBundle nameBundle) select,
-) async {
+  String Function(NameBundle nameBundle) select, {
+  String path = './',
+}) async {
   final environment = Environment.current();
 
   final originalName = select(environment.originalName);
   final newName = select(environment.newName);
 
-  final files = Directory('./')
+  final files = Directory(path)
       .list(recursive: true)
       .where((event) => event is File)
       .cast<File>();
@@ -112,6 +131,11 @@ Future<void> renameAppWidgetName() => replaceInCodebase(
       (nameBundle) => nameBundle.appWidgetName,
     );
 
+Future<void> renameAppTitle() => replaceInCodebase(
+      (nameBundle) => nameBundle.appTitle,
+      path: './lib/src/core/l10n/',
+    );
+
 Future<void> renameWidgetFile() async {}
 
 Future<void> selfDestruct() async {}
@@ -122,22 +146,28 @@ Future<void> seq(List<FutureOr<void> Function()> actions) async {
   }
 }
 
+String assembleMessage(String newName, int replaced, Duration duration) =>
+    'Setup complete! '
+    'Replaced to $newName-derived names '
+    '$replaced times. Took $duration.';
+
 void printResultMessage() {
   final environment = Environment.current();
   final stats = environment.stats;
-  final replaced = stats.replaced;
-  final duration = stats.stopTimer();
 
   stdout.write(
-    'Setup complete! '
-    'Replaced to ${environment.newName}-derived names '
-    '$replaced times. Took $duration.',
+    assembleMessage(
+      environment.newName.packageName,
+      stats.replaced,
+      stats.stopTimer(),
+    ),
   );
 }
 
 Future<void> performRenaming() => seq(const [
       renamePackage,
       renameAppWidgetName,
+      renameAppTitle,
       renameWidgetFile,
       selfDestruct,
       printResultMessage,
