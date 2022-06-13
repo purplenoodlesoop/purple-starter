@@ -17,16 +17,20 @@ class NameBundle {
 
   final String packageName;
   final String appTitle;
+  final String packageDescription;
 
   const NameBundle({
     required this.packageName,
     required this.appTitle,
+    required this.packageDescription,
   });
 
   const NameBundle.original()
       : this(
           packageName: _originalPackageName,
           appTitle: 'An app created from `$_originalPackageName` app template.',
+          packageDescription:
+              'A fresh Flutter project created using Purple Starter.',
         );
 
   String get _appFileName => packageName + '_app';
@@ -84,12 +88,14 @@ class Environment {
 
 Environment createEnvironment(List<String> args) {
   final packageName = args.first;
+  final appTitle = capitalized(packageName.replaceAll('_', ' '));
 
   return Environment(
     originalName: const NameBundle.original(),
     newName: NameBundle(
       packageName: packageName,
-      appTitle: capitalized(packageName.replaceAll('_', ' ')),
+      appTitle: appTitle,
+      packageDescription: '$appTitle Flutter app',
     ),
     stats: SetupStats()..startTimer(),
   );
@@ -141,6 +147,16 @@ Future<void> replaceInFile(
       ),
     );
 
+Future<void> renameAppTitle() => replaceInFile(
+      './lib/src/core/l10n/app_en.arb',
+      (nameBundle) => nameBundle.appTitle,
+    );
+
+Future<void> renamePackageDescription() => replaceInFile(
+      './pubspec.yaml',
+      (nameBundle) => nameBundle.packageDescription,
+    );
+
 Future<void> renamePackage() => replaceInDirectory(
       (nameBundle) => nameBundle.packageName,
     );
@@ -148,13 +164,6 @@ Future<void> renamePackage() => replaceInDirectory(
 Future<void> renameAppWidgetName() => replaceInDirectory(
       (nameBundle) => nameBundle.appWidgetName,
     );
-
-Future<void> renameAppTitle() => replaceInFile(
-      './lib/src/core/l10n/app_en.arb',
-      (nameBundle) => nameBundle.appTitle,
-    );
-
-Future<void> renamePackageDescription() async {}
 
 Future<void> renameWidgetFile() async {}
 
@@ -187,10 +196,10 @@ Future<void> seq(List<FutureOr<void> Function()> actions) async {
 }
 
 Future<void> performSetup() => seq(const [
-      renamePackage,
-      renameAppWidgetName,
       renameAppTitle,
       renamePackageDescription,
+      renamePackage,
+      renameAppWidgetName,
       renameWidgetFile,
       createFlutterBridges,
       selfDestruct,
