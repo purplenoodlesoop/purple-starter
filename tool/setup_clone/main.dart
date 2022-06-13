@@ -6,7 +6,7 @@ import 'dart:io';
 
 Future<void> main(List<String> args) => Environment.run(
       environment: createEnvironment(args),
-      body: performRenaming,
+      body: performSetup,
     );
 
 String capitalized(String source) =>
@@ -96,18 +96,13 @@ Environment createEnvironment(List<String> args) {
 }
 
 Future<void> replaceInCodebase(
-  String Function(NameBundle nameBundle) select, {
-  String path = './',
-}) async {
+  String Function(NameBundle nameBundle) select,
+  Stream<File> files,
+) async {
   final environment = Environment.current();
 
   final originalName = select(environment.originalName);
   final newName = select(environment.newName);
-
-  final files = Directory(path)
-      .list(recursive: true)
-      .where((event) => event is File)
-      .cast<File>();
 
   await for (final file in files) {
     try {
@@ -123,28 +118,49 @@ Future<void> replaceInCodebase(
   }
 }
 
-Future<void> renamePackage() => replaceInCodebase(
+Future<void> replaceInDirectory(
+  String Function(NameBundle nameBundle) select, {
+  String path = './',
+}) =>
+    replaceInCodebase(
+      select,
+      Directory(path)
+          .list(recursive: true)
+          .where((event) => event is File)
+          .cast(),
+    );
+
+Future<void> replaceInFile(
+  String path,
+  String Function(NameBundle nameBundle) select,
+) =>
+    replaceInCodebase(
+      select,
+      Stream.value(
+        File(path),
+      ),
+    );
+
+Future<void> renamePackage() => replaceInDirectory(
       (nameBundle) => nameBundle.packageName,
     );
 
-Future<void> renameAppWidgetName() => replaceInCodebase(
+Future<void> renameAppWidgetName() => replaceInDirectory(
       (nameBundle) => nameBundle.appWidgetName,
     );
 
-Future<void> renameAppTitle() => replaceInCodebase(
+Future<void> renameAppTitle() => replaceInFile(
+      './lib/src/core/l10n/app_en.arb',
       (nameBundle) => nameBundle.appTitle,
-      path: './lib/src/core/l10n/',
     );
+
+Future<void> renamePackageDescription() async {}
 
 Future<void> renameWidgetFile() async {}
 
-Future<void> selfDestruct() async {}
+Future<void> createFlutterBridges() async {}
 
-Future<void> seq(List<FutureOr<void> Function()> actions) async {
-  for (final action in actions) {
-    await action();
-  }
-}
+Future<void> selfDestruct() async {}
 
 String assembleMessage(String newName, int replaced, Duration duration) =>
     'Setup complete! '
@@ -164,11 +180,19 @@ void printResultMessage() {
   );
 }
 
-Future<void> performRenaming() => seq(const [
+Future<void> seq(List<FutureOr<void> Function()> actions) async {
+  for (final action in actions) {
+    await action();
+  }
+}
+
+Future<void> performSetup() => seq(const [
       renamePackage,
       renameAppWidgetName,
       renameAppTitle,
+      renamePackageDescription,
       renameWidgetFile,
+      createFlutterBridges,
       selfDestruct,
       printResultMessage,
     ]);
