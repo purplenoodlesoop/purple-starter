@@ -165,11 +165,26 @@ Future<void> renameAppWidgetName() => replaceInDirectory(
       (nameBundle) => nameBundle.appWidgetName,
     );
 
-Future<void> renameWidgetFile() async {}
+String appWidgetPath(
+  NameBundle bundle,
+) =>
+    './lib/src/feature/app/${bundle.appWidgetPath}';
 
-Future<void> createFlutterBridges() async {}
+Future<void> renameWidgetFile() async {
+  final environment = Environment.current();
 
-Future<void> selfDestruct() async {}
+  await File(appWidgetPath(environment.originalName)).rename(
+    appWidgetPath(environment.newName),
+  );
+}
+
+Future<void> createFlutterBridges() async {
+  // FIXME: – implement
+}
+
+Future<void> selfDestruct() async {
+  // FIXME: – implement
+}
 
 String assembleMessage(String newName, int replaced, Duration duration) =>
     'Setup complete! '
