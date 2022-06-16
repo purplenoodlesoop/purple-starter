@@ -22,8 +22,8 @@ format:
 	@dart fix --apply .
 	@dart format -l 80 --fix .
 
-#setup:
-#	@echo "* Getting dependencies for setup tool *"
-#	fvm dart pub get --directory=./tool/setup_clone
-#	@echo "* Setting up the project *"
-#	@fvm dart ./tool/setup_clone/main.dart $(NAME)
+setup:
+	@echo "* Getting dependencies for setup tool *"
+	fvm dart pub get --directory=./tool/setup_clone
+	@echo "* Setting up the project *"
+	@fvm dart ./tool/setup_clone/main.dart $(NAME)
