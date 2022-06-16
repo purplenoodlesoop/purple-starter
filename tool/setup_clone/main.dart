@@ -178,12 +178,45 @@ Future<void> renameWidgetFile() async {
   );
 }
 
-Future<void> createFlutterBridges() async {
-  // FIXME: – implement
+Future<bool> runProcessConcealing(
+  String command,
+  List<String> arguments,
+) async {
+  try {
+    await Process.run(command, arguments);
+
+    return true;
+  } on Object {
+    return false;
+  }
+}
+
+Future<void> createFlutterRunners() async {
+  final packageName = Environment.current().newName.packageName;
+  final sharedCommands = [
+    'create',
+    '--project-name',
+    packageName,
+    '--org',
+    'com.$packageName',
+    '.',
+  ];
+
+  final hasRunFvm = await runProcessConcealing(
+    'fvm',
+    ['flutter', ...sharedCommands],
+  );
+
+  if (!hasRunFvm) {
+    final hasRunFlutter = await runProcessConcealing('flutter', sharedCommands);
+    if (!hasRunFlutter) {
+      throw Exception('Failed to create Flutter runners.');
+    }
+  }
 }
 
 Future<void> selfDestruct() async {
-  // FIXME: – implement
+  g
 }
 
 String assembleMessage(String newName, int replaced, Duration duration) =>
@@ -216,7 +249,7 @@ Future<void> performSetup() => seq(const [
       renamePackage,
       renameAppWidgetName,
       renameWidgetFile,
-      createFlutterBridges,
+      createFlutterRunners,
       selfDestruct,
       printResultMessage,
     ]);
