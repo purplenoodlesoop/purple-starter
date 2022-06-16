@@ -178,6 +178,22 @@ Future<void> renameWidgetFile() async {
   );
 }
 
+Future<void> renameReadmeFile() async {
+  await File('./README.md').rename('./STARTER.md');
+}
+
+Future<void> createEmptyReadme() async {
+  final file = File('./README.md');
+
+  await file.create();
+
+  final sink = file.openWrite()
+    ..write('# ')
+    ..writeln(Environment.current().newName.packageName);
+
+  await sink.close();
+}
+
 Future<bool> runProcessConcealing(
   String command,
   List<String> arguments,
@@ -215,10 +231,6 @@ Future<void> createFlutterRunners() async {
   }
 }
 
-Future<void> selfDestruct() async {
-  g
-}
-
 String assembleMessage(String newName, int replaced, Duration duration) =>
     'Setup complete! '
     'Replaced to $newName-derived names '
@@ -249,7 +261,8 @@ Future<void> performSetup() => seq(const [
       renamePackage,
       renameAppWidgetName,
       renameWidgetFile,
+      renameReadmeFile,
+      createEmptyReadme,
       createFlutterRunners,
-      selfDestruct,
       printResultMessage,
     ]);
