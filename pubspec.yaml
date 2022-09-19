@@ -27,7 +27,6 @@ dependencies:
   pure: ^0.2.0
   fast_immutable_collections: ^7.0.0
   stream_transform: ^2.0.0
-  sum: ^0.2.0
 
   # BLoC
   stream_bloc: ^0.5.1
