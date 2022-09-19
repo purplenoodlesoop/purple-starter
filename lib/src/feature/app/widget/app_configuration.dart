@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-// ignore: depend_on_referenced_packages
 import 'package:flutter_gen/gen_l10n/app_localizations.g.dart';
 import 'package:purple_starter/src/core/extension/extensions.dart';
 import 'package:purple_starter/src/core/router/app_router.dart';

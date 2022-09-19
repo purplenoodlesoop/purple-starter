@@ -119,7 +119,7 @@ Future<void> replaceInCodebase(
         environment.stats.incrementReplaced();
       }
     } on Object {
-      // ignore
+      // no-op
     }
   }
 }

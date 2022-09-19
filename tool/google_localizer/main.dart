@@ -29,8 +29,7 @@ class Environment {
 
   Environment(this.localizationFolder, this.translator);
 
-  // ignore: avoid-non-null-assertion
-  static Environment get current => (Zone.current[_key] as Environment?)!;
+  static Environment get current => Zone.current[_key] as Environment;
 
   static T run<T>({
     required Environment environment,
