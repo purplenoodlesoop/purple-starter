@@ -101,7 +101,7 @@ mixin MainRunner {
         },
         error: (state) {
           terminate();
-          hooks?.onFailed(state.lastProgress, state.error, state.stackTrace);
+          hooks?.onFailed(state.progress, state.error, state.stackTrace);
         },
       );
     }

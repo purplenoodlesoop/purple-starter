@@ -71,7 +71,7 @@ class InitializationState with _$InitializationState {
 
   @With<_IndexedInitializationStateMixin>()
   const factory InitializationState.error({
-    required InitializationProgress lastProgress,
+    required InitializationProgress progress,
     required Object error,
     required StackTrace stackTrace,
   }) = InitializationError;
@@ -147,7 +147,7 @@ class InitializationBloc
       );
     } on Object catch (e, s) {
       yield InitializationState.error(
-        lastProgress: _currentProgress,
+        progress: _currentProgress,
         error: e,
         stackTrace: s,
       );
