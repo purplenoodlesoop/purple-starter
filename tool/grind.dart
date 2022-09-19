@@ -1,5 +1,3 @@
-// ignore_for_file: avoid-ignoring-return-values
-
 import 'dart:io';
 
 import 'package:grinder/grinder.dart';

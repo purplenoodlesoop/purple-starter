@@ -1,9 +1,11 @@
 import 'package:pure/pure.dart';
 import 'package:purple_starter/src/feature/settings/database/settings_dao.dart';
 import 'package:purple_starter/src/feature/settings/enum/app_theme.dart';
+import 'package:purple_starter/src/feature/settings/model/settings_data.dart';
 
 abstract class ISettingsRepository {
-  AppTheme? get theme;
+  SettingsData currentData();
+
   Future<void> setTheme(AppTheme value);
 }
 
@@ -14,9 +16,13 @@ class SettingsRepository implements ISettingsRepository {
     required ISettingsDao settingsDao,
   }) : _settingsDao = settingsDao;
 
-  @override
-  AppTheme? get theme =>
+  AppTheme? get _theme =>
       AppTheme.values.byName.nullable(_settingsDao.themeMode.value);
+
+  @override
+  SettingsData currentData() => SettingsData(
+        theme: _theme ?? AppTheme.system,
+      );
 
   @override
   Future<void> setTheme(AppTheme value) =>

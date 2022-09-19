@@ -1,5 +1,3 @@
-// ignore_for_file: cancel_subscriptions
-
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
@@ -88,7 +86,6 @@ mixin MainRunner {
     }
 
     void processInitializationState(InitializationState state) {
-      // ignore: avoid-ignoring-return-values
       state.map(
         notInitialized: (_) => hooks?.onStarted(),
         initializing: (state) => hooks?.onProgress(state.progress),
@@ -104,7 +101,7 @@ mixin MainRunner {
         },
         error: (state) {
           terminate();
-          hooks?.onFailed(state.lastProgress, state.error, state.stackTrace);
+          hooks?.onFailed(state.progress, state.error, state.stackTrace);
         },
       );
     }
@@ -121,7 +118,6 @@ mixin MainRunner {
   }) {
     _runZoned(
       () {
-        // ignore: avoid-ignoring-return-values
         WidgetsFlutterBinding.ensureInitialized();
         _amendFlutterError();
         _runApp(shouldSend: shouldSend, appBuilder: appBuilder, hooks: hooks);

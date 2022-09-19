@@ -58,7 +58,6 @@ class SentryTrackingManager implements ErrorTrackingManager {
         rethrow;
       }
     } else {
-      // ignore: avoid-ignoring-return-values
       await _subscriptionCompleter?.future;
     }
   }

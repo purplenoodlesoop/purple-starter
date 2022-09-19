@@ -36,8 +36,8 @@ abstract class Scope extends StatefulWidget {
       'contain its instance.',
     );
 
-    // ignore: avoid-non-null-assertion
-    return scope!.delegate as D;
+    // ignore: cast_nullable_to_non_nullable
+    return scope?.delegate as D;
   }
 
   /// Create a delegate of this Scope.

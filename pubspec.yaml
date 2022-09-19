@@ -27,17 +27,16 @@ dependencies:
   pure: ^0.2.0
   fast_immutable_collections: ^7.0.0
   stream_transform: ^2.0.0
-  sum: ^0.2.0
 
   # BLoC
-  stream_bloc: ^0.4.0
+  stream_bloc: ^0.5.1
 
   # Flutter integrations
   flutter_bloc: ^8.0.1
   provider: ^6.0.2
 
   # Code generation
-  freezed_annotation: ^1.1.0
+  freezed_annotation: ^2.1.0
   json_annotation: ^4.4.0
   select_annotation: ^0.2.0
 
@@ -52,7 +51,7 @@ dependencies:
   stack_trace: ^1.10.0
 
   # Persistance
-  drift: ^1.2.0
+  drift: ^2.1.0
   sqlite3_flutter_libs: ^0.5.0
   shared_preferences: ^2.0.13
 
@@ -61,24 +60,24 @@ dependencies:
   retrofit: ^3.0.1
 
   # Navigation
-  auto_route: ^3.2.4
+  auto_route: ^5.0.1
 
 dev_dependencies:
   # Analyzer extensions
   dart_code_metrics: ^4.13.0
-  purple_metrics_lints: ^0.2.0
+  purple_metrics_lints: ^0.3.0
 
   # Utils
-  flutter_launcher_icons: ^0.9.2
+  flutter_launcher_icons: ^0.10.0
   flutter_native_splash: ^2.0.5
 
   # Code generation
   build_runner: ^2.1.7
-  auto_route_generator: ^3.2.3
-  select: ^0.2.0
+  auto_route_generator: ^5.0.2
+  select: ^0.3.1
   retrofit_generator: ^4.0.1
-  drift_dev: ^1.2.0
-  freezed: ^1.1.0
+  drift_dev: ^2.1.0
+  freezed: ^2.1.0+1
   json_serializable: ^6.1.4
   flutter_gen_runner: ^4.1.5
 

@@ -1,21 +1,32 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:purple_starter/src/feature/settings/enum/app_theme.dart';
+import 'package:purple_starter/src/feature/settings/model/settings_data.dart';
 import 'package:purple_starter/src/feature/settings/repository/settings_repository.dart';
 import 'package:stream_bloc/stream_bloc.dart';
-import 'package:sum/sum.dart';
 
 part 'settings_bloc.freezed.dart';
 
 // --- States --- //
 
 @freezed
-class SettingsData with _$SettingsData {
-  const factory SettingsData({
-    required AppTheme theme,
-  }) = _SettingsData;
-}
+class SettingsState with _$SettingsState {
+  const factory SettingsState.idle({
+    required SettingsData data,
+  }) = SettingsStateIdle;
 
-typedef SettingsState = PersistentAsyncData<String, SettingsData>;
+  const factory SettingsState.loading({
+    required SettingsData data,
+  }) = SettingsStateLoading;
+
+  const factory SettingsState.updatedSuccessfully({
+    required SettingsData data,
+  }) = SettingsStateUpdatedSuccessfully;
+
+  const factory SettingsState.error({
+    required SettingsData data,
+    required String description,
+  }) = SettingsStateError;
+}
 
 // --- Events --- //
 
@@ -34,37 +45,37 @@ class SettingsBloc extends StreamBloc<SettingsEvent, SettingsState> {
   SettingsBloc({
     required ISettingsRepository settingsRepository,
   })  : _settingsRepository = settingsRepository,
-        super(_initialState(settingsRepository));
+        super(
+          SettingsState.idle(
+            data: settingsRepository.currentData(),
+          ),
+        );
 
-  static SettingsState _initialState(
-    ISettingsRepository repository,
-  ) =>
-      SettingsState.idle(
-        data: SettingsData(
-          theme: repository.theme ?? AppTheme.system,
-        ),
-      );
+  SettingsData get _data => state.data;
 
   Stream<SettingsState> _performMutation(
-    Future<SettingsData> Function() body,
+    Future<void> Function() body,
   ) async* {
-    yield state.toLoading();
+    yield SettingsState.loading(data: _data);
     try {
-      final newData = await body();
-      yield SettingsState.idle(data: newData);
+      await body();
+      yield SettingsState.updatedSuccessfully(
+        data: _settingsRepository.currentData(),
+      );
     } on Object catch (e) {
-      yield state.toError(error: e.toString());
+      yield SettingsState.error(
+        data: _data,
+        description: e.toString(),
+      );
       rethrow;
     } finally {
-      yield state.toIdle();
+      yield SettingsState.idle(data: _data);
     }
   }
 
-  Stream<SettingsState> _setTheme(AppTheme theme) => _performMutation(() async {
-        await _settingsRepository.setTheme(theme);
-
-        return state.data.copyWith(theme: theme);
-      });
+  Stream<SettingsState> _setTheme(AppTheme theme) => _performMutation(
+        () => _settingsRepository.setTheme(theme),
+      );
 
   @override
   Stream<SettingsState> mapEventToStates(SettingsEvent event) => event.when(
