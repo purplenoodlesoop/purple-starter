@@ -207,29 +207,25 @@ Future<bool> runProcessConcealing(
   }
 }
 
-Future<void> createFlutterRunners() async {
+Future<void> runFlutter(List<String> commands) => Process.run(
+      'fvm',
+      ['flutter', ...commands],
+    );
+
+Future<void> createFlutterRunners() {
   final packageName = Environment.current().newName.packageName;
-  final sharedCommands = [
+
+  return runFlutter([
     'create',
     '--project-name',
     packageName,
     '--org',
     'com.$packageName',
     '.',
-  ];
-
-  final hasRunFvm = await runProcessConcealing(
-    'fvm',
-    ['flutter', ...sharedCommands],
-  );
-
-  if (!hasRunFvm) {
-    final hasRunFlutter = await runProcessConcealing('flutter', sharedCommands);
-    if (!hasRunFlutter) {
-      throw Exception('Failed to create Flutter runners.');
-    }
-  }
+  ]);
 }
+
+Future<void> format() => runFlutter(const ['format']);
 
 String assembleMessage(String newName, int replaced, Duration duration) =>
     'Setup complete! '
@@ -264,5 +260,6 @@ Future<void> performSetup() => seq(const [
       renameReadmeFile,
       createEmptyReadme,
       createFlutterRunners,
+      format,
       printResultMessage,
     ]);
