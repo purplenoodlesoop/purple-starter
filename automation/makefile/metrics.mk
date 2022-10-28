@@ -16,9 +16,8 @@ stats:
 	@echo "* Running cloc *"
 	@cloc .
 
-# https://pub.dev/packages/dependency_validator
 dependency-validator:
 	@pub run dependency_validator
 
 pana:
-	@dart pub global activate pana && pana --json --no-warning --line-length 80
+	@pana --json --no-warning --line-length 80

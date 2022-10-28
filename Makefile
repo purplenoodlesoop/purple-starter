@@ -1,6 +1,6 @@
-.PHONY: help version doctor
+-include automation/makefile/*.mk
 
-flutter = (fvm flutter || flutter)
+.PHONY: help version doctor
 
 # Script description and usage through `make` or `make help` commands
 help:
@@ -9,10 +9,8 @@ help:
 	@echo "  or something else"
 	@echo "   with this script"
 
--include automation/makefile/*.mk
-
 version:
-	@flutter --version
+	@fvm flutter --version
 
 doctor:
-	@flutter doctor
+	@fvm flutter doctor

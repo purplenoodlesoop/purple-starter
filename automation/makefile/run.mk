@@ -2,7 +2,7 @@
 
 run:
 	@echo "* Running app *"
-	@flutter run
+	@fvm flutter run
 
 emulator:
 	@echo "* Opening an Android emulator *"
@@ -12,16 +12,16 @@ install-apk:
 	@adb install build\app\outputs\flutter-apk\app-release.apk
 
 logs:
-	@flutter logs
+	@fvm flutter logs
 
 # Development/Trunk
 run-develop:
-	@flutter run --flavor development --dart-define=environment=development
+	@fvm flutter run --flavor development --dart-define=environment=development
 
 # Staging/Stage/Model/Pre-production
 run-staging:
-	@flutter run --flavor staging --dart-define=environment=staging
+	@fvm flutter run --flavor staging --dart-define=environment=staging
 
 # Production/Live
 run-production:
-	@flutter run --flavor production --dart-define=environment=production
+	@fvm flutter run --flavor production --dart-define=environment=production
