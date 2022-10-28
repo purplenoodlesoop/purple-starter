@@ -4,7 +4,8 @@ clean:
 	@echo "* Cleaning the project *"
 	@rm -rf build .flutter-plugins .flutter-plugins-dependencies coverage .dart_tool .packages pubspec.lock
 	@flutter clean
-	@ #git clean -fdx
+	@git clean -d
+	@make pub-get
 
 pub-get:
 	@echo "* Getting latest dependencies *"
