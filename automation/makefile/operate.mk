@@ -1,4 +1,4 @@
-.PHONY: first-run clean splash prepare icon google-localizations setup format
+.PHONY: first-run clean splash prepare icon google-localizations setup format clean version doctor
 
 first-run: prepare run
 
@@ -27,3 +27,16 @@ setup:
 	@fvm dart pub get --directory=./tool/setup_clone
 	@echo "* Setting up the project *"
 	@fvm dart ./tool/setup_clone/main.dart $(NAME)
+
+clean:
+	@echo "* Cleaning the project *"
+	@rm -rf build .flutter-plugins .flutter-plugins-dependencies coverage .dart_tool .packages pubspec.lock
+	@fvm flutter clean
+	@git clean -d
+	@make pub-get
+
+version:
+	@fvm flutter --version
+
+doctor:
+	@fvm flutter doctor
