@@ -6,7 +6,11 @@ splash: pub-get
 	@echo "* Generating Splash screens *"
 	@fvm flutter pub run flutter_native_splash:create
 
+# Prepares the application for the first run.
+#
+# Fetches latest dependencies, and generates code, icon and splash screen.
 prepare: pub-get gen-build-delete icon splash
+	@echo "* Prepared the application *"
 
 icon: pub-get
 	@echo "* Generating app icons *"
