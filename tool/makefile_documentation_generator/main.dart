@@ -6,9 +6,41 @@ import 'package:makefile/makefile.dart';
 import 'package:md/md.dart';
 import 'package:stream_transform/stream_transform.dart';
 
-extension on String {
-  String capitalized() =>
-      '${this[0].toUpperCase()}${substring(1).toLowerCase()}';
+class Target {
+  final String name;
+  final String formattedName;
+  final List<String> comments;
+  final List<String> prerequisites;
+  final List<String> recipe;
+
+  Target({
+    required this.name,
+    required this.formattedName,
+    required this.comments,
+    required this.prerequisites,
+    required this.recipe,
+  });
+
+  factory Target.fromMakefileTarget(
+    MakefileTarget target,
+  ) {
+    final info = target.info;
+    final name = info.name;
+
+    return Target(
+      name: name,
+      formattedName: _formatName(name),
+      comments: info.comments,
+      prerequisites: target.prerequisites,
+      recipe: target.recipe,
+    );
+  }
+
+  static String _formatName(String name) {
+    final spaced = name.replaceAll('-', ' ');
+
+    return '${spaced[0].toUpperCase()}${spaced.substring(1).toLowerCase()}';
+  }
 }
 
 Directory get makefilesDirectory => Directory('./automation/makefile');
@@ -33,9 +65,8 @@ bool usableTarget(
 
 Stream<List<int>> openRead(File file) => file.openRead();
 
-List<MakefileTarget> sortTargets(List<MakefileTarget> targets) =>
-    targets.toList(growable: false)
-      ..sort((a, b) => a.info.name.compareTo(b.info.name));
+List<Target> sortTargets(List<Target> targets) =>
+    targets.toList(growable: false)..sort((a, b) => a.name.compareTo(b.name));
 
 Future<A> withDocumentationSink<A>(
   FutureOr<A> Function(IOSink sink) body,
@@ -52,35 +83,53 @@ Future<void> writeLines(Iterable<String> lines) => withDocumentationSink(
       (sink) => sink.writeAll(lines),
     );
 
-Markdown indexEntry(MakefileTarget target) {
-  final name = target.info.name;
+Markdown targetLink(Target target) => Markdown.link(
+      label: target.formattedName,
+      destination: '#${target.name}',
+    );
 
-  return Markdown.link(
-    label: name.replaceAll('-', ' ').capitalized(),
-    destination: '#$name',
-  );
-}
+Markdown codeText(String text) => Markdown.text(
+      data: text,
+      style: TextStyle.code,
+    );
 
-Markdown index(List<MakefileTarget> targets) => Markdown.section(
+Markdown index(List<Target> targets) => Markdown.section(
       header: 'Index',
       children: [
         Markdown.list(
           style: ListStyle.unordered,
-          children: targets.map(indexEntry).toList(),
+          children: targets.map(targetLink).toList(),
         ),
       ],
     );
 
-Markdown targetEntry(MakefileTarget target) {
-  final info = target.info;
-  final comments = info.comments;
-  final name = info.name;
+Markdown unorderedListBuilder<T>(
+  String header,
+  Iterable<T> entries,
+  Markdown Function(T text) builder,
+) =>
+    Markdown.section(
+      header: header,
+      children: [
+        Markdown.list(
+          style: ListStyle.unordered,
+          children: entries.map(builder).toList(),
+        ),
+      ],
+    );
+
+Markdown targetEntry(List<Target> targets, Target target) {
+  final comments = target.comments;
+  final name = target.name;
   final prerequisites =
       target.prerequisites.where((element) => element.isNotEmpty);
+  final usedBy = targets.where(
+    (element) => element.prerequisites.contains(target.name),
+  );
   final recipe = target.recipe;
 
   return Markdown.section(
-    header: name.replaceAll('-', ' ').capitalized(),
+    header: target.formattedName,
     children: [
       if (comments.isNotEmpty)
         Markdown.text(
@@ -95,23 +144,10 @@ Markdown targetEntry(MakefileTarget target) {
           ),
         ],
       ),
+      if (usedBy.isNotEmpty)
+        unorderedListBuilder('Used by', usedBy, targetLink),
       if (prerequisites.isNotEmpty)
-        Markdown.section(
-          header: 'Perquisites',
-          children: [
-            Markdown.list(
-              style: ListStyle.unordered,
-              children: prerequisites
-                  .map(
-                    (prerequisite) => Markdown.text(
-                      data: prerequisite,
-                      style: TextStyle.code,
-                    ),
-                  )
-                  .toList(),
-            ),
-          ],
-        ),
+        unorderedListBuilder('Perquisites', prerequisites, codeText),
       if (recipe.isNotEmpty)
         Markdown.section(
           header: 'Recipe',
@@ -126,12 +162,12 @@ Markdown targetEntry(MakefileTarget target) {
   );
 }
 
-Markdown targets(List<MakefileTarget> targets) => Markdown.section(
+Markdown targets(List<Target> targets) => Markdown.section(
       header: 'Targets',
-      children: targets.map(targetEntry).toList(),
+      children: targets.map((entry) => targetEntry(targets, entry)).toList(),
     );
 
-Markdown documentation(List<MakefileTarget> targetsList) => Markdown.section(
+Markdown documentation(List<Target> targetsList) => Markdown.section(
       header: 'Makefile documentation',
       children: [
         Markdown.text(
@@ -151,6 +187,7 @@ Future<void> main(List<String> arguments) => makefilesDirectory
     .whereType<MakefileTarget>()
     .where(usableTarget)
     .toList()
+    .then((targets) => targets.map(Target.fromMakefileTarget).toList())
     .then(sortTargets)
     .then(documentation)
     .then(renderMarkdownByLine)

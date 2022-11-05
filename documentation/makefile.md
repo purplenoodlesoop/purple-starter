@@ -220,6 +220,10 @@ Run tests and generate coverage report
 
 `gen-build-delete`
 
+#### Used by
+
+- [Prepare](#prepare)
+
 #### Perquisites
 
 - `pub-get`
@@ -293,6 +297,10 @@ Script description and usage through `make` or `make help` commands
 #### Name
 
 `icon`
+
+#### Used by
+
+- [Prepare](#prepare)
 
 #### Perquisites
 
@@ -441,6 +449,10 @@ Prepares the application for the first run.  Fetches latest dependencies, and ge
 
 `prepare`
 
+#### Used by
+
+- [First run](#first-run)
+
 #### Perquisites
 
 - `pub-get`
@@ -459,6 +471,16 @@ Prepares the application for the first run.  Fetches latest dependencies, and ge
 #### Name
 
 `pub-get`
+
+#### Used by
+
+- [Build](#build)
+- [Build web](#build-web)
+- [Gen build](#gen-build)
+- [Gen build delete](#gen-build-delete)
+- [Icon](#icon)
+- [Prepare](#prepare)
+- [Splash](#splash)
 
 #### Recipe
 
@@ -490,6 +512,10 @@ Prepares the application for the first run.  Fetches latest dependencies, and ge
 
 `pub-upgrade`
 
+#### Used by
+
+- [Pub outdated](#pub-outdated)
+
 #### Recipe
 
 ```Makefile
@@ -515,6 +541,10 @@ Prepares the application for the first run.  Fetches latest dependencies, and ge
 #### Name
 
 `run`
+
+#### Used by
+
+- [First run](#first-run)
 
 #### Recipe
 
@@ -596,6 +626,10 @@ Staging/Stage/Model/Pre-production
 
 `splash`
 
+#### Used by
+
+- [Prepare](#prepare)
+
 #### Perquisites
 
 - `pub-get`
@@ -626,6 +660,10 @@ Run tests
 #### Name
 
 `test`
+
+#### Used by
+
+- [Coverage](#coverage)
 
 #### Recipe
 
