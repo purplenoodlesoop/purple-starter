@@ -20,13 +20,17 @@ bool notPlatformImports(
     file.uri.pathSegments.last != 'platform.mk';
 
 bool notPhony(
-  MakefileEntryTarget event,
+  MakefileTarget event,
 ) =>
     event.info.name != '.PHONY';
 
 Stream<List<int>> openRead(File file) => file.openRead();
 
-Markdown indexEntry(MakefileEntryTarget target) {
+List<MakefileTarget> sortTargets(List<MakefileTarget> targets) =>
+    targets.toList(growable: false)
+      ..sort((a, b) => a.info.name.compareTo(b.info.name));
+
+Markdown indexEntry(MakefileTarget target) {
   final name = target.info.name;
 
   return Markdown.link(
@@ -35,7 +39,7 @@ Markdown indexEntry(MakefileEntryTarget target) {
   );
 }
 
-Markdown index(List<MakefileEntryTarget> targets) => Markdown.section(
+Markdown index(List<MakefileTarget> targets) => Markdown.section(
       header: 'Index',
       children: [
         Markdown.list(
@@ -45,7 +49,7 @@ Markdown index(List<MakefileEntryTarget> targets) => Markdown.section(
       ],
     );
 
-Markdown targetEntry(MakefileEntryTarget target) {
+Markdown targetEntry(MakefileTarget target) {
   final info = target.info;
   final comments = info.comments;
   final name = info.name;
@@ -99,13 +103,12 @@ Markdown targetEntry(MakefileEntryTarget target) {
   );
 }
 
-Markdown targets(List<MakefileEntryTarget> targets) => Markdown.section(
+Markdown targets(List<MakefileTarget> targets) => Markdown.section(
       header: 'Targets',
       children: targets.map(targetEntry).toList(),
     );
 
-Markdown documentation(List<MakefileEntryTarget> targetsList) =>
-    Markdown.section(
+Markdown documentation(List<MakefileTarget> targetsList) => Markdown.section(
       header: 'Makefile documentation',
       children: [
         Markdown.text(
@@ -116,19 +119,19 @@ Markdown documentation(List<MakefileEntryTarget> targetsList) =>
       ],
     );
 
-Future<void> main(List<String> arguments) async {
-  final targets = await Directory('./automation/makefile')
-      .list(recursive: true)
-      .whereType<File>()
-      .startWith(makefile)
-      .where(notPlatformImports)
-      .asyncExpand(openRead)
-      .transform(utf8.decoder)
-      .transform(const LineSplitter())
-      .transform(const MakefileParser())
-      .whereType<MakefileEntryTarget>()
-      .where(notPhony)
-      .toList()
-    ..sort((a, b) => a.info.name.compareTo(b.info.name));
-  await makefileDocumentation.writeAsString(renderNode(documentation(targets)));
-}
+Future<void> main(List<String> arguments) => Directory('./automation/makefile')
+    .list(recursive: true)
+    .whereType<File>()
+    .startWith(makefile)
+    .where(notPlatformImports)
+    .asyncExpand(openRead)
+    .transform(utf8.decoder)
+    .transform(const LineSplitter())
+    .transform(const MakefileParser())
+    .whereType<MakefileTarget>()
+    .where(notPhony)
+    .toList()
+    .then(sortTargets)
+    .then(documentation)
+    .then(renderMarkdown)
+    .then(makefileDocumentation.writeAsString);
