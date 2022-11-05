@@ -12,7 +12,7 @@ extension on String {
 
 File get rootMakefile => File('./Makefile');
 
-File get makefileDocumentation => File('./documentation/markdown.md');
+File get makefileDocumentation => File('./documentation/makefile.md');
 
 bool notPlatformImports(
   File file,
