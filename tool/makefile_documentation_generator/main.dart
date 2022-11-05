@@ -59,7 +59,8 @@ Markdown targetEntry(MakefileTarget target) {
   final info = target.info;
   final comments = info.comments;
   final name = info.name;
-  final prerequisites = target.prerequisites;
+  final prerequisites =
+      target.prerequisites.where((element) => element.isNotEmpty);
   final recipe = target.recipe;
 
   return Markdown.section(
