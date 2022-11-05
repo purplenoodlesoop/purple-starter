@@ -468,6 +468,7 @@ Prepares the application for the first run.  Fetches latest dependencies, and ge
 
 ### Pub get
 
+Fetches latest dependencies using Flutter Version Manager.
 #### Name
 
 `pub-get`

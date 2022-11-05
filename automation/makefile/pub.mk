@@ -1,5 +1,6 @@
 .PHONY: pub-get pub-outdated pub-upgrade pub-upgrade-major
 
+# Fetches latest dependencies using Flutter Version Manager.
 pub-get:
 	@echo "* Getting latest dependencies *"
 	@fvm flutter pub get
