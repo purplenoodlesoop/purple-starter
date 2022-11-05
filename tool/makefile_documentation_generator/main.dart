@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -10,8 +11,8 @@ extension on String {
       '${this[0].toUpperCase()}${substring(1).toLowerCase()}';
 }
 
+Directory get makefilesDirectory => Directory('./automation/makefile');
 File get rootMakefile => File('./Makefile');
-
 File get makefileDocumentation => File('./documentation/makefile.md');
 
 bool notPlatformImports(
@@ -35,6 +36,21 @@ Stream<List<int>> openRead(File file) => file.openRead();
 List<MakefileTarget> sortTargets(List<MakefileTarget> targets) =>
     targets.toList(growable: false)
       ..sort((a, b) => a.info.name.compareTo(b.info.name));
+
+Future<A> withDocumentationSink<A>(
+  FutureOr<A> Function(IOSink sink) body,
+) async {
+  final sink = makefileDocumentation.openWrite();
+  try {
+    return await body(sink);
+  } finally {
+    await sink.close();
+  }
+}
+
+Future<void> writeLines(Iterable<String> lines) => withDocumentationSink(
+      (sink) => sink.writeAll(lines),
+    );
 
 Markdown indexEntry(MakefileTarget target) {
   final name = target.info.name;
@@ -126,7 +142,7 @@ Markdown documentation(List<MakefileTarget> targetsList) => Markdown.section(
       ],
     );
 
-Future<void> main(List<String> arguments) => Directory('./automation/makefile')
+Future<void> main(List<String> arguments) => makefilesDirectory
     .list(recursive: true)
     .whereType<File>()
     .startWith(rootMakefile)
@@ -137,5 +153,5 @@ Future<void> main(List<String> arguments) => Directory('./automation/makefile')
     .toList()
     .then(sortTargets)
     .then(documentation)
-    .then(renderMarkdown)
-    .then(makefileDocumentation.writeAsString);
+    .then(renderMarkdownByLine)
+    .then(writeLines);
