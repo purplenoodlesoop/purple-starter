@@ -63,6 +63,9 @@ bool usableTarget(
 ) =>
     !const ['.PHONY', '_echo_os'].contains(event.info.name);
 
+List<Target> mapTargets(List<MakefileTarget> targets) =>
+    targets.map(Target.fromMakefileTarget).toList();
+
 Stream<List<int>> openRead(File file) => file.openRead();
 
 List<Target> sortTargets(List<Target> targets) =>
@@ -124,7 +127,9 @@ Markdown targetEntry(List<Target> targets, Target target) {
   final prerequisites =
       target.prerequisites.where((element) => element.isNotEmpty);
   final usedBy = targets.where(
-    (element) => element.prerequisites.contains(target.name),
+    (element) =>
+        element.prerequisites.contains(name) ||
+        element.recipe.any((line) => line.contains('make $name')),
   );
   final recipe = target.recipe;
 
@@ -187,7 +192,7 @@ Future<void> main(List<String> arguments) => makefilesDirectory
     .whereType<MakefileTarget>()
     .where(usableTarget)
     .toList()
-    .then((targets) => targets.map(Target.fromMakefileTarget).toList())
+    .then(mapTargets)
     .then(sortTargets)
     .then(documentation)
     .then(renderMarkdownByLine)

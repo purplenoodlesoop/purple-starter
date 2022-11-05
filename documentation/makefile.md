@@ -90,6 +90,11 @@ This file is auto-generated
 
 `clean`
 
+#### Used by
+
+- [Build](#build)
+- [Build web](#build-web)
+
 #### Recipe
 
 ```Makefile
@@ -331,6 +336,10 @@ Script description and usage through `make` or `make help` commands
 
 `install-pods`
 
+#### Used by
+
+- [Ios deep clean](#ios-deep-clean)
+
 #### Recipe
 
 ```Makefile
@@ -477,9 +486,11 @@ Fetches latest dependencies using Flutter Version Manager.
 
 - [Build](#build)
 - [Build web](#build-web)
+- [Clean](#clean)
 - [Gen build](#gen-build)
 - [Gen build delete](#gen-build-delete)
 - [Icon](#icon)
+- [Ios deep clean](#ios-deep-clean)
 - [Prepare](#prepare)
 - [Splash](#splash)
 
