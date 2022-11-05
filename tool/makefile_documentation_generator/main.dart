@@ -10,7 +10,7 @@ extension on String {
       '${this[0].toUpperCase()}${substring(1).toLowerCase()}';
 }
 
-File get makefile => File('./Makefile');
+File get rootMakefile => File('./Makefile');
 
 File get makefileDocumentation => File('./documentation/markdown.md');
 
@@ -19,10 +19,16 @@ bool notPlatformImports(
 ) =>
     file.uri.pathSegments.last != 'platform.mk';
 
-bool notPhony(
+Stream<Makefile> parseMakefile(File file) => file
+    .openRead()
+    .transform(utf8.decoder)
+    .transform(const LineSplitter())
+    .transform(const MakefileParser());
+
+bool usableTarget(
   MakefileTarget event,
 ) =>
-    event.info.name != '.PHONY';
+    !const ['.PHONY', '_echo_os'].contains(event.info.name);
 
 Stream<List<int>> openRead(File file) => file.openRead();
 
@@ -122,14 +128,11 @@ Markdown documentation(List<MakefileTarget> targetsList) => Markdown.section(
 Future<void> main(List<String> arguments) => Directory('./automation/makefile')
     .list(recursive: true)
     .whereType<File>()
-    .startWith(makefile)
+    .startWith(rootMakefile)
     .where(notPlatformImports)
-    .asyncExpand(openRead)
-    .transform(utf8.decoder)
-    .transform(const LineSplitter())
-    .transform(const MakefileParser())
+    .concurrentAsyncExpand(parseMakefile)
     .whereType<MakefileTarget>()
-    .where(notPhony)
+    .where(usableTarget)
     .toList()
     .then(sortTargets)
     .then(documentation)
