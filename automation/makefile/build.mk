@@ -1,4 +1,4 @@
-.PHONY: build-android build-web build-iost
+.PHONY: build-android build-web build-ios
 
 build-android: clean
 	@echo "Building Android APK"
