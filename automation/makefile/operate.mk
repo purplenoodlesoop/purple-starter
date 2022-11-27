@@ -32,10 +32,11 @@ setup:
 	@echo "* Setting up the project *"
 	@fvm dart ./tool/setup_clone/main.dart $(NAME)
 
+# FIXME: PLATFORM
 clean:
 	@echo "* Cleaning the project *"
-	@rm -rf build .flutter-plugins .flutter-plugins-dependencies coverage .dart_tool .packages pubspec.lock
-	@fvm flutter clean
+	@grind delete-flutter-artifacts
+	@grind clean
 	@git clean -d
 	@make pub-get
 

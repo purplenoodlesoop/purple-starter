@@ -1,8 +1,9 @@
 .PHONY: test coverage
 
 # Run tests
+# FIXME: PLATFORM
 test:
-	@time flutter test --concurrency=6 --dart-define=environment=testing --coverage test/
+	@grind run-tests
 
 # Run tests and generate coverage report
 coverage: test
