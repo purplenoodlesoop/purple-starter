@@ -12,10 +12,6 @@ metrics-unused-l10n:
 metrics-unused-code:
 	@grind code-metrics-unused-code
 
-stats:
-	@echo "* Running cloc *"
-	@cloc .
-
 dependency-validator:
 	@pub run dependency_validator
 

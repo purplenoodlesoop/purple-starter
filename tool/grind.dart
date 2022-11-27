@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:grinder/grinder.dart';
+import 'package:pure/pure.dart';
 
 void main(List<String> args) => grind(args);
 
@@ -35,6 +36,16 @@ void _runMetrics(String actionDescription, String command) {
 
 void _runMetricsUnused(String type) {
   _runMetrics('Checking for unused $type', 'check-unused-$type');
+}
+
+FileSystemEntity _createAppropriateFileSystemEntity(String path) {
+  if (FileSystemEntity.isDirectorySync(path)) {
+    return Directory(path);
+  } else if (FileSystemEntity.isFileSync(path)) {
+    return File(path);
+  } else {
+    return Link(path);
+  }
 }
 
 @Task('Clean project.')
@@ -82,4 +93,38 @@ void codeMetricsUnusedL10n() {
 @Task('Dart Code Metrics: check for unused code.')
 void codeMetricsUnusedCode() {
   _runMetricsUnused('code');
+}
+
+@Task('Deletes flutter artifacts')
+void deleteFlutterArtifacts() {
+  const files = [
+    'build',
+    '.flutter-plugins',
+    '.flutter-plugins-dependencies',
+    'coverage',
+    '.dart_tool',
+    '.packages',
+    'pubspec.lock',
+  ];
+
+  Future.wait(
+    files
+        .map(_createAppropriateFileSystemEntity)
+        .map((entity) => entity.delete(recursive: true)),
+  );
+}
+
+@Task('Runs tests suite')
+void runTests() {
+  final stopwatch = Stopwatch()..start();
+  _runFlutter(
+    'test',
+    arguments: [
+      '--concurrency=6',
+      '--dart-define=environment=testing',
+      '--coverage',
+      'test/',
+    ],
+  );
+  log('* Run tests in ${stopwatch.elapsed} *');
 }

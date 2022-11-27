@@ -1,11 +1,13 @@
-.PHONY: build build-web
+.PHONY: build-android build-web build-ios
 
-build: pub-get
+build-android: clean
 	@echo "Building Android APK"
-	@make clean
-	@fvm flutter build apk --release --tree-shake-icons --no-shrink
+	@fvm flutter build apk --no-pub --no-shrink
 
-build-web: pub-get
+build-web: clean
 	@echo "Building Web app"
-	@make clean
-	@fvm flutter build web --release --dart-define=FLUTTER_WEB_USE_SKIA=true --no-source-maps --pwa-strategy offline-first
+	@fvm flutter build web --dart-define=FLUTTER_WEB_USE_SKIA=true --no-pub --no-source-maps --pwa-strategy offline-first
+
+build-ios: clean
+	@echo "Building iOS IPA"
+	@fvm flutter build ipa --no-pub
