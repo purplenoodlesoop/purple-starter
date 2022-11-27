@@ -32,7 +32,6 @@ setup:
 	@echo "* Setting up the project *"
 	@fvm dart ./tool/setup_clone/main.dart $(NAME)
 
-# FIXME: PLATFORM
 clean:
 	@echo "* Cleaning the project *"
 	@grind delete-flutter-artifacts

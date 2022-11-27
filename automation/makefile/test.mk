@@ -1,7 +1,6 @@
 .PHONY: test coverage
 
 # Run tests
-# FIXME: PLATFORM
 test:
 	@grind run-tests
 
