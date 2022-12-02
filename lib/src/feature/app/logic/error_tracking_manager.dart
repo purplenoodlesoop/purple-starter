@@ -33,7 +33,6 @@ class SentryTrackingManager implements ErrorTrackingManager {
   static bool _false() => false;
 
   static bool _isWarningOrError(LogMessage message) => message.level.maybeWhen(
-        warning: _true,
         error: _true,
         orElse: _false,
       );

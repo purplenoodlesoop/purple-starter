@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:purple_starter/src/core/database/drift/app_database.dart';
+import 'package:purple_starter/src/feature/app/api/dio_logger_interceptor.dart';
 import 'package:typed_preferences/typed_preferences.dart';
 
 abstract class IDependenciesStorage {
@@ -25,7 +26,10 @@ class DependenciesStorage implements IDependenciesStorage {
   AppDatabase? _database;
 
   @override
-  Dio get dio => _dio ??= Dio();
+  Dio get dio => _dio ??= Dio()
+    ..interceptors.addAll([
+      DioLoggerInterceptor(),
+    ]);
 
   @override
   AppDatabase get database => _database ??= AppDatabase(name: _databaseName);
