@@ -10,6 +10,7 @@ import 'package:purple_starter/src/feature/app/widget/app_configuration.dart';
 import 'package:purple_starter/src/feature/app/widget/app_lifecycle_scope.dart';
 import 'package:purple_starter/src/feature/settings/widget/scope/settings_scope.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:typed_preferences/typed_preferences.dart';
 
 class PurpleStarterApp extends StatelessWidget {
   final InitializationData initializationData;
@@ -19,8 +20,8 @@ class PurpleStarterApp extends StatelessWidget {
     required this.initializationData,
   }) : super(key: key);
 
-  SharedPreferences get _sharedPreferences =>
-      initializationData.sharedPreferences;
+  PreferencesDriver get _preferencesDriver =>
+      initializationData.preferencesDriver;
 
   @override
   Widget build(BuildContext context) => EnvironmentScope(
@@ -30,12 +31,12 @@ class PurpleStarterApp extends StatelessWidget {
           child: DependenciesScope(
             create: (context) => DependenciesStorage(
               databaseName: 'purple_starter_database',
-              sharedPreferences: _sharedPreferences,
+              preferencesDriver: _preferencesDriver,
             ),
             child: RepositoryScope(
               create: (context) => RepositoryStorage(
                 appDatabase: DependenciesScope.of(context).database,
-                sharedPreferences: _sharedPreferences,
+                preferencesDriver: _preferencesDriver,
               ),
               child: const SettingsScope(
                 child: AppConfiguration(),
