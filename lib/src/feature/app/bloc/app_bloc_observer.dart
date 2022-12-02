@@ -1,4 +1,5 @@
 import 'package:l/l.dart';
+import 'package:purple_starter/src/core/logic/identity_logging_mixin.dart';
 import 'package:stream_bloc/stream_bloc.dart';
 
 extension on StringBuffer {
@@ -21,21 +22,13 @@ extension on StringBuffer {
   }
 }
 
-class AppBlocObserver extends StreamBlocObserver {
+class AppBlocObserver extends StreamBlocObserver with IdentityLoggingMixin {
   const AppBlocObserver();
-
-  void _log(void Function(StringBuffer buffer) assemble) {
-    final buffer = StringBuffer('AppBlocObserver | ');
-
-    assemble(buffer);
-
-    l.d(buffer.toString());
-  }
 
   @override
   void onCreate(Closable closable) {
     super.onCreate(closable);
-    _log(
+    logData(
       (buffer) => buffer
         ..write('Created ')
         ..writeInfo(closable),
@@ -46,7 +39,7 @@ class AppBlocObserver extends StreamBlocObserver {
   void onEvent(BlocEventSink<Object?> eventSink, Object? event) {
     super.onEvent(eventSink, event);
     if (event != null) {
-      _log(
+      logData(
         (buffer) => buffer
           ..write('Event ')
           ..writeInfo(event)
@@ -63,7 +56,7 @@ class AppBlocObserver extends StreamBlocObserver {
     final Object? event = transition.event;
 
     if (event != null) {
-      _log(
+      logData(
         (buffer) => buffer
           ..write('Transition in ')
           ..writeInfo(bloc)
@@ -81,7 +74,7 @@ class AppBlocObserver extends StreamBlocObserver {
   void onError(ErrorSink errorSink, Object error, StackTrace stackTrace) {
     super.onError(errorSink, error, stackTrace);
 
-    _log(
+    logData(
       (buffer) => buffer
         ..write('Error ')
         ..writeInfo(error)
@@ -95,7 +88,7 @@ class AppBlocObserver extends StreamBlocObserver {
   @override
   void onClose(Closable closable) {
     super.onClose(closable);
-    _log(
+    logData(
       (buffer) => buffer
         ..write('Closed ')
         ..writeInfo(closable),

@@ -1,24 +1,24 @@
 import 'package:dio/dio.dart';
 import 'package:purple_starter/src/core/database/drift/app_database.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:typed_preferences/typed_preferences.dart';
 
 abstract class IDependenciesStorage {
   Dio get dio;
   AppDatabase get database;
-  SharedPreferences get sharedPreferences;
+  PreferencesDriver get preferencesDriver;
 
   void close();
 }
 
 class DependenciesStorage implements IDependenciesStorage {
   final String _databaseName;
-  final SharedPreferences _sharedPreferences;
+  final PreferencesDriver _preferencesDriver;
 
   DependenciesStorage({
     required String databaseName,
-    required SharedPreferences sharedPreferences,
+    required PreferencesDriver preferencesDriver,
   })  : _databaseName = databaseName,
-        _sharedPreferences = sharedPreferences;
+        _preferencesDriver = preferencesDriver;
 
   Dio? _dio;
 
@@ -31,7 +31,7 @@ class DependenciesStorage implements IDependenciesStorage {
   AppDatabase get database => _database ??= AppDatabase(name: _databaseName);
 
   @override
-  SharedPreferences get sharedPreferences => _sharedPreferences;
+  PreferencesDriver get preferencesDriver => _preferencesDriver;
 
   @override
   Future<void> close() async {

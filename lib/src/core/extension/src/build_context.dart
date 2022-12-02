@@ -10,13 +10,14 @@ import 'package:purple_starter/src/core/widget/dependencies_scope.dart';
 import 'package:purple_starter/src/core/widget/environment_scope.dart';
 import 'package:purple_starter/src/core/widget/repository_scope.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:typed_preferences/typed_preferences.dart';
 
 extension BuildContextX on BuildContext {
   IEnvironmentStorage get environment => EnvironmentScope.of(this);
   IDependenciesStorage get dependencies => DependenciesScope.of(this);
   Dio get dio => dependencies.dio;
   AppDatabase get database => dependencies.database;
-  SharedPreferences get sharedPreferences => dependencies.sharedPreferences;
+  PreferencesDriver get preferencesDriver => dependencies.preferencesDriver;
 
   IRepositoryStorage get repository => RepositoryScope.of(this);
 

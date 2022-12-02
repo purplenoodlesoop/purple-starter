@@ -4,10 +4,12 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:pure/pure.dart';
 import 'package:purple_starter/src/core/extension/extensions.dart';
 import 'package:purple_starter/src/core/model/environment_storage.dart';
+import 'package:purple_starter/src/feature/app/database/app_prefernces_driver_observer.dart';
 import 'package:purple_starter/src/feature/app/logic/error_tracking_manager.dart';
 import 'package:select_annotation/select_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stream_bloc/stream_bloc.dart';
+import 'package:typed_preferences/typed_preferences.dart';
 
 part 'initialization_bloc.freezed.dart';
 part 'initialization_bloc.select.dart';
@@ -40,7 +42,7 @@ class InitializationProgress with _$InitializationProgress {
 abstract class InitializationData {
   ErrorTrackingDisabler get errorTrackingDisabler;
   IEnvironmentStorage get environmentStorage;
-  SharedPreferences get sharedPreferences;
+  PreferencesDriver get preferencesDriver;
 }
 
 @selectable
@@ -66,7 +68,7 @@ class InitializationState with _$InitializationState {
   const factory InitializationState.initialized({
     required IEnvironmentStorage environmentStorage,
     required ErrorTrackingDisabler errorTrackingDisabler,
-    required SharedPreferences sharedPreferences,
+    required PreferencesDriver preferencesDriver,
   }) = InitializationInitialized;
 
   @With<_IndexedInitializationStateMixin>()
@@ -143,7 +145,12 @@ class InitializationBloc
       yield InitializationState.initialized(
         environmentStorage: environmentStorage,
         errorTrackingDisabler: errorTrackingManager,
-        sharedPreferences: sharedPreferences,
+        preferencesDriver: PreferencesDriver(
+          sharedPreferences: sharedPreferences,
+          observers: const [
+            AppPreferencesDriverObserver(),
+          ],
+        ),
       );
     } on Object catch (e, s) {
       yield InitializationState.error(
