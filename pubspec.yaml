@@ -61,6 +61,7 @@ dependencies:
 
   # Navigation
   auto_route: ^5.0.1
+  typed_preferences: ^0.1.0+1
 
 dev_dependencies:
   # Analyzer extensions
