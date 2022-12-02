@@ -11,6 +11,12 @@ extension DriftLogger on Never {
     final sql = parts.first.split('Drift: Sent').last.trim();
     final args = parts.last.trim();
 
-    l.i('Drift | Executing $sql with $args');
+    final buffer = StringBuffer()
+      ..write('DriftLogger | Executing')
+      ..write(sql)
+      ..write(' with ')
+      ..write(args);
+
+    l.i(buffer.toString());
   }
 }
