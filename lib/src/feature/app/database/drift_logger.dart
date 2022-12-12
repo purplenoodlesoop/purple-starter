@@ -2,8 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:l/l.dart';
 
 extension DriftLogger on Never {
-  //driftRuntimeOptions.debugPrint('Drift: Sent $sql with args $args');
-
   static const bool shouldLog = !kReleaseMode;
 
   static void log(String string) {
