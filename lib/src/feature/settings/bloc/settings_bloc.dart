@@ -39,15 +39,16 @@ class SettingsEvent with _$SettingsEvent {
 
 // --- BLoC --- //
 
-class SettingsBloc extends StreamBloc<SettingsEvent, SettingsState> {
-  final ISettingsRepository _settingsRepository;
+abstract class SettingsBlocDependencies
+    implements SettingsRepositoryDependency {}
 
-  SettingsBloc({
-    required ISettingsRepository settingsRepository,
-  })  : _settingsRepository = settingsRepository,
-        super(
+class SettingsBloc extends StreamBloc<SettingsEvent, SettingsState> {
+  final SettingsBlocDependencies _dependencies;
+
+  SettingsBloc(this._dependencies)
+      : super(
           SettingsState.idle(
-            data: settingsRepository.currentData(),
+            data: _dependencies.settingsRepository.currentData(),
           ),
         );
 
@@ -60,7 +61,7 @@ class SettingsBloc extends StreamBloc<SettingsEvent, SettingsState> {
     try {
       await body();
       yield SettingsState.updatedSuccessfully(
-        data: _settingsRepository.currentData(),
+        data: _dependencies.settingsRepository.currentData(),
       );
     } on Object catch (e) {
       yield SettingsState.error(
@@ -74,7 +75,7 @@ class SettingsBloc extends StreamBloc<SettingsEvent, SettingsState> {
   }
 
   Stream<SettingsState> _setTheme(AppTheme theme) => _performMutation(
-        () => _settingsRepository.setTheme(theme),
+        () => _dependencies.settingsRepository.setTheme(theme),
       );
 
   @override

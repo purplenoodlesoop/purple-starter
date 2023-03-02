@@ -1,3 +1,5 @@
+import 'package:mark/mark.dart';
+import 'package:purple_starter/src/core/di/shared_parent.dart';
 import 'package:purple_starter/src/core/logic/identity_logging_mixin.dart';
 import 'package:typed_preferences/typed_preferences.dart';
 
@@ -7,10 +9,18 @@ extension on bool {
   String get status => this ? _successfully : 'un$_successfully';
 }
 
+abstract class AppPreferencesDriverObserverDependencies
+    implements LoggerDependency {}
+
 class AppPreferencesDriverObserver
     with IdentityLoggingMixin
     implements PreferencesDriverObserver {
-  const AppPreferencesDriverObserver();
+  final AppPreferencesDriverObserverDependencies _dependencies;
+
+  const AppPreferencesDriverObserver(this._dependencies);
+
+  @override
+  Logger get logger => _dependencies.logger;
 
   @override
   void onClear(bool isSuccess) {

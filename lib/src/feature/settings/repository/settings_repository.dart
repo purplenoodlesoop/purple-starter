@@ -9,15 +9,21 @@ abstract class ISettingsRepository {
   Future<void> setTheme(AppTheme value);
 }
 
+abstract class SettingsRepositoryDependency {
+  ISettingsRepository get settingsRepository;
+}
+
+abstract class SettingsRepositoryDependencies implements SettingsDaoDependency {
+}
+
 class SettingsRepository implements ISettingsRepository {
-  final ISettingsDao _settingsDao;
+  final SettingsRepositoryDependencies _dependencies;
 
-  SettingsRepository({
-    required ISettingsDao settingsDao,
-  }) : _settingsDao = settingsDao;
+  SettingsRepository(this._dependencies);
 
-  AppTheme? get _theme =>
-      AppTheme.values.byName.nullable(_settingsDao.themeMode.value);
+  AppTheme? get _theme => AppTheme.values.byName.nullable(
+        _dependencies.settingsDao.themeMode.value,
+      );
 
   @override
   SettingsData currentData() => SettingsData(
@@ -26,5 +32,5 @@ class SettingsRepository implements ISettingsRepository {
 
   @override
   Future<void> setTheme(AppTheme value) =>
-      _settingsDao.themeMode.setValue(value.name);
+      _dependencies.settingsDao.themeMode.setValue(value.name);
 }

@@ -1,4 +1,5 @@
-import 'package:l/l.dart';
+import 'package:mark/mark.dart';
+import 'package:purple_starter/src/core/di/shared_parent.dart';
 import 'package:purple_starter/src/core/logic/identity_logging_mixin.dart';
 import 'package:stream_bloc/stream_bloc.dart';
 
@@ -22,8 +23,15 @@ extension on StringBuffer {
   }
 }
 
+abstract class AppBlocObserverDependencies implements LoggerDependency {}
+
 class AppBlocObserver extends StreamBlocObserver with IdentityLoggingMixin {
-  const AppBlocObserver();
+  final AppBlocObserverDependencies _dependencies;
+
+  const AppBlocObserver(this._dependencies);
+
+  @override
+  Logger get logger => _dependencies.logger;
 
   @override
   void onCreate(Closable closable) {
@@ -50,7 +58,10 @@ class AppBlocObserver extends StreamBlocObserver with IdentityLoggingMixin {
   }
 
   @override
-  void onTransition(BlocEventSink<Object?> bloc, Transition transition) {
+  void onTransition(
+    BlocEventSink<Object?> bloc,
+    Transition<dynamic, dynamic> transition,
+  ) {
     super.onTransition(bloc, transition);
 
     final Object? event = transition.event;
@@ -82,7 +93,7 @@ class AppBlocObserver extends StreamBlocObserver with IdentityLoggingMixin {
         ..writeInfo(errorSink),
     );
 
-    l.e(error, stackTrace);
+    logger.error(error, stackTrace: stackTrace);
   }
 
   @override

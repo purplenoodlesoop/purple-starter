@@ -7,3 +7,7 @@ analyzer:
     - 'tool/google_localizer/**'
     - 'lib/generated_plugin_registrant.dart'
     - '**/*.select.dart'
+
+dart_code_metrics:
+  rules:
+    - prefer-moving-to-variable: false

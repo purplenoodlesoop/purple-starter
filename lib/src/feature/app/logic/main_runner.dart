@@ -1,17 +1,11 @@
 import 'dart:async';
 
-import 'package:drift/drift.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:purple_starter/src/core/extension/extensions.dart';
 import 'package:purple_starter/src/core/model/environment_storage.dart';
-import 'package:purple_starter/src/feature/app/bloc/app_bloc_observer.dart';
 import 'package:purple_starter/src/feature/app/bloc/initialization_bloc.dart';
-import 'package:purple_starter/src/feature/app/database/drift_logger.dart';
-import 'package:purple_starter/src/feature/app/logic/error_tracking_manager.dart';
-import 'package:purple_starter/src/feature/app/logic/logger.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:stream_bloc/stream_bloc.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 typedef AppBuilder = Widget Function(InitializationData initializationData);
@@ -45,12 +39,6 @@ class _InitializationFactories implements InitializationFactories {
 
   @override
   IEnvironmentStorage createEnvironmentStorage() => const EnvironmentStorage();
-
-  @override
-  ErrorTrackingManager createErrorTrackingManager(
-    IEnvironmentStorage environment,
-  ) =>
-      SentryTrackingManager(sentryDsn: environment.sentryDsn);
 }
 
 mixin MainRunner {
@@ -60,26 +48,9 @@ mixin MainRunner {
     FlutterError.onError = FlutterError.onError?.amend(log) ?? log;
   }
 
-  static void _setDriftLogger() {
-    driftRuntimeOptions.debugPrint = DriftLogger.log;
-  }
-
-  static void _setUpStatic() {
-    const setups = [_amendFlutterError, _setDriftLogger];
-
-    for (final setup in setups) {
-      setup();
-    }
-  }
-
-  static T? _runZoned<T>(T Function() body) => Logger.runLogging(
-        () => StreamBlocObserver.inject(
-          const AppBlocObserver(),
-          () => runZonedGuarded(
-            body,
-            Logger.logZoneError,
-          ),
-        ),
+  static T? _runZoned<T>(T Function() body) => runZonedGuarded(
+        body,
+        Logger.logZoneError,
       );
 
   static void _runApp({
@@ -133,7 +104,6 @@ mixin MainRunner {
     _runZoned(
       () {
         WidgetsFlutterBinding.ensureInitialized();
-        _setUpStatic();
         _runApp(shouldSend: shouldSend, appBuilder: appBuilder, hooks: hooks);
       },
     );
