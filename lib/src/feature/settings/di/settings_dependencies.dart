@@ -8,7 +8,7 @@ abstract class SettingsDependencies implements SettingsBlocDependencies {}
 class SettingsDependenciesModule<P extends SharedParent<P>>
     extends SharedBaseModule<SettingsDependenciesModule<P>, P>
     implements SettingsDependencies, SettingsRepositoryDependencies {
-  SettingsDependenciesModule(P parent) : super(parent);
+  SettingsDependenciesModule(super.parent);
 
   @override
   ISettingsDao get settingsDao => shared(

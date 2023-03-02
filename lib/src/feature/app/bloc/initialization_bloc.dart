@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:arbor/arbor.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:pure/pure.dart';
 import 'package:purple_starter/src/core/extension/extensions.dart';
@@ -88,18 +89,16 @@ class InitializationEvent with _$InitializationEvent {
   }) = _Initialize;
 }
 
-abstract class InitializationFactories {
-  IEnvironmentStorage createEnvironmentStorage();
+abstract class InitializationBlocDependencies {
+  ObjectFactory<IEnvironmentStorage> get environmentStorage;
 }
 
 class InitializationBloc
     extends StreamBloc<InitializationEvent, InitializationState> {
-  final InitializationFactories _factories;
+  final InitializationBlocDependencies _dependencies;
 
-  InitializationBloc({
-    required InitializationFactories initializationFactories,
-  })  : _factories = initializationFactories,
-        super(const InitializationState.notInitialized());
+  InitializationBloc(this._dependencies)
+      : super(const InitializationState.notInitialized());
 
   InitializationProgress get _currentProgress =>
       state.maybeCast<_IndexedInitializationStateMixin>()?.progress ??
@@ -113,7 +112,7 @@ class InitializationBloc
     );
 
     try {
-      final environmentStorage = _factories.createEnvironmentStorage();
+      final environmentStorage = _dependencies.environmentStorage();
       yield InitializationState.initializing(
         progress: _currentProgress.copyWith(
           currentStep: InitializationStep.errorTracking,

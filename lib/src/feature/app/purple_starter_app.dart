@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_arbor/flutter_arbor.dart';
+import 'package:mark/mark.dart';
 import 'package:pure/pure.dart';
 import 'package:purple_starter/src/core/di/app_dependencies.dart';
 import 'package:purple_starter/src/core/widget/environment_scope.dart';
@@ -11,9 +12,13 @@ import 'package:purple_starter/src/feature/settings/widget/scope/settings_scope.
 
 class PurpleStarterApp extends StatelessWidget {
   final InitializationData initializationData;
+  final ArborObserver observer;
+  final Logger logger;
 
   const PurpleStarterApp({
     required this.initializationData,
+    required this.observer,
+    required this.logger,
     super.key,
   });
 
@@ -24,6 +29,8 @@ class PurpleStarterApp extends StatelessWidget {
           child: NodeScope<AppDependencies>(
             create: (context) => AppDependenciesTree(
               sharedPreferences: initializationData.sharedPreferences,
+              observer: observer,
+              logger: logger,
             ),
             child: const SettingsScope(
               child: AppConfiguration(),

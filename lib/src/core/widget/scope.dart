@@ -14,9 +14,7 @@ typedef DelegateAccess<D extends ScopeDelegate> = D Function(
 abstract class Scope extends StatefulWidget {
   final Widget _child;
 
-  const Scope({Key? key, required Widget child})
-      : _child = child,
-        super(key: key);
+  const Scope({super.key, required Widget child}) : _child = child;
 
   /// Accesses a delegate of a given scope through InheritedWidget location,
   /// thus making this method having complexity of O(1).
@@ -82,11 +80,10 @@ class _InheritedScope<S extends Scope> extends InheritedWidget {
   final ScopeDelegate<Scope> delegate;
 
   _InheritedScope({
-    Key? key,
     required this.delegate,
-    required Widget child,
-  })  : keys = delegate.keys,
-        super(child: child, key: key);
+    required super.child,
+    super.key,
+  }) : keys = delegate.keys;
 
   @override
   bool updateShouldNotify(_InheritedScope<S> oldWidget) =>

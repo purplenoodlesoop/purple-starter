@@ -1,14 +1,19 @@
 import 'dart:async';
 
+import 'package:arbor/arbor.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:purple_starter/src/core/extension/extensions.dart';
-import 'package:purple_starter/src/core/model/environment_storage.dart';
+import 'package:mark/mark.dart';
 import 'package:purple_starter/src/feature/app/bloc/initialization_bloc.dart';
+import 'package:purple_starter/src/feature/app/di/bootstrap_dependencies.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:stream_transform/stream_transform.dart';
 
-typedef AppBuilder = Widget Function(InitializationData initializationData);
+typedef AppBuilder = Widget Function(
+  InitializationData initializationData,
+  ArborObserver observer,
+  Logger logger,
+);
 
 abstract class InitializationHooks {
   const InitializationHooks();
@@ -34,33 +39,16 @@ abstract class InitializationHooks {
   ) {}
 }
 
-class _InitializationFactories implements InitializationFactories {
-  const _InitializationFactories();
-
-  @override
-  IEnvironmentStorage createEnvironmentStorage() => const EnvironmentStorage();
-}
-
 mixin MainRunner {
-  static void _amendFlutterError() {
-    const log = Logger.logFlutterError;
-
-    FlutterError.onError = FlutterError.onError?.amend(log) ?? log;
-  }
-
-  static T? _runZoned<T>(T Function() body) => runZonedGuarded(
-        body,
-        Logger.logZoneError,
-      );
-
   static void _runApp({
     required bool shouldSend,
     required AppBuilder appBuilder,
     required InitializationHooks? hooks,
   }) {
-    final initializationBloc = InitializationBloc(
-      initializationFactories: const _InitializationFactories(),
-    )..add(
+    final BootstrapDependencies bootstrapDependencies =
+        BootstrapDependenciesTree()..init();
+    final initializationBloc = InitializationBloc(bootstrapDependencies)
+      ..add(
         InitializationEvent.initialize(shouldSendSentry: shouldSend),
       );
     StreamSubscription<InitializationState>? initializationSubscription;
@@ -68,6 +56,7 @@ mixin MainRunner {
     void terminate() {
       initializationSubscription?.cancel();
       initializationBloc.close();
+      bootstrapDependencies.dispose();
     }
 
     void processInitializationState(InitializationState state) {
@@ -80,7 +69,11 @@ mixin MainRunner {
           runApp(
             DefaultAssetBundle(
               bundle: SentryAssetBundle(),
-              child: appBuilder(state),
+              child: appBuilder(
+                state,
+                bootstrapDependencies.observer,
+                bootstrapDependencies.logger,
+              ),
             ),
           );
         },
@@ -101,11 +94,7 @@ mixin MainRunner {
     bool shouldSend = !kDebugMode,
     InitializationHooks? hooks,
   }) {
-    _runZoned(
-      () {
-        WidgetsFlutterBinding.ensureInitialized();
-        _runApp(shouldSend: shouldSend, appBuilder: appBuilder, hooks: hooks);
-      },
-    );
+    WidgetsFlutterBinding.ensureInitialized();
+    _runApp(shouldSend: shouldSend, appBuilder: appBuilder, hooks: hooks);
   }
 }

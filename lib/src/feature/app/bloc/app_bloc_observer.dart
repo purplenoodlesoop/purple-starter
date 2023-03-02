@@ -1,3 +1,5 @@
+// ignore_for_file: avoid-dynamic
+
 import 'package:mark/mark.dart';
 import 'package:purple_starter/src/core/di/shared_parent.dart';
 import 'package:purple_starter/src/core/logic/identity_logging_mixin.dart';
