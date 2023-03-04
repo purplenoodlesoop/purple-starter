@@ -10,5 +10,5 @@ QueryExecutor openConnection(String name) => LazyDatabase(() async {
       final dbFolder = await getApplicationDocumentsDirectory();
       final file = File(path.join(dbFolder.path, '$name.sqlite'));
 
-      return NativeDatabase(file, logStatements: DriftLogger.shouldLog);
+      return NativeDatabase(file, logStatements: IDriftLogger.shouldLog);
     });

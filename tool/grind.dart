@@ -1,7 +1,8 @@
+// ignore_for_file: unreachable_from_main
+
 import 'dart:io';
 
 import 'package:grinder/grinder.dart';
-import 'package:pure/pure.dart';
 
 void main(List<String> args) => grind(args);
 
@@ -55,7 +56,7 @@ void cleanFlutter() {
 
 @Task('Clean iOS.')
 @Depends(cleanFlutter)
-Future<void> cleanIos() async {
+void cleanIos() {
   const directory = 'ios/';
   const targetDirectories = ['.symlinks/', 'Pods'];
   const targetFiles = ['Podfile.lock'];

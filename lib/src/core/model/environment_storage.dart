@@ -1,3 +1,4 @@
+import 'package:pure/pure.dart';
 import 'package:purple_starter/src/core/enum/environment.dart';
 
 abstract class IEnvironmentStorage {
@@ -5,13 +6,16 @@ abstract class IEnvironmentStorage {
   String get sentryDsn;
 }
 
+abstract class EnvironmentStorageDependency {
+  IEnvironmentStorage get environmentStorage;
+}
+
 class EnvironmentStorage implements IEnvironmentStorage {
   const EnvironmentStorage();
 
   @override
-  Environment get environment => Environment.values.byName(
-        const String.fromEnvironment('ENVIRONMENT'),
-      );
+  Environment get environment => const String.fromEnvironment('ENVIRONMENT')
+      .pipe(Environment.values.byName);
 
   @override
   String get sentryDsn => const String.fromEnvironment('SENTRY_DSN');

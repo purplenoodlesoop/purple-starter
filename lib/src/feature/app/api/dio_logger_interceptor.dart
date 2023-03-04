@@ -1,7 +1,18 @@
 import 'package:dio/dio.dart';
+import 'package:mark/mark.dart';
+import 'package:purple_starter/src/core/di/shared_parent.dart';
 import 'package:purple_starter/src/core/logic/identity_logging_mixin.dart';
 
+abstract class DioLoggerInterceptorDependencies implements LoggerDependency {}
+
 class DioLoggerInterceptor extends Interceptor with IdentityLoggingMixin {
+  final DioLoggerInterceptorDependencies _dependencies;
+
+  DioLoggerInterceptor(this._dependencies);
+
+  @override
+  Logger get logger => _dependencies.logger;
+
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     logData((b) {
