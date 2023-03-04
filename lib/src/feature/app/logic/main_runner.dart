@@ -4,8 +4,12 @@ import 'package:arbor/arbor.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mark/mark.dart';
+import 'package:purple_starter/src/core/model/environment_storage.dart';
 import 'package:purple_starter/src/feature/app/bloc/initialization_bloc.dart';
+import 'package:purple_starter/src/feature/app/di/app_arbor_observer.dart';
 import 'package:purple_starter/src/feature/app/di/bootstrap_dependencies.dart';
+import 'package:purple_starter/src/feature/app/logger/error_reporting_message_processor.dart';
+import 'package:purple_starter/src/feature/app/logger/pretty_ephemeral_message_processor.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:stream_transform/stream_transform.dart';
 
@@ -13,6 +17,7 @@ typedef AppBuilder = Widget Function(
   InitializationData initializationData,
   ArborObserver observer,
   Logger logger,
+  IEnvironmentStorage environmentStorage,
 );
 
 abstract class InitializationHooks {
@@ -45,8 +50,18 @@ mixin MainRunner {
     required AppBuilder appBuilder,
     required InitializationHooks? hooks,
   }) {
+    final logger = Logger(
+      processors: [
+        PrettyEphemeralMessageProcessor(),
+        ErrorReportingMessageProcessor(),
+      ],
+    );
+    final arborObserver = AppArborObserver(logger);
     final BootstrapDependencies bootstrapDependencies =
-        BootstrapDependenciesTree()..init();
+        BootstrapDependenciesTree(
+      logger: logger,
+      observer: arborObserver,
+    )..init();
     final initializationBloc = InitializationBloc(bootstrapDependencies)
       ..add(
         InitializationEvent.initialize(shouldSendSentry: shouldSend),
@@ -71,8 +86,9 @@ mixin MainRunner {
               bundle: SentryAssetBundle(),
               child: appBuilder(
                 state,
-                bootstrapDependencies.observer,
-                bootstrapDependencies.logger,
+                arborObserver,
+                logger,
+                bootstrapDependencies.environmentStorage,
               ),
             ),
           );

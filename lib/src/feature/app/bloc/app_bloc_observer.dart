@@ -12,6 +12,8 @@ extension on StringBuffer {
   void writeInfo(Object? object) {
     Type? type;
 
+    // Not a real assert, just a way to get the type of
+    // the object only in debug mode.
     // ignore: prefer_asserts_with_message
     assert(
       () {

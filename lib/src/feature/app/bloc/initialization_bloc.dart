@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:arbor/arbor.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:pure/pure.dart';
 import 'package:purple_starter/src/core/extension/extensions.dart';
@@ -15,7 +14,6 @@ part 'initialization_bloc.select.dart';
 
 @matchable
 enum InitializationStep {
-  environment,
   errorTracking,
   sharedPreferences,
 }
@@ -24,7 +22,6 @@ enum InitializationStep {
 class InitializationProgress with _$InitializationProgress {
   const factory InitializationProgress({
     required InitializationStep currentStep,
-    IEnvironmentStorage? environmentStorage,
   }) = _InitializationProgress;
 
   const InitializationProgress._();
@@ -38,7 +35,6 @@ class InitializationProgress with _$InitializationProgress {
 
 @selectable
 abstract class InitializationData {
-  IEnvironmentStorage get environmentStorage;
   SharedPreferences get sharedPreferences;
 }
 
@@ -63,7 +59,6 @@ class InitializationState with _$InitializationState {
 
   @Implements<InitializationData>()
   const factory InitializationState.initialized({
-    required IEnvironmentStorage environmentStorage,
     required SharedPreferences sharedPreferences,
   }) = InitializationInitialized;
 
@@ -90,7 +85,7 @@ class InitializationEvent with _$InitializationEvent {
 }
 
 abstract class InitializationBlocDependencies {
-  ObjectFactory<IEnvironmentStorage> get environmentStorage;
+  IEnvironmentStorage get environmentStorage;
 }
 
 class InitializationBloc
@@ -112,17 +107,15 @@ class InitializationBloc
     );
 
     try {
-      final environmentStorage = _dependencies.environmentStorage();
       yield InitializationState.initializing(
         progress: _currentProgress.copyWith(
           currentStep: InitializationStep.errorTracking,
-          environmentStorage: environmentStorage,
         ),
       );
 
       await SentryFlutter.init(
         (options) => options
-          ..dsn = environmentStorage.sentryDsn
+          ..dsn = _dependencies.environmentStorage.sentryDsn
           ..tracesSampleRate = 1,
       );
       yield InitializationState.initializing(
@@ -133,7 +126,6 @@ class InitializationBloc
 
       final sharedPreferences = await SharedPreferences.getInstance();
       yield InitializationState.initialized(
-        environmentStorage: environmentStorage,
         sharedPreferences: sharedPreferences,
       );
     } on Object catch (e, s) {

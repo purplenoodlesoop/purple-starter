@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_arbor/flutter_arbor.dart';
 import 'package:mark/mark.dart';
-import 'package:pure/pure.dart';
 import 'package:purple_starter/src/core/di/app_dependencies.dart';
-import 'package:purple_starter/src/core/widget/environment_scope.dart';
+import 'package:purple_starter/src/core/model/environment_storage.dart';
 import 'package:purple_starter/src/feature/app/bloc/initialization_bloc.dart';
 import 'package:purple_starter/src/feature/app/di/app_dependencies.dart';
 import 'package:purple_starter/src/feature/app/widget/app_configuration.dart';
@@ -14,27 +13,27 @@ class PurpleStarterApp extends StatelessWidget {
   final InitializationData initializationData;
   final ArborObserver observer;
   final Logger logger;
+  final IEnvironmentStorage environmentStorage;
 
   const PurpleStarterApp({
     required this.initializationData,
     required this.observer,
     required this.logger,
+    required this.environmentStorage,
     super.key,
   });
 
   @override
-  Widget build(BuildContext context) => EnvironmentScope(
-        create: initializationData.environmentStorage.constant,
-        child: AppLifecycleScope(
-          child: NodeScope<AppDependencies>(
-            create: (context) => AppDependenciesTree(
-              sharedPreferences: initializationData.sharedPreferences,
-              observer: observer,
-              logger: logger,
-            ),
-            child: const SettingsScope(
-              child: AppConfiguration(),
-            ),
+  Widget build(BuildContext context) => AppLifecycleScope(
+        child: NodeScope<AppDependencies>(
+          create: (context) => AppDependenciesTree(
+            sharedPreferences: initializationData.sharedPreferences,
+            observer: observer,
+            logger: logger,
+            environmentStorage: environmentStorage,
+          ),
+          child: const SettingsScope(
+            child: AppConfiguration(),
           ),
         ),
       );

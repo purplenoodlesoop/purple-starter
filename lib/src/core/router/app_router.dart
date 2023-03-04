@@ -13,8 +13,8 @@ class AppRouter extends _$AppRouter {}
 
 class PlaceholderPage extends StatelessWidget {
   const PlaceholderPage({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) => const Scaffold(

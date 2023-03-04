@@ -6,7 +6,7 @@ import 'package:stream_bloc/stream_bloc.dart';
 
 typedef ScopeData<D extends Object?> = D Function(
   BuildContext context, {
-  bool listen,
+  bool? listen,
 });
 
 typedef NullaryScopeMethod = void Function(BuildContext context);
@@ -33,7 +33,7 @@ class BlocScope<E extends Object?, S extends Object?,
   ScopeData<D> data<D extends Object?>(
     D Function(BuildContext context, S state) data,
   ) =>
-      (BuildContext context, {bool? listen}) => (listen ?? _listenByDefault)
+      (context, {listen}) => (listen ?? _listenByDefault)
           ? context.select<B, D>(data.curry(context).dot(_state))
           : data(context, _bloc(context).state);
 
@@ -43,14 +43,14 @@ class BlocScope<E extends Object?, S extends Object?,
   NullaryScopeMethod nullary(
     E? Function(BuildContext context) createEvent,
   ) =>
-      (BuildContext context) => _bloc(context).add.nullable(
+      (context) => _bloc(context).add.nullable(
             createEvent(context),
           );
 
   UnaryScopeMethod<A> unary<A extends Object?>(
     E? Function(BuildContext context, A argument) createEvent,
   ) =>
-      (BuildContext context, A argument) => _bloc(context).add.nullable(
+      (context, argument) => _bloc(context).add.nullable(
             createEvent(context, argument),
           );
 }

@@ -9,8 +9,6 @@ import 'package:purple_starter/src/feature/app/bloc/app_bloc_observer.dart';
 import 'package:purple_starter/src/feature/app/bloc/initialization_bloc.dart';
 import 'package:purple_starter/src/feature/app/database/drift_logger.dart';
 import 'package:purple_starter/src/feature/app/di/app_arbor_observer.dart';
-import 'package:purple_starter/src/feature/app/logger/error_reporting_message_processor.dart';
-import 'package:purple_starter/src/feature/app/logger/pretty_ephemeral_message_processor.dart';
 import 'package:stream_bloc/stream_bloc.dart';
 
 abstract class BootstrapDependencies
@@ -29,6 +27,17 @@ class BootstrapDependenciesTree extends BaseTree<BootstrapDependenciesTree>
         AppBlocObserverDependencies,
         DriftLoggerDependencies,
         AppArborObserverDependencies {
+  @override
+  final Logger logger;
+
+  @override
+  final ArborObserver observer;
+
+  BootstrapDependenciesTree({
+    required this.logger,
+    required this.observer,
+  });
+
   ObjectFactory<AppBlocObserver> get _blocObserver => instance(
         () => AppBlocObserver(this),
       );
@@ -61,25 +70,7 @@ class BootstrapDependenciesTree extends BaseTree<BootstrapDependenciesTree>
   }
 
   @override
-  ObjectFactory<IEnvironmentStorage> get environmentStorage => instance(
-        EnvironmentStorage.new,
-      );
-
-  @override
-  Logger get logger => shared(
-        () => Logger(
-          processors: [
-            PrettyEphemeralMessageProcessor(),
-            ErrorReportingMessageProcessor(),
-          ],
-        ),
-        dispose: (logger) => logger.dispose(),
-      );
-
-  @override
-  ArborObserver get observer => shared(
-        () => AppArborObserver(this),
-      );
+  IEnvironmentStorage get environmentStorage => shared(EnvironmentStorage.new);
 
   @override
   void init() {

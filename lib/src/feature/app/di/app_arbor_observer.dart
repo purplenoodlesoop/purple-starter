@@ -6,12 +6,10 @@ import 'package:purple_starter/src/core/logic/identity_logging_mixin.dart';
 abstract class AppArborObserverDependencies implements LoggerDependency {}
 
 class AppArborObserver with IdentityLoggingMixin implements ArborObserver {
-  final AppArborObserverDependencies _dependencies;
-
-  AppArborObserver(this._dependencies);
-
   @override
-  Logger get logger => _dependencies.logger;
+  final Logger logger;
+
+  AppArborObserver(this.logger);
 
   @override
   void onCreatedChild<A extends Node<A>>(ChildNode node) {
@@ -28,7 +26,8 @@ class AppArborObserver with IdentityLoggingMixin implements ArborObserver {
     logData(
       (b) => b
         ..write(A)
-        ..write(' created module '),
+        ..write(' created module ')
+        ..write(module.runtimeType),
     );
   }
 

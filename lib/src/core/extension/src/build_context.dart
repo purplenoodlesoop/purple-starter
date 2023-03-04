@@ -4,12 +4,9 @@ import 'package:mark/mark.dart';
 import 'package:purple_starter/src/core/di/app_dependencies.dart';
 import 'package:purple_starter/src/core/gen/l10n/app_localizations.g.dart';
 import 'package:purple_starter/src/core/model/environment_storage.dart';
-import 'package:purple_starter/src/core/widget/environment_scope.dart';
 
 extension BuildContextX on BuildContext {
   AppDependencies get _appDependencies => NodeScope.of<AppDependencies>(this);
-
-  IEnvironmentStorage get environment => EnvironmentScope.of(this);
 
   Logger get logger => _appDependencies.core.logger;
   FeatureDependencies get featureDependencies => _appDependencies.feature;

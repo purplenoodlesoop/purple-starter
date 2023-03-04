@@ -34,6 +34,7 @@ abstract class Scope extends StatefulWidget {
       'contain its instance.',
     );
 
+    // Assert is used to signal a error.
     // ignore: cast_nullable_to_non_nullable
     return scope?.delegate as D;
   }
@@ -44,6 +45,7 @@ abstract class Scope extends StatefulWidget {
   ScopeDelegate<Scope> createDelegate();
 
   @override
+  // The widget is used as a base one, so it should not be used as a state.
   // ignore: no_logic_in_create_state
   State<StatefulWidget> createState() => createDelegate();
 }
@@ -70,6 +72,7 @@ abstract class ScopeDelegate<S extends Scope> extends State<S> {
   @override
   Widget build(BuildContext context) => _InheritedScope<S>(
         delegate: this,
+        // The same reason as in `createState` method of `Scope`.
         // ignore: avoid-returning-widgets
         child: buildScoping(context, widget._child),
       );
