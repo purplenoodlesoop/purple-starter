@@ -40,7 +40,7 @@ class AppBlocObserver extends StreamBlocObserver with IdentityLoggingMixin {
   @override
   void onCreate(Closable closable) {
     super.onCreate(closable);
-    logData(
+    log(
       (buffer) => buffer
         ..write('Created ')
         ..writeInfo(closable),
@@ -51,7 +51,7 @@ class AppBlocObserver extends StreamBlocObserver with IdentityLoggingMixin {
   void onEvent(BlocEventSink<Object?> eventSink, Object? event) {
     super.onEvent(eventSink, event);
     if (event != null) {
-      logData(
+      log(
         (buffer) => buffer
           ..write('Event ')
           ..writeInfo(event)
@@ -71,7 +71,7 @@ class AppBlocObserver extends StreamBlocObserver with IdentityLoggingMixin {
     final Object? event = transition.event;
 
     if (event != null) {
-      logData(
+      log(
         (buffer) => buffer
           ..write('Transition in ')
           ..writeInfo(bloc)
@@ -89,7 +89,7 @@ class AppBlocObserver extends StreamBlocObserver with IdentityLoggingMixin {
   void onError(ErrorSink errorSink, Object error, StackTrace stackTrace) {
     super.onError(errorSink, error, stackTrace);
 
-    logData(
+    log(
       (buffer) => buffer
         ..write('Error ')
         ..writeInfo(error)
@@ -103,7 +103,7 @@ class AppBlocObserver extends StreamBlocObserver with IdentityLoggingMixin {
   @override
   void onClose(Closable closable) {
     super.onClose(closable);
-    logData(
+    log(
       (buffer) => buffer
         ..write('Closed ')
         ..writeInfo(closable),

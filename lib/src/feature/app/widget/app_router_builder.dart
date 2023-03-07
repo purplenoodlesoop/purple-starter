@@ -1,6 +1,8 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:purple_starter/src/feature/app/router/navigator_observers_factory.dart';
+import 'package:purple_starter/src/core/extension/extensions.dart';
+import 'package:purple_starter/src/feature/app/router/logger_navigator_observer.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 typedef CreateRouter = RootStackRouter Function(BuildContext context);
 typedef RouterWidgetBuilder = Widget Function(
@@ -14,10 +16,10 @@ class AppRouterBuilder extends StatefulWidget {
   final RouterWidgetBuilder builder;
 
   const AppRouterBuilder({
-    Key? key,
     required this.createRouter,
     required this.builder,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<AppRouterBuilder> createState() => _AppRouterBuilderState();
@@ -33,11 +35,18 @@ class _AppRouterBuilderState extends State<AppRouterBuilder> {
   }
 
   @override
-  Widget build(BuildContext context) => widget.builder(
-        context,
-        router.defaultRouteParser(),
-        router.delegate(
-          navigatorObservers: const NavigatorObserversFactory(),
-        ),
-      );
+  Widget build(BuildContext context) {
+    final appFeatureDependencies = context.featureDependencies.app;
+
+    return widget.builder(
+      context,
+      router.defaultRouteParser(),
+      router.delegate(
+        navigatorObservers: () => [
+          SentryNavigatorObserver(),
+          LoggerNavigationObserver(appFeatureDependencies),
+        ],
+      ),
+    );
+  }
 }

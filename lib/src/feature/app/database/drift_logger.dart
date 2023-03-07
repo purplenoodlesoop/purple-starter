@@ -25,7 +25,7 @@ class DriftLogger with IdentityLoggingMixin implements IDriftLogger {
     final sql = parts.first.split('Drift: Sent').last.trim();
     final args = parts.last.trim();
 
-    logData(
+    log(
       (b) => b
         ..write(sql)
         ..write(' with ')
