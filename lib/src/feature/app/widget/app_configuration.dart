@@ -7,8 +7,8 @@ import 'package:purple_starter/src/feature/settings/widget/scope/settings_scope.
 
 class AppConfiguration extends StatelessWidget {
   const AppConfiguration({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

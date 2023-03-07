@@ -15,7 +15,7 @@ class DioLoggerInterceptor extends Interceptor with IdentityLoggingMixin {
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    logData((b) {
+    log((b) {
       b
         ..write('Performing ')
         ..write(options.method)
@@ -30,7 +30,7 @@ class DioLoggerInterceptor extends Interceptor with IdentityLoggingMixin {
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
     final options = response.requestOptions;
-    logData(
+    log(
       (b) => b
         ..write('Received ')
         ..write(response.statusMessage ?? response.statusCode)

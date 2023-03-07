@@ -24,7 +24,7 @@ class AppPreferencesDriverObserver
 
   @override
   void onClear(bool isSuccess) {
-    logData(
+    log(
       (b) => b
         ..write('Cleared ')
         ..write(isSuccess.status),
@@ -33,14 +33,14 @@ class AppPreferencesDriverObserver
 
   @override
   void beforeClear() {
-    logData(
+    log(
       (b) => b..write('Clearing..'),
     );
   }
 
   @override
   void beforeGet<T extends Object>(String path) {
-    logData(
+    log(
       (b) => b
         ..write('Reading ')
         ..write(path)
@@ -52,14 +52,14 @@ class AppPreferencesDriverObserver
 
   @override
   void beforeReload() {
-    logData(
+    log(
       (b) => b..write('Reloading..'),
     );
   }
 
   @override
   void beforeRemove<T extends Object>(String path) {
-    logData(
+    log(
       (b) => b
         ..write('Removing ')
         ..write(path)
@@ -71,7 +71,7 @@ class AppPreferencesDriverObserver
 
   @override
   void beforeSet<T extends Object>(String path, T value) {
-    logData(
+    log(
       (b) => b
         ..write('Setting ')
         ..write(path)
@@ -85,7 +85,7 @@ class AppPreferencesDriverObserver
 
   @override
   void onGet<T extends Object>(String path, T? value) {
-    logData(
+    log(
       (b) => b
         ..write('Read ')
         ..write(path)
@@ -98,12 +98,12 @@ class AppPreferencesDriverObserver
 
   @override
   void onReload() {
-    logData((b) => b..write('Reloaded'));
+    log((b) => b..write('Reloaded'));
   }
 
   @override
   void onRemove<T extends Object>(String path, bool isSuccess) {
-    logData(
+    log(
       (b) => b
         ..write('Removed ')
         ..write(path)
@@ -116,7 +116,7 @@ class AppPreferencesDriverObserver
 
   @override
   void onSet<T extends Object>(String path, T value, bool isSuccess) {
-    logData(
+    log(
       (b) => b
         ..write('Set ')
         ..write(path)

@@ -13,7 +13,7 @@ class AppArborObserver with IdentityLoggingMixin implements ArborObserver {
 
   @override
   void onCreatedChild<A extends Node<A>>(ChildNode node) {
-    logData(
+    log(
       (b) => b
         ..write(A)
         ..write(' created child ')
@@ -23,7 +23,7 @@ class AppArborObserver with IdentityLoggingMixin implements ArborObserver {
 
   @override
   void onCreatedModule<A extends Node<A>>(ModuleNode module) {
-    logData(
+    log(
       (b) => b
         ..write(A)
         ..write(' created module ')
@@ -33,7 +33,7 @@ class AppArborObserver with IdentityLoggingMixin implements ArborObserver {
 
   @override
   void onCreatedInstance<A extends Node<A>>(Object? object) {
-    logData(
+    log(
       (b) => b
         ..write(A)
         ..write(' created new ')
@@ -43,7 +43,7 @@ class AppArborObserver with IdentityLoggingMixin implements ArborObserver {
 
   @override
   void onCreatedShared<A extends Node<A>>(Object? object) {
-    logData(
+    log(
       (b) => b
         ..write(A)
         ..write(' created shared ')
@@ -53,7 +53,7 @@ class AppArborObserver with IdentityLoggingMixin implements ArborObserver {
 
   @override
   void onInit<A extends Lifecycle>() {
-    logData(
+    log(
       (b) => b
         ..write('Init ')
         ..write(A),
@@ -62,7 +62,7 @@ class AppArborObserver with IdentityLoggingMixin implements ArborObserver {
 
   @override
   void onDisposed<A extends Disposable>() {
-    logData(
+    log(
       (b) => b
         ..write('Disposed ')
         ..write(A),

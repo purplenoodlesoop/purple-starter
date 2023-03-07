@@ -3,10 +3,12 @@ import 'package:flutter_arbor/flutter_arbor.dart';
 import 'package:mark/mark.dart';
 import 'package:purple_starter/src/core/di/app_dependencies.dart';
 import 'package:purple_starter/src/core/gen/l10n/app_localizations.g.dart';
-import 'package:purple_starter/src/core/model/environment_storage.dart';
 
 extension BuildContextX on BuildContext {
-  AppDependencies get _appDependencies => NodeScope.of<AppDependencies>(this);
+  AppDependencies get _appDependencies => NodeScope.of<AppDependencies>(
+        this,
+        listen: true,
+      );
 
   Logger get logger => _appDependencies.core.logger;
   FeatureDependencies get featureDependencies => _appDependencies.feature;
