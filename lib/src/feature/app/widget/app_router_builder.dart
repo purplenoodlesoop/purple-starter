@@ -28,10 +28,6 @@ class AppRouterBuilder extends StatefulWidget {
 class _AppRouterBuilderState extends State<AppRouterBuilder> {
   late final RootStackRouter router = widget.createRouter(context);
 
-  List<NavigatorObserver> createNavigatorObservers() => [
-        SentryNavigatorObserver(),
-      ];
-
   @override
   void dispose() {
     router.dispose();
