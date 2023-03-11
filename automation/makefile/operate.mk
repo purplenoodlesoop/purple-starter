@@ -31,6 +31,7 @@ setup:
 	@fvm dart pub get --directory=./tool/setup_clone
 	@echo "* Setting up the project *"
 	@fvm dart ./tool/setup_clone/main.dart $(NAME)
+	@make prepare
 
 clean:
 	@echo "* Cleaning the project *"
