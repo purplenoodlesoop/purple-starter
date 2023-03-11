@@ -4,10 +4,14 @@ import 'dart:async';
 
 import 'dart:io';
 
-Future<void> main(List<String> args) => Environment.run(
-      environment: createEnvironment(args),
-      body: performSetup,
-    );
+Future<void> main(List<String> args) => Process.run(
+      'make',
+      ['help'],
+    ).then((value) => print(value.stdout));
+// => Environment.run(
+//       environment: createEnvironment(args),
+//       body: performSetup,
+//     );
 
 String capitalized(String source) =>
     source[0].toUpperCase() + source.substring(1);
@@ -194,38 +198,25 @@ Future<void> createEmptyReadme() async {
   await sink.close();
 }
 
-Future<bool> runProcessConcealing(
-  String command,
-  List<String> arguments,
-) async {
-  try {
-    await Process.run(command, arguments);
-
-    return true;
-  } on Object {
-    return false;
-  }
-}
-
-Future<void> runFlutter(List<String> commands) => Process.run(
-      'fvm',
-      ['flutter', ...commands],
+Future<void> runMake(
+  String name, [
+  List<String> arguments = const [],
+]) =>
+    Process.run(
+      'make',
+      [name, ...arguments],
     );
 
 Future<void> createFlutterRunners() {
   final packageName = Environment.current().newName.packageName;
 
-  return runFlutter([
-    'create',
-    '--project-name',
-    packageName,
-    '--org',
-    'com.$packageName',
-    '.',
-  ]);
+  return runMake(
+    'create-flutter-runners',
+    ['PACKAGE=$packageName', 'ORG=com.$packageName'],
+  );
 }
 
-Future<void> format() => runFlutter(const ['format']);
+Future<void> format() => runMake('format');
 
 String assembleMessage(String newName, int replaced, Duration duration) =>
     'Setup complete! '

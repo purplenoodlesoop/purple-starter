@@ -3,10 +3,12 @@
 This file is auto-generated
 ## Index
 
-- [Build](#build)
+- [Build android](#build-android)
+- [Build ios](#build-ios)
 - [Build web](#build-web)
 - [Clean](#clean)
 - [Coverage](#coverage)
+- [Create flutter runners](#create-flutter-runners)
 - [Dependency validator](#dependency-validator)
 - [Doc](#doc)
 - [Doctor](#doctor)
@@ -48,22 +50,38 @@ This file is auto-generated
 
 ## Targets
 
-### Build
+### Build android
 
 #### Name
 
-`build`
+`build-android`
 
 #### Perquisites
 
-- `pub-get`
+- `clean`
 
 #### Recipe
 
 ```Makefile
 @echo "Building Android APK"
-@make clean
-@fvm flutter build apk --release --tree-shake-icons --no-shrink
+@fvm flutter build apk --no-pub --no-shrink
+```
+
+### Build ios
+
+#### Name
+
+`build-ios`
+
+#### Perquisites
+
+- `clean`
+
+#### Recipe
+
+```Makefile
+@echo "Building iOS IPA"
+@fvm flutter build ipa --no-pub
 ```
 
 ### Build web
@@ -74,14 +92,13 @@ This file is auto-generated
 
 #### Perquisites
 
-- `pub-get`
+- `clean`
 
 #### Recipe
 
 ```Makefile
 @echo "Building Web app"
-@make clean
-@fvm flutter build web --release --dart-define=FLUTTER_WEB_USE_SKIA=true --no-source-maps --pwa-strategy offline-first
+@fvm flutter build web --dart-define=FLUTTER_WEB_USE_SKIA=true --no-pub --no-source-maps --pwa-strategy offline-first
 ```
 
 ### Clean
@@ -92,15 +109,16 @@ This file is auto-generated
 
 #### Used by
 
-- [Build](#build)
+- [Build android](#build-android)
+- [Build ios](#build-ios)
 - [Build web](#build-web)
 
 #### Recipe
 
 ```Makefile
 @echo "* Cleaning the project *"
-@rm -rf build .flutter-plugins .flutter-plugins-dependencies coverage .dart_tool .packages pubspec.lock
-@fvm flutter clean
+@grind delete-flutter-artifacts
+@grind clean
 @git clean -d
 @make pub-get
 ```
@@ -126,6 +144,18 @@ Run tests and generate coverage report
 @ #lcov --list coverage/lcov.info
 @lcov --summary coverage/lcov.info
 @genhtml -o coverage coverage/lcov.info
+```
+
+### Create flutter runners
+
+#### Name
+
+`create-flutter-runners`
+
+#### Recipe
+
+```Makefile
+@fvm flutter create --project-name $(PACKAGE) --org $(ORG) .
 ```
 
 ### Dependency validator
@@ -461,6 +491,7 @@ Prepares the application for the first run.  Fetches latest dependencies, and ge
 #### Used by
 
 - [First run](#first-run)
+- [Setup](#setup)
 
 #### Perquisites
 
@@ -484,8 +515,6 @@ Fetches latest dependencies using Flutter Version Manager.
 
 #### Used by
 
-- [Build](#build)
-- [Build web](#build-web)
 - [Clean](#clean)
 - [Gen build](#gen-build)
 - [Gen build delete](#gen-build-delete)
@@ -617,6 +646,7 @@ Staging/Stage/Model/Pre-production
 @fvm dart pub get --directory=./tool/setup_clone
 @echo "* Setting up the project *"
 @fvm dart ./tool/setup_clone/main.dart $(NAME)
+@make prepare
 ```
 
 ### Simulator
@@ -680,7 +710,7 @@ Run tests
 #### Recipe
 
 ```Makefile
-@time flutter test --concurrency=6 --dart-define=environment=testing --coverage test/
+@grind run-tests
 ```
 
 ### Version
