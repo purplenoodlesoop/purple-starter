@@ -26,11 +26,15 @@ format:
 	@fvm dart fix --apply .
 	@fvm dart format -l 80 --fix .
 
+create-flutter-runners:
+	@fvm flutter create --project-name $(PACKAGE) --org $(ORG) .
+
 setup:
 	@echo "* Getting dependencies for setup tool *"
 	@fvm dart pub get --directory=./tool/setup_clone
 	@echo "* Setting up the project *"
 	@fvm dart ./tool/setup_clone/main.dart $(NAME)
+	@make prepare
 
 clean:
 	@echo "* Cleaning the project *"
