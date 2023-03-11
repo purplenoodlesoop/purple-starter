@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:pure/pure.dart';
 import 'package:purple_starter/src/core/extension/extensions.dart';
+import 'package:purple_starter/src/core/extension/src/stream.dart';
 import 'package:purple_starter/src/core/model/environment_storage.dart';
 import 'package:select_annotation/select_annotation.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -148,8 +149,6 @@ class InitializationBloc
   Stream<Transition<InitializationEvent, InitializationState>> transformEvents(
     Stream<InitializationEvent> events,
     TransitionFunction<InitializationEvent, InitializationState> transitionFn,
-  ) {
-    // TODO: implement transformEvents
-    return super.transformEvents(events, transitionFn);
-  }
+  ) =>
+      events.exhaustMap(transitionFn);
 }
