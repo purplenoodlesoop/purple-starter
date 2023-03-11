@@ -143,4 +143,13 @@ class InitializationBloc
       event.when(
         initialize: _initialize,
       );
+
+  @override
+  Stream<Transition<InitializationEvent, InitializationState>> transformEvents(
+    Stream<InitializationEvent> events,
+    TransitionFunction<InitializationEvent, InitializationState> transitionFn,
+  ) {
+    // TODO: implement transformEvents
+    return super.transformEvents(events, transitionFn);
+  }
 }
