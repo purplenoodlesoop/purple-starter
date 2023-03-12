@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:meta/meta.dart';
 
 typedef DelegateAccess<D extends ScopeDelegate> = D Function(
   BuildContext, {
@@ -70,6 +71,7 @@ abstract class ScopeDelegate<S extends Scope> extends State<S> {
   Widget buildScoping(BuildContext context, Widget child) => child;
 
   @override
+  @nonVirtual
   Widget build(BuildContext context) => _InheritedScope<S>(
         delegate: this,
         // The same reason as in `createState` method of `Scope`.
