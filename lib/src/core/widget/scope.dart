@@ -15,7 +15,10 @@ typedef DelegateAccess<D extends ScopeDelegate> = D Function(
 abstract class Scope extends StatefulWidget {
   final Widget _child;
 
-  const Scope({super.key, required Widget child}) : _child = child;
+  const Scope({
+    required Widget child,
+    super.key,
+  }) : _child = child;
 
   /// Accesses a delegate of a given scope through InheritedWidget location,
   /// thus making this method having complexity of O(1).

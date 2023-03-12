@@ -9,7 +9,7 @@ abstract class SettingsDaoDependency {
 }
 
 class SettingsDao extends TypedPreferencesDao implements ISettingsDao {
-  SettingsDao(PreferencesDriver driver) : super(driver);
+  SettingsDao(super.driver);
 
   @override
   PreferencesEntry<String> get themeMode => stringEntry('theme_mode');

@@ -4,14 +4,10 @@ import 'dart:async';
 
 import 'dart:io';
 
-Future<void> main(List<String> args) => Process.run(
-      'make',
-      ['help'],
-    ).then((value) => print(value.stdout));
-// => Environment.run(
-//       environment: createEnvironment(args),
-//       body: performSetup,
-//     );
+Future<void> main(List<String> args) => Environment.run(
+      environment: createEnvironment(args),
+      body: performSetup,
+    );
 
 String capitalized(String source) =>
     source[0].toUpperCase() + source.substring(1);
