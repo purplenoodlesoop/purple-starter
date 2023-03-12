@@ -113,6 +113,7 @@ class InitializationBloc
       await SentryFlutter.init(
         (options) => options
           ..dsn = _dependencies.environmentStorage.sentryDsn
+          ..environment = _dependencies.environmentStorage.environment.name
           ..tracesSampleRate = 1,
       );
       yield InitializationState.initializing(
