@@ -40,17 +40,17 @@ class BlocScope<E extends Object?, S extends Object?,
   ScopeData<D> select<D extends Object?>(D Function(S state) selector) =>
       data(selector.constant.uncurry);
 
-  NullaryScopeMethod nullary(
-    E? Function(BuildContext context) createEvent,
-  ) =>
-      (context) => _bloc(context).add.nullable(
-            createEvent(context),
-          );
+  void add(BuildContext context, E? event) {
+    _bloc(context).add.nullable(event);
+  }
 
-  UnaryScopeMethod<A> unary<A extends Object?>(
-    E? Function(BuildContext context, A argument) createEvent,
-  ) =>
-      (context, argument) => _bloc(context).add.nullable(
-            createEvent(context, argument),
-          );
+  Future<void> addAwaiting(
+    BuildContext context,
+    bool Function(S state) selectNotLoading,
+    E? event,
+  ) {
+    final bloc = _bloc(context)..add.nullable(event);
+
+    return bloc.stream.firstWhere(selectNotLoading);
+  }
 }

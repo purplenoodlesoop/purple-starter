@@ -33,10 +33,9 @@ class SettingsScope extends StatelessWidget {
   static ScopeData<AppTheme> get appThemeOf => _scope.select(_theme);
 
   // --- Methods --- //
-
-  static UnaryScopeMethod<AppTheme> get setTheme => _scope.unary(
-        (context, theme) => SettingsEvent.setTheme(theme: theme),
-      );
+  void seTheme(BuildContext context, AppTheme theme) {
+    _scope.add(context, SettingsEvent.setTheme(theme: theme));
+  }
 
   // --- Build --- //
 
