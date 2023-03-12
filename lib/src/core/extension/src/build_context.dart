@@ -10,8 +10,9 @@ extension BuildContextX on BuildContext {
         listen: true,
       );
 
-  Logger get logger => _appDependencies.core.logger;
+  CoreDependencies get coreDependencies => _appDependencies.core;
   FeatureDependencies get featureDependencies => _appDependencies.feature;
+  Logger get logger => coreDependencies.logger;
 
   AppLocalizations get localized => AppLocalizations.of(this);
 
