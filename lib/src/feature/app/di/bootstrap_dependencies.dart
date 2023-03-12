@@ -2,9 +2,10 @@ import 'package:arbor/arbor.dart';
 import 'package:drift/drift.dart';
 import 'package:flutter/foundation.dart';
 import 'package:mark/mark.dart';
+import 'package:purple_starter/src/core/database/environment_dao.dart';
 import 'package:purple_starter/src/core/di/shared_parent.dart';
 import 'package:purple_starter/src/core/extension/extensions.dart';
-import 'package:purple_starter/src/core/model/environment_storage.dart';
+import 'package:purple_starter/src/core/repository/configuration_repository.dart';
 import 'package:purple_starter/src/feature/app/bloc/app_bloc_observer.dart';
 import 'package:purple_starter/src/feature/app/bloc/initialization_bloc.dart';
 import 'package:purple_starter/src/feature/app/database/drift_logger.dart';
@@ -26,7 +27,8 @@ class BootstrapDependenciesTree extends BaseTree<BootstrapDependenciesTree>
         BootstrapDependencies,
         AppBlocObserverDependencies,
         DriftLoggerDependencies,
-        AppArborObserverDependencies {
+        AppArborObserverDependencies,
+        ConfigurationRepositoryDependencies {
   @override
   final Logger logger;
 
@@ -70,7 +72,12 @@ class BootstrapDependenciesTree extends BaseTree<BootstrapDependenciesTree>
   }
 
   @override
-  IEnvironmentStorage get environmentStorage => shared(EnvironmentStorage.new);
+  IEnvironmentDao get environmentDao => shared(EnvironmentDao.new);
+
+  @override
+  IConfigurationRepository get configurationRepository => shared(
+        () => ConfigurationRepository(this),
+      );
 
   @override
   void init() {

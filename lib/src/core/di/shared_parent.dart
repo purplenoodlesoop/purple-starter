@@ -2,7 +2,7 @@ import 'package:arbor/arbor.dart';
 import 'package:dio/dio.dart';
 import 'package:mark/mark.dart';
 import 'package:purple_starter/src/core/database/drift/app_database.dart';
-import 'package:purple_starter/src/core/model/environment_storage.dart';
+import 'package:purple_starter/src/core/repository/configuration_repository.dart';
 import 'package:typed_preferences/typed_preferences.dart';
 
 abstract class LoggerDependency {
@@ -23,7 +23,7 @@ abstract class SharedParent<P extends SharedParent<P>>
         LoggerDependency,
         DatabaseDependency,
         DioDependency,
-        EnvironmentStorageDependency {
+        ConfigurationRepositoryDependency {
   PreferencesDriver get preferencesDriver;
 }
 
@@ -42,7 +42,8 @@ mixin SharedParentNodeMixin<C extends SharedParentNodeMixin<C, P>,
   PreferencesDriver get preferencesDriver => parent.preferencesDriver;
 
   @override
-  IEnvironmentStorage get environmentStorage => parent.environmentStorage;
+  IConfigurationRepository get configurationRepository =>
+      parent.configurationRepository;
 }
 
 abstract class SharedBaseChildNode<C extends SharedBaseChildNode<C, P>,
