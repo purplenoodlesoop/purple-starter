@@ -19,3 +19,7 @@ targets:
           include:
             - lib/**
             - test/**
+      drift_dev:
+        enabled: true
+        options:
+          data_class_to_companions: false
