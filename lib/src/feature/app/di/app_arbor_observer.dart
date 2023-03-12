@@ -1,4 +1,5 @@
 import 'package:arbor/arbor.dart';
+import 'package:flutter/foundation.dart';
 import 'package:mark/mark.dart';
 import 'package:purple_starter/src/core/di/shared_parent.dart';
 import 'package:purple_starter/src/core/logic/identity_logging_mixin.dart';
@@ -10,6 +11,9 @@ class AppArborObserver with IdentityLoggingMixin implements ArborObserver {
   final Logger logger;
 
   AppArborObserver(this.logger);
+
+  @override
+  bool get shouldLog => kDebugMode;
 
   @override
   void onCreatedChild<A extends Node<A>>(ChildNode node) {

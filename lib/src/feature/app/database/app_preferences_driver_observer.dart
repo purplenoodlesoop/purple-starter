@@ -17,7 +17,7 @@ class AppPreferencesDriverObserver
     implements PreferencesDriverObserver {
   final AppPreferencesDriverObserverDependencies _dependencies;
 
-  const AppPreferencesDriverObserver(this._dependencies);
+  AppPreferencesDriverObserver(this._dependencies);
 
   @override
   Logger get logger => _dependencies.logger;
