@@ -80,9 +80,7 @@ class InitializationState with _$InitializationState {
 
 @freezed
 class InitializationEvent with _$InitializationEvent {
-  const factory InitializationEvent.initialize({
-    required bool shouldSendSentry,
-  }) = _Initialize;
+  const factory InitializationEvent.initialize() = _Initialize;
 }
 
 abstract class InitializationBlocDependencies {
@@ -100,9 +98,7 @@ class InitializationBloc
       state.maybeCast<_IndexedInitializationStateMixin>()?.progress ??
       InitializationProgress.initial();
 
-  Stream<InitializationState> _initialize(
-    bool shouldSendSentry,
-  ) async* {
+  Stream<InitializationState> _initialize() async* {
     yield InitializationState.initializing(
       progress: InitializationProgress.initial(),
     );

@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:arbor/arbor.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mark/mark.dart';
 import 'package:purple_starter/src/core/model/environment_storage.dart';
@@ -46,7 +45,6 @@ abstract class InitializationHooks {
 
 mixin MainRunner {
   static void _runApp({
-    required bool shouldSend,
     required AppBuilder appBuilder,
     required InitializationHooks? hooks,
   }) {
@@ -64,7 +62,7 @@ mixin MainRunner {
     )..init();
     final initializationBloc = InitializationBloc(bootstrapDependencies)
       ..add(
-        InitializationEvent.initialize(shouldSendSentry: shouldSend),
+        const InitializationEvent.initialize(),
       );
     StreamSubscription<InitializationState>? initializationSubscription;
 
@@ -107,10 +105,9 @@ mixin MainRunner {
 
   static void run({
     required AppBuilder appBuilder,
-    bool shouldSend = !kDebugMode,
     InitializationHooks? hooks,
   }) {
     WidgetsFlutterBinding.ensureInitialized();
-    _runApp(shouldSend: shouldSend, appBuilder: appBuilder, hooks: hooks);
+    _runApp(appBuilder: appBuilder, hooks: hooks);
   }
 }
