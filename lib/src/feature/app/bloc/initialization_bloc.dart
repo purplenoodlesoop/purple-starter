@@ -4,7 +4,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:pure/pure.dart';
 import 'package:purple_starter/src/core/extension/extensions.dart';
 import 'package:purple_starter/src/core/extension/src/stream.dart';
-import 'package:purple_starter/src/core/model/environment_storage.dart';
+import 'package:purple_starter/src/core/repository/configuration_repository.dart';
 import 'package:select_annotation/select_annotation.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -83,9 +83,8 @@ class InitializationEvent with _$InitializationEvent {
   const factory InitializationEvent.initialize() = _Initialize;
 }
 
-abstract class InitializationBlocDependencies {
-  IEnvironmentStorage get environmentStorage;
-}
+abstract class InitializationBlocDependencies
+    implements ConfigurationRepositoryDependency {}
 
 class InitializationBloc
     extends StreamBloc<InitializationEvent, InitializationState> {
@@ -112,8 +111,8 @@ class InitializationBloc
 
       await SentryFlutter.init(
         (options) => options
-          ..dsn = _dependencies.environmentStorage.sentryDsn
-          ..environment = _dependencies.environmentStorage.environment.name
+          ..dsn = _dependencies.configurationRepository.sentryDsn
+          ..environment = _dependencies.configurationRepository.environment.name
           ..tracesSampleRate = 1,
       );
       yield InitializationState.initializing(

@@ -6,13 +6,13 @@ void sharedRun(InitializationHooks initializationHooks) => MainRunner.run(
         initializationData,
         observer,
         logger,
-        environmentStorage,
+        configurationRepository,
       ) =>
           PurpleStarterApp(
         initializationData: initializationData,
         observer: observer,
         logger: logger,
-        environmentStorage: environmentStorage,
+        configurationRepository: configurationRepository,
       ),
       hooks: initializationHooks,
     );

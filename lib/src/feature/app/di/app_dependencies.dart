@@ -5,7 +5,7 @@ import 'package:mark/mark.dart';
 import 'package:purple_starter/src/core/database/drift/app_database.dart';
 import 'package:purple_starter/src/core/di/app_dependencies.dart';
 import 'package:purple_starter/src/core/di/shared_parent.dart';
-import 'package:purple_starter/src/core/model/environment_storage.dart';
+import 'package:purple_starter/src/core/repository/configuration_repository.dart';
 import 'package:purple_starter/src/feature/app/di/core_dependencies.dart';
 import 'package:purple_starter/src/feature/app/di/feature_dependencies.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -26,13 +26,13 @@ class AppDependenciesTree extends BaseTree<AppDependenciesTree>
   final Logger logger;
 
   @override
-  final IEnvironmentStorage environmentStorage;
+  final IConfigurationRepository configurationRepository;
 
   AppDependenciesTree({
     required this.observer,
     required this.sharedPreferences,
     required this.logger,
-    required this.environmentStorage,
+    required this.configurationRepository,
   });
 
   @override

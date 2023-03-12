@@ -1,17 +1,17 @@
 import 'package:pure/pure.dart';
 import 'package:purple_starter/src/core/enum/environment.dart';
 
-abstract class IEnvironmentStorage {
+abstract class IEnvironmentDao {
   Environment get environment;
   String get sentryDsn;
 }
 
-abstract class EnvironmentStorageDependency {
-  IEnvironmentStorage get environmentStorage;
+abstract class EnvironmentDaoDependency {
+  IEnvironmentDao get environmentDao;
 }
 
-class EnvironmentStorage implements IEnvironmentStorage {
-  const EnvironmentStorage();
+class EnvironmentDao implements IEnvironmentDao {
+  const EnvironmentDao();
 
   @override
   Environment get environment => const String.fromEnvironment('ENVIRONMENT')

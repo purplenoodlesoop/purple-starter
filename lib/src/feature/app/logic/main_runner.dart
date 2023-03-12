@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:arbor/arbor.dart';
 import 'package:flutter/material.dart';
 import 'package:mark/mark.dart';
-import 'package:purple_starter/src/core/model/environment_storage.dart';
+import 'package:purple_starter/src/core/repository/configuration_repository.dart';
 import 'package:purple_starter/src/feature/app/bloc/initialization_bloc.dart';
 import 'package:purple_starter/src/feature/app/di/app_arbor_observer.dart';
 import 'package:purple_starter/src/feature/app/di/bootstrap_dependencies.dart';
@@ -17,7 +17,7 @@ typedef AppBuilder = Widget Function(
   InitializationData initializationData,
   ArborObserver observer,
   Logger logger,
-  IEnvironmentStorage environmentStorage,
+  IConfigurationRepository configurationRepository,
 );
 
 abstract class InitializationHooks {
@@ -82,7 +82,7 @@ mixin MainRunner {
                 state,
                 arborObserver,
                 logger,
-                bootstrapDependencies.environmentStorage,
+                bootstrapDependencies.configurationRepository,
               ),
             ),
           );
