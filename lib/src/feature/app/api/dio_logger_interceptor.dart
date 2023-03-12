@@ -28,7 +28,12 @@ class DioLoggerInterceptor extends Interceptor with IdentityLoggingMixin {
   }
 
   @override
-  void onResponse(Response response, ResponseInterceptorHandler handler) {
+  void onResponse(
+    // Dio forces to use the dynamic type here.
+    // ignore: avoid-dynamic
+    Response<dynamic> response,
+    ResponseInterceptorHandler handler,
+  ) {
     final options = response.requestOptions;
     log(
       (b) => b

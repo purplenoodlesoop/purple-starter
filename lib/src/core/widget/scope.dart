@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:meta/meta.dart';
 
 typedef DelegateAccess<D extends ScopeDelegate> = D Function(
   BuildContext, {
@@ -14,7 +15,10 @@ typedef DelegateAccess<D extends ScopeDelegate> = D Function(
 abstract class Scope extends StatefulWidget {
   final Widget _child;
 
-  const Scope({super.key, required Widget child}) : _child = child;
+  const Scope({
+    required Widget child,
+    super.key,
+  }) : _child = child;
 
   /// Accesses a delegate of a given scope through InheritedWidget location,
   /// thus making this method having complexity of O(1).
@@ -70,6 +74,7 @@ abstract class ScopeDelegate<S extends Scope> extends State<S> {
   Widget buildScoping(BuildContext context, Widget child) => child;
 
   @override
+  @nonVirtual
   Widget build(BuildContext context) => _InheritedScope<S>(
         delegate: this,
         // The same reason as in `createState` method of `Scope`.

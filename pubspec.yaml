@@ -24,7 +24,7 @@ dependencies:
 
   # Data manipulation
   pure: ^0.2.0
-  fast_immutable_collections: ^8.2.0
+  fast_immutable_collections: ^9.0.0
   stream_transform: ^2.0.0
 
   # Dependencies
@@ -60,8 +60,8 @@ dependencies:
   typed_preferences: ^0.2.0
 
   # HTTP
-  dio: ^4.0.4
-  retrofit: ^3.0.1
+  dio: ^5.0.2
+  retrofit: ^4.0.1
 
   # Navigation
   auto_route: ^5.0.1
@@ -72,14 +72,14 @@ dev_dependencies:
   purple_metrics_lints: ^0.5.0
 
   # Utils
-  flutter_launcher_icons: ^0.11.0
+  flutter_launcher_icons: ^0.12.0
   flutter_native_splash: ^2.0.5
 
   # Code generation
   build_runner: ^2.1.7
   auto_route_generator: ^5.0.2
   select: ^0.4.1
-  retrofit_generator: ^4.0.1
+  retrofit_generator: ^6.0.0+1
   drift_dev: ^2.5.2
   freezed: ^2.1.0+1
   json_serializable: ^6.1.4

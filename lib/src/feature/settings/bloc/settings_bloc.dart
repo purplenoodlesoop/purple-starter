@@ -6,7 +6,7 @@ import 'package:stream_bloc/stream_bloc.dart';
 
 part 'settings_bloc.freezed.dart';
 
-// --- States --- //
+/* --- States --- */
 
 @freezed
 class SettingsState with _$SettingsState {
@@ -28,7 +28,7 @@ class SettingsState with _$SettingsState {
   }) = SettingsStateError;
 }
 
-// --- Events --- //
+/* --- Events --- */
 
 @freezed
 class SettingsEvent with _$SettingsEvent {
@@ -37,7 +37,7 @@ class SettingsEvent with _$SettingsEvent {
   }) = _SettingsEventSetTheme;
 }
 
-// --- BLoC --- //
+/* --- BLoC --- */
 
 abstract class SettingsBlocDependencies
     implements SettingsRepositoryDependency {}
