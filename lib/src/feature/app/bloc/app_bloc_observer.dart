@@ -32,7 +32,7 @@ abstract class AppBlocObserverDependencies implements LoggerDependency {}
 class AppBlocObserver extends StreamBlocObserver with IdentityLoggingMixin {
   final AppBlocObserverDependencies _dependencies;
 
-  const AppBlocObserver(this._dependencies);
+  AppBlocObserver(this._dependencies);
 
   @override
   Logger get logger => _dependencies.logger;

@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:arbor/arbor.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mark/mark.dart';
 import 'package:purple_starter/src/core/model/environment_storage.dart';
@@ -11,6 +10,7 @@ import 'package:purple_starter/src/feature/app/di/bootstrap_dependencies.dart';
 import 'package:purple_starter/src/feature/app/logger/error_reporting_message_processor.dart';
 import 'package:purple_starter/src/feature/app/logger/pretty_ephemeral_message_processor.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:stack_trace/stack_trace.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 typedef AppBuilder = Widget Function(
@@ -45,17 +45,11 @@ abstract class InitializationHooks {
 }
 
 mixin MainRunner {
-  static void _runApp({
-    required bool shouldSend,
-    required AppBuilder appBuilder,
-    required InitializationHooks? hooks,
-  }) {
-    final logger = Logger(
-      processors: [
-        PrettyEphemeralMessageProcessor(),
-        ErrorReportingMessageProcessor(),
-      ],
-    );
+  static void _runApp(
+    Logger logger,
+    AppBuilder appBuilder,
+    InitializationHooks? hooks,
+  ) {
     final arborObserver = AppArborObserver(logger);
     final BootstrapDependencies bootstrapDependencies =
         BootstrapDependenciesTree(
@@ -64,7 +58,7 @@ mixin MainRunner {
     )..init();
     final initializationBloc = InitializationBloc(bootstrapDependencies)
       ..add(
-        InitializationEvent.initialize(shouldSendSentry: shouldSend),
+        const InitializationEvent.initialize(),
       );
     StreamSubscription<InitializationState>? initializationSubscription;
 
@@ -107,10 +101,15 @@ mixin MainRunner {
 
   static void run({
     required AppBuilder appBuilder,
-    bool shouldSend = !kDebugMode,
     InitializationHooks? hooks,
   }) {
     WidgetsFlutterBinding.ensureInitialized();
-    _runApp(shouldSend: shouldSend, appBuilder: appBuilder, hooks: hooks);
+    final logger = Logger(
+      processors: [
+        PrettyEphemeralMessageProcessor(),
+        ErrorReportingMessageProcessor(),
+      ],
+    );
+    Chain.capture(() => _runApp(logger, appBuilder, hooks));
   }
 }
