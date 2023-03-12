@@ -24,15 +24,15 @@ class PurpleStarterApp extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) => AppLifecycleScope(
-        child: NodeScope<AppDependencies>(
-          create: (context) => AppDependenciesTree(
-            sharedPreferences: initializationData.sharedPreferences,
-            observer: observer,
-            logger: logger,
-            environmentStorage: environmentStorage,
-          ),
-          child: const SettingsScope(
+  Widget build(BuildContext context) => NodeScope<AppDependencies>(
+        create: (context) => AppDependenciesTree(
+          sharedPreferences: initializationData.sharedPreferences,
+          observer: observer,
+          logger: logger,
+          environmentStorage: environmentStorage,
+        ),
+        child: const SettingsScope(
+          child: AppLifecycleScope(
             child: AppConfiguration(),
           ),
         ),
