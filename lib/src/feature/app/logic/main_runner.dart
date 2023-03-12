@@ -10,6 +10,7 @@ import 'package:purple_starter/src/feature/app/di/bootstrap_dependencies.dart';
 import 'package:purple_starter/src/feature/app/logger/error_reporting_message_processor.dart';
 import 'package:purple_starter/src/feature/app/logger/pretty_ephemeral_message_processor.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:stack_trace/stack_trace.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 typedef AppBuilder = Widget Function(
@@ -44,16 +45,11 @@ abstract class InitializationHooks {
 }
 
 mixin MainRunner {
-  static void _runApp({
-    required AppBuilder appBuilder,
-    required InitializationHooks? hooks,
-  }) {
-    final logger = Logger(
-      processors: [
-        PrettyEphemeralMessageProcessor(),
-        ErrorReportingMessageProcessor(),
-      ],
-    );
+  static void _runApp(
+    Logger logger,
+    AppBuilder appBuilder,
+    InitializationHooks? hooks,
+  ) {
     final arborObserver = AppArborObserver(logger);
     final BootstrapDependencies bootstrapDependencies =
         BootstrapDependenciesTree(
@@ -108,6 +104,12 @@ mixin MainRunner {
     InitializationHooks? hooks,
   }) {
     WidgetsFlutterBinding.ensureInitialized();
-    _runApp(appBuilder: appBuilder, hooks: hooks);
+    final logger = Logger(
+      processors: [
+        PrettyEphemeralMessageProcessor(),
+        ErrorReportingMessageProcessor(),
+      ],
+    );
+    Chain.capture(() => _runApp(logger, appBuilder, hooks));
   }
 }
